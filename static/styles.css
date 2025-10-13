@@ -1,0 +1,87 @@
+/**
+ * Copyright 2025 oh826
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body {
+      font-family: 'Arial', 'Helvetica', sans-serif; /* Swapped to my go-to fonts */
+      padding: 15px 25px; /* Uneven padding feels more natural */
+      max-width: 920px; /* Rounded up a bit from 925 */
+      margin: 0 auto; /* Centered, classic move */
+    }
+    
+    h1 {
+      margin-bottom: 8px; /* Gave it a bit more breathing room */
+      color: #333; /* Darker text for punch */
+    }
+    
+    /* Form styling - made it pop with a custom teal from that logo */
+    form {
+      border: 2px solid #009688; /* Slightly off from #00A8A8, my tweak */
+      padding: 12px; /* Rounded up for comfort */
+      margin-bottom: 20px; /* Extra space between forms */
+      border-radius: 10px; /* Rounded corners, my style */
+      background: #e0f7f7; /* Light teal bg, softer than solid */
+    }
+    
+    label {
+      display: block;
+      font-weight: bold; /* Bold for clarity */
+      margin-bottom: 4px; /* Tightened up a bit */
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px; /* Dropped to 150, felt too tall */
+      padding: 8px; /* Less padding, more compact */
+      font-size: 16px; /* Explicit size for consistency */
+      box-sizing: border-box;
+      border: 1px solid #ccc; /* Added a border for input feel */
+    }
+
+    input[type="file"] {
+      display: block;
+      margin-top: 20px; /* Adjusted for spacing */
+      background: #fff; /* White bg for file input */
+      border: 1px solid #999; /* Subtle border */
+    }
+    
+    button {
+      margin-top: 12px; /* Slight nudge */
+      padding: 10px 15px; /* More clickable area */
+      font-size: 16px;
+      background: #009688; /* Matching teal */
+      color: #fff; /* White text for contrast */
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    /* Result box - kept it clean */
+    #result {
+      white-space: pre-wrap;
+      background: #fff;
+      border: 1px solid #ddd; /* Lighter border */
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+    
+    /* Notes - made them stand out */
+    .note {
+      color: #00695c; /* Darker teal for notes */
+      font-size: 14px; /* Smaller, more subtle */
+      margin-top: 5px;
+      font-style: italic; /* Added flair */
+    }

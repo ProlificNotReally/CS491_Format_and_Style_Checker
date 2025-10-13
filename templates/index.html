@@ -1,0 +1,33 @@
+<!-- save as this file under templates folder with /index.html as the name -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Python Text Autocorrecter</title>
+  <link rel="stylesheet" href="../static/styles.css" type="text/css" />
+</head>
+<body>
+  <h1> Python Autocorrecter Sample Project</h1>
+  <h3> Please enter your below in order to autocorrect</h3>
+
+  <!-- TEXT autocorrect form (POSTs which sends text  to Python backend) -->
+  <form method="post" action="/autocorrect-text">
+    <label for="text-input">Paste or type text to autocorrect:</label>
+    <textarea id="text-input" name="text" placeholder="Type or paste text here...">{{ corrected if corrected else (original if original else '') }}</textarea>
+    <div class="note">This sends the input text to the Python server which then returns the corrected text.</div>
+    <button type="submit">Autocorrect Text</button>
+  </form>
+
+  <h2> Upload a document (PDF / Word / TXT)</h2>
+
+  <!-- FILE upload form (multipart) -->
+  <form method="post" action="/autocorrect-file" enctype="multipart/form-data">
+    <label for="doc-input">Choose a file (.pdf, .docx, .txt):</label>
+    <input id="doc-input" name="document" type="file" accept=".pdf,.docx,.txt" required />
+    <div class="note">Server will extract text and then return an autocorrected version. (Note: Older .doc binary files not supported in this version.)</div>
+    <button type="submit">Upload & Autocorrect your Document</button>
+  </form>
+
+</body>
+</html>

@@ -198,6 +198,24 @@ export async function checkDocument() {
         });
       }
 
+      const sym = rules.symbols;
+      if (!sym.allowSymbolFont) {
+        console.log("Running symbols check...");
+        const paragraphs = context.document.body.paragraphs;
+        paragraphs.load("items/font/name");
+        await context.sync();
+
+        let symbolCount = 0;
+        for (const para of paragraphs.items) {
+          if (para.font.name === "Symbol") {
+            para.font.highlightColor = "#00CED1";  // Turquoise
+            symbolCount++;
+          }
+        }
+        await context.sync();
+        console.log(`Symbols check: ${symbolCount} Symbol font instance(s) highlighted.`);
+      }
+
     });
   } catch (error) {
     console.log("Error: " + error);

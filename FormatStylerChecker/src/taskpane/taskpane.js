@@ -79,51 +79,85 @@ export async function checkDocument() {
       }
 
       if(!document_checking.allowWaterMarks){
+        // const templates = context.application.templates;
+        // templates.load("items/name,items/buildingBlockEntries");
+        // await context.sync();
+
+        // let watermarkBlocks = []
+
+        // for (const template of templates.items){
+        //   const blockEntries = template.buildingBlockEntries;
+        //   const count = blockEntries.getCount();
+        //   await context.sync();
+
+        //   console.log(`There are ${count.value} blocks in the template named ${template.name}`);
+
+        //   for (let i = 0; i < count.value; i++) {
+        //     const entry = blockEntries.getItemAt(i);
+        //     context.load(entry, "name,type,value,description,insertType");
+        //     await context.sync();
+
+        //     if (
+        //         entry.type.name === "Watermarks"
+        //     ) {
+        //         watermarkBlocks.push({
+        //             template: template.name,
+        //             type: entry.type.name,
+        //             name: entry.name,
+        //             value: entry.value,
+        //             description: entry.description,
+        //             insertType: entry.insertType
+        //         });
+        //     }
+        //   }
+         
+        // }
+
+        // console.log("Collected building block information for built-in watermarks:", watermarkBlocks);
+
         const sections = context.document.sections;
         sections.load("items");
         await context.sync();
 
-        let watermarkCount = 0;
-
-        for (const [i, section] of sections.items.entries()) {
-          const header = section.getHeader("Primary");
-          const shapes = header.shapes;
-
-          shapes.load("items/type,textFrame/textRange,textFrame/hasText,fill/transparency");
-          await context.sync();
-
-          shapes.items.forEach((shape) => {
-            const isTextWatermark =
-              shape.textFrame?.hasText &&
-              shape.fill?.transparency >= 0.3 && 
-              shape.textFrame.textRange?.text?.length > 0;
-
-            const isImageWatermark = shape.type === "Picture";
-
-            if (isTextWatermark || isImageWatermark) {
-              watermarkCount++;
-              console.log(
-                `Watermark detected in Section ${i + 1}: ${
-                  isTextWatermark ? "Text" : "Image"
-                }`
+        for (let i = 0; i < sections.items.length; i++) {
+          const section = sections.items[i];
+          const headerTypes = ["primary", "firstPage", "evenPages"];
+          for (const type of headerTypes) {
+            const header = section.getHeader(type);
+            const ooxml = header.getOoxml();
+            await context.sync();
+            // console.log(ooxml.value);
+            if (ooxml.value.includes("docPartGallery w:val=\"Watermarks\"")) {
+              console.log(`Watermark detected in section ${i + 1}, header: ${type}`);
+              let updatedXml = ooxml.value.replace(
+                /(<v:shape[^>]*PowerPlusWaterMarkObject[^>]*\b)fillcolor="[^"]*"/i,
+                '$1fillcolor="red"'
               );
 
-              if (isTextWatermark) {
-                shape.textFrame.textRange.font.highlightColor = "#FFFF00";
+              updatedXml = updatedXml.replace(
+                /(<v:fill[^>]*\b)opacity="[^"]*"/gi,
+                `$1opacity="1"`
+              );
+              header.insertOoxml(updatedXml, "Replace");
+
+              const match = ooxml.value.match(/<v:textpath[^>]*string="([^"]+)"/i);
+              
+              await context.sync();
+
+              if (match && match[1]) {
+                console.log(`Watermark text: "${match[1]}"`);
+              } else {
+                console.log("Could not extract watermark text. May be an image watermark.");
               }
             }
-          });
-        }
+          }
+        }    
 
-        await context.sync();
-
-        console.log(`Found and highlighted ${watermarkCount} watermark(s).`);
       }
 
       if(document_checking.enforceValidReferenceSources){
         console.log("loading reference fields");
         const refFields = context.document.body.fields.getByTypes([Word.FieldType.ref]);
-        console.log("loading reference fields");
         refFields.load("items"); 
         await context.sync();
         console.log("loaded reference fields");
@@ -160,9 +194,7 @@ export async function checkDocument() {
         sections.items.forEach((section, index) => {
           const setup = section.pageSetup;
           const orientation = setup.orientation;
-          
-          console.log(`Section ${index + 1}: ${orientation}`);
-
+        
           if (orientation === Word.PageOrientation.portrait) {
             if(setup.topMargin !== margins.topMarginPortrait || setup.bottomMargin !== margins.bottomMarginPortrait ||setup.leftMargin !== margins.leftMarginPortrait || setup.rightMargin !== margins.rightMarginPortrait){
               console.warn(
@@ -191,13 +223,17 @@ export async function checkDocument() {
         sections.items.forEach((section, index) => {
           const setup = section.pageSetup;
           const orientation = setup.orientation; 
-          console.log(`Section ${index + 1}: ${orientation}`);
+
           if (page_size.type == "letter" && setup.paperSize !== Word.PaperSize.letter) {
             console.warn(`Section ${index + 1} paper size is not Letter.`);
           }
+          else {
+            console.log(`Section ${index + 1}: ${orientation} page size is correct.`)
+          }
         });
       }
-
+      
+      
     });
   } catch (error) {
     console.log("Error: " + error);

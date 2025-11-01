@@ -1,0 +1,9 @@
+<<<<<<< HEAD
+=======
+# Build output
+dist/
+test/testBuild
+
+# Node modules folder
+>>>>>>> 532c9d1ddfc61af3164e0b315aa7a6ba7b22d020
+node_modules/

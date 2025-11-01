@@ -1,0 +1,14 @@
+{
+  "formatting": {
+    "allowHighlighting": false,
+    "allowHiddenText": false,
+    "allowedFontColors": ["black", "#000000", "automatic"],
+    "allowBlankPages": false,
+    "allowedFontSizeRange": [8, 12],
+    "allowedFont": "Times New Roman",
+    "enforceTextJustification": true,
+    "allowOrphanedHeadingsOrCaptions": false,
+    "enforceRepeatingHeaderRowsForContinuousTables": true,
+    "allowWebHyperlinks": false
+  }
+}

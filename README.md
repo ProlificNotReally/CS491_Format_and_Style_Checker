@@ -1,1 +1,0 @@
-# CS491_Format_and_Style_Checker

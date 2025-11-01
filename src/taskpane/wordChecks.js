@@ -1,3 +1,4 @@
+import { checkHeaderFooterFormatting } from "./checkHeaderFooterFormatting";
 import rules from "./config/rules.json";
 
 /**
@@ -199,7 +200,10 @@ export async function analyzeFormatting() {
       });
     }
 
-    return results;
+    
+    const headerFooterIssues = await checkHeaderFooterFormatting(context);
+    results.push(...headerFooterIssues);
+return results;
   });
 }
 

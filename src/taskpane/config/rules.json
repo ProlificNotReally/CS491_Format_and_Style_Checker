@@ -10,5 +10,14 @@
     "allowOrphanedHeadingsOrCaptions": false,
     "enforceRepeatingHeaderRowsForContinuousTables": true,
     "allowWebHyperlinks": false
+  },
+  "header": {
+    "requiredLineCount": 2,
+    "alignment": "Left",
+    "secondLineUnderline": true,
+    "pageNumberPreTab": true
+  },
+  "footer": {
+    "imageMustBeCentered": true
   }
 }

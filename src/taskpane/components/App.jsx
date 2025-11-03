@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { analyzeFormatting, goToError } from "../wordChecks";
+import { checkDocument } from "../docChecks";
 
 export default function App() {
   const [results, setResults] = useState([]);
+  const [docResults, setDocResults] = useState([]);
   const [isChecking, setIsChecking] = useState(false);
+  const [isCheckingDocument, setIsCheckingDocument] = useState(false);
 
   //Run formatting analysis
   const handleRunCheck = async () => {
@@ -18,6 +21,18 @@ export default function App() {
     }
   };
 
+  const handleRunDocumentCheck = async () => {
+    try {
+      setIsCheckingDocument(true);
+      const issues = await checkDocument();
+      setDocResults(issues);
+    } catch (err) {
+      console.error("Error running formatting checks:", err);
+    } finally {
+      setIsCheckingDocument(false);
+    }
+  };
+
   //Jump to a specific error in Word
   const handleGoTo = async (issue) => {
     if (issue.canLocate && issue.location) {
@@ -26,34 +41,66 @@ export default function App() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Formatting Checker</h1>
+    <div>
+      <div style={styles.container}>
+        <h1 style={styles.title}>Formatting Checker</h1>
 
-      <button onClick={handleRunCheck} style={styles.button} disabled={isChecking}>
-        {isChecking ? "Checking..." : "Run Formatting Check"}
-      </button>
+        <button onClick={handleRunCheck} style={styles.button} disabled={isChecking}>
+          {isChecking ? "Checking..." : "Run Formatting Check"}
+        </button>
 
-      <div style={styles.resultsContainer}>
-        {results.length === 0 && !isChecking && (
-          <p style={styles.placeholder}>No results yet. Click “Run Formatting Check”.</p>
-        )}
+        <div style={styles.resultsContainer}>
+          {results.length === 0 && !isChecking && (
+            <p style={styles.placeholder}>No results yet. Click “Run Formatting Check”.</p>
+          )}
 
-        {results.map((r) => (
-          <div
-            key={r.id}
-            onClick={() => handleGoTo(r)}
-            style={{
-              ...styles.resultBox,
-              cursor: r.canLocate ? "pointer" : "default",
-              backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
-            }}
-          >
-            <b>{r.type}</b>
-            <p style={styles.message}>{r.message}</p>
-          </div>
-        ))}
+          {results.map((r) => (
+            <div
+              key={r.id}
+              onClick={() => handleGoTo(r)}
+              style={{
+                ...styles.resultBox,
+                cursor: r.canLocate ? "pointer" : "default",
+                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+              }}
+            >
+              <b>{r.type}</b>
+              <p style={styles.message}>{r.message}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={styles.container}>
+        <h2 style={styles.title}>Document Checker</h2>
+
+        <button onClick={handleRunDocumentCheck} style={styles.button} disabled={isCheckingDocument}>
+          {isCheckingDocument ? "Checking..." : "Run Document Check"}
+        </button>
+
+        <div style={styles.resultsContainer}>
+          {docResults.length === 0 && !isCheckingDocument && (
+            <p style={styles.placeholder}>No results yet. Click “Run Document Check”.</p>
+          )}
+
+          {docResults.map((r) => (
+            <div
+              key={r.id}
+              onClick={() => handleGoTo(r)}
+              style={{
+                ...styles.resultBox,
+                cursor: r.canLocate ? "pointer" : "default",
+                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+              }}
+            >
+              <b>{r.type}</b>
+              <p style={styles.message}>{r.message}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
+  
   );
 }
 

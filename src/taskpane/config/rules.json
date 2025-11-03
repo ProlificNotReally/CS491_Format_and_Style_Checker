@@ -10,5 +10,30 @@
     "allowOrphanedHeadingsOrCaptions": false,
     "enforceRepeatingHeaderRowsForContinuousTables": true,
     "allowWebHyperlinks": false
-  }
+  },
+
+   "document_checking": {
+        "allowComments": false,
+        "allowTextBoxes": false,
+        "allowWaterMarks": false,
+        "enforceValidReferenceSources": true
+    },
+    "margins": {
+        "enforceMargins": true,
+        "topMarginPortrait": 72,
+        "bottomMarginPortrait": 72,
+        "leftMarginPortrait": 90,
+        "rightMarginPortrait": 72,
+        "topMarginLandscape": 90,
+        "bottomMarginLandscape": 72,
+        "leftMarginLandscape": 72,
+        "rightMarginLandscape": 72
+    },
+    
+    "page_size": {
+        "enforcePageSize": true,
+        "type": "letter"
+    }
+
+
 }

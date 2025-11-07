@@ -324,9 +324,11 @@ export async function goToError(location) {
   if (!location) return;
 
   await Word.run(async (context) => {
-    const range = location.getRange
+    const range = location.getRange()
       ? location.getRange()
       : context.document.getSelection();
+
+    console.log(range);
 
     range.select();
     context.sync();

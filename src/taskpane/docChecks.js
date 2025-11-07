@@ -267,6 +267,7 @@ export async function checkDocument() {
       await context.sync();
 
       revisions.items.forEach((rev, i) => {
+        context.trackedObjects
         results.push({
           id: `revision-${i + 1}`,
           type: "Revision",

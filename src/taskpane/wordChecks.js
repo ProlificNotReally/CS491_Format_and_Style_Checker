@@ -2,57 +2,57 @@ import { checkHeaderFooterFormatting } from "./checkHeaderFooterFormatting";
 import rules from "./config/rules.json";
 
 /**
- * Runs all formatting checks across all sections based on rules.json.
- * Returns an array of issue objects, each tagged with the section number.
+ * Runs all formatting checks based on rules.json.
+ * Returns an array of issue objects with optional location ranges
+ * that can be used to jump to the offending text in Word.
  */
 export async function analyzeFormatting() {
   return Word.run(async (context) => {
     const { formatting } = rules;
     const results = [];
 
-    //Load all sections
+    // Load all sections
     const sections = context.document.sections;
-    sections.load("items");
+    sections.load("items/body");
     await context.sync();
 
-    if (!sections.items || sections.items.length === 0) {
-      results.push({
-        id: "no-sections",
-        type: "Info",
-        message: "No sections found in the document.",
-        canLocate: false,
-      });
-      return results;
-    }
-
-    //Iterate through each section
+    // Iterate through sections
     for (let s = 0; s < sections.items.length; s++) {
       const section = sections.items[s];
-      const sectionNum = s + 1;
+      const body = section.body;
+      const paragraphs = body.paragraphs;
 
-      //Load paragraphs for this section
-      const paragraphs = section.body.paragraphs;
       if (paragraphs && typeof paragraphs.load === "function") {
         paragraphs.load("items/font,items/paragraphFormat,items/text");
         await context.sync();
       }
 
-      //Handle empty sections
+      // Handle empty section
       if (!paragraphs?.items || paragraphs.items.length === 0) {
         results.push({
-          id: `section-${sectionNum}-empty`,
-          section: sectionNum,
+          id: `s${s + 1}-empty`,
+          section: s + 1,
           type: "Info",
-          message: `Section ${sectionNum} is empty.`,
+          message: `Section ${s + 1}: No paragraphs found.`,
           text: "",
           canLocate: false,
         });
         continue;
       }
 
-      //Loop through paragraphs safely
+      // Batch-load OOXML for all paragraphs (1 sync total per section)
+      const ooxmlObjs = paragraphs.items.map((p) => p.getOoxml());
+      await context.sync();
+
+      // Pre-lowercase allowed colors for faster checks
+      const allowedColors = formatting.allowedFontColors.map((c) =>
+        c.toLowerCase()
+      );
+
+      // Loop through paragraphs with pre-fetched XML
       for (let i = 0; i < paragraphs.items.length; i++) {
         const p = paragraphs.items[i];
+        const ooxml = ooxmlObjs[i].value || "";
         const text = p.text?.trim() || "";
         const font = p.font || {};
         const alignment = p.paragraphFormat
@@ -60,19 +60,16 @@ export async function analyzeFormatting() {
           : "Unknown";
         const range = p.getRange();
 
-        //Highlighting check
+        // --- Highlighting check ---
         if (
           !formatting.allowHighlighting &&
-          (p.font.highlightColor ||
-            p.font.highlightColor === undefined) &&
-          p.font.highlightColor !== "None" &&
-          p.font.highlightColor !== null
+          (font.highlightColor && font.highlightColor !== "None")
         ) {
           results.push({
-            id: `s${sectionNum}-p${i + 1}-highlight`,
-            section: sectionNum,
+            id: `s${s + 1}-p${i + 1}-highlight`,
+            section: s + 1,
             type: "Highlighting",
-            message: `Section ${sectionNum}, Paragraph ${
+            message: `Section ${s + 1}, Paragraph ${
               i + 1
             }: Highlighting detected.`,
             text,
@@ -81,13 +78,13 @@ export async function analyzeFormatting() {
           });
         }
 
-        //Hidden text check
+        // --- Hidden text check ---
         if (!formatting.allowHiddenText && font.hidden) {
           results.push({
-            id: `s${sectionNum}-p${i + 1}-hidden`,
-            section: sectionNum,
+            id: `s${s + 1}-p${i + 1}-hidden`,
+            section: s + 1,
             type: "Hidden Text",
-            message: `Section ${sectionNum}, Paragraph ${
+            message: `Section ${s + 1}, Paragraph ${
               i + 1
             }: Hidden text detected.`,
             text,
@@ -96,124 +93,78 @@ export async function analyzeFormatting() {
           });
         }
 
-        //Font color check
-        const allowedColors = formatting.allowedFontColors.map((c) =>
-          c.toLowerCase()
-        );
+        // --- Font color check (OOXML regex-based) ---
+        const colorMatches = [
+          ...ooxml.matchAll(/<w:color[^>]*w:val="([^"]+)"/g),
+        ];
+        const uniqueColors = [
+          ...new Set(colorMatches.map((m) => m[1].toLowerCase())),
+        ];
 
-        //console.log("FONT COLOR >> ", p.font.color);
+        if (uniqueColors.length > 0) {
+          const invalidColors = uniqueColors.filter(
+            (c) => !allowedColors.includes("#" + c)
+          );
 
-        if (p.font.color && p.font.color !== "None") {
-          //Case A: uniform color
-          const colorLower = p.font.color.toLowerCase();
-
-          if (!allowedColors.includes(colorLower)) {
+          invalidColors.forEach((badColor) => {
             results.push({
-              id: `s${sectionNum}-p${i + 1}-color`,
-              section: sectionNum,
+              id: `s${s + 1}-p${i + 1}-color-${badColor.replace("#", "")}`,
+              section: s + 1,
               type: "Font Color",
-              message: `Section ${sectionNum}, Paragraph ${
+              message: `Section ${s + 1}, Paragraph ${
                 i + 1
-              }: Font color "${p.font.color}" is not allowed.`,
+              }: Contains disallowed font color "${badColor}".`,
               text,
               location: range,
               canLocate: true,
             });
-          }
-        } else if (!p.font.color || p.font.color.trim() === "") {
-          
-          //Case B: mixed colors → check runs
-          const runs = p.getRange().getTextRanges(["Any"], true);
-          runs.load("items/font/color,items/text");
-          await context.sync();
-
-          const invalidColors = new Set();
-          const seenColors = new Set();
-
-          runs.items.forEach((run) => {
-            const color = run.font.color?.toLowerCase();
-            //console.log("color - ", color);
-            if (!color || color === "none") return;
-            seenColors.add(color);
-            if (!allowedColors.includes(color)) invalidColors.add(color);
           });
-
-          if (invalidColors.size > 0) {
-            invalidColors.forEach((badColor) => {
-              results.push({
-                id: `s${sectionNum}-p${i + 1}-color-${badColor.replace("#", "")}`,
-                section: sectionNum,
-                type: "Font Color",
-                message: `Section ${sectionNum}, Paragraph ${
-                  i + 1
-                }: Contains disallowed font color "${badColor}".`,
-                text,
-                location: range,
-                canLocate: true,
-              });
-            });
-          }
         }
 
-        //Font size range and consistency check
+        // --- Font size check ---
         const [minSize, maxSize] = formatting.allowedFontSizeRange;
-        if (p.font.size === null) {
+        if (font.size == null || font.size === "") {
           results.push({
-            id: `s${sectionNum}-p${i + 1}-multisize`,
-            section: sectionNum,
+            id: `s${s + 1}-p${i + 1}-multisize`,
+            section: s + 1,
             type: "Font Size",
-            message: `Section ${sectionNum}, Paragraph ${
+            message: `Section ${s + 1}, Paragraph ${
               i + 1
-            }: Multiple font sizes detected within the same paragraph.`,
+            }: Contains multiple or undefined font sizes.`,
             text,
             location: range,
             canLocate: true,
           });
-        } else if (p.font.size < minSize || p.font.size > maxSize) {
+        } else if (font.size < minSize || font.size > maxSize) {
           results.push({
-            id: `s${sectionNum}-p${i + 1}-size`,
-            section: sectionNum,
+            id: `s${s + 1}-p${i + 1}-size`,
+            section: s + 1,
             type: "Font Size",
-            message: `Section ${sectionNum}, Paragraph ${
+            message: `Section ${s + 1}, Paragraph ${
               i + 1
-            }: Font size ${p.font.size}pt is outside the allowed range (${minSize}–${maxSize}).`,
+            }: Font size ${font.size}pt is outside allowed range (${minSize}–${maxSize}).`,
             text,
             location: range,
             canLocate: true,
           });
         }
 
-        //Font family check
-        if (p.font.name === null) {
+        // --- Font family check ---
+        if (font.name && font.name !== formatting.allowedFont) {
           results.push({
-            id: `s${sectionNum}-p${i + 1}-multifont`,
-            section: sectionNum,
+            id: `s${s + 1}-p${i + 1}-font`,
+            section: s + 1,
             type: "Font",
-            message: `Section ${sectionNum}, Paragraph ${
+            message: `Section ${s + 1}, Paragraph ${
               i + 1
-            }: Multiple font types detected within the same paragraph.`,
-            text,
-            location: range,
-            canLocate: true,
-          });
-        } else if (
-          p.font.name &&
-          p.font.name !== formatting.allowedFont
-        ) {
-          results.push({
-            id: `s${sectionNum}-p${i + 1}-font`,
-            section: sectionNum,
-            type: "Font",
-            message: `Section ${sectionNum}, Paragraph ${
-              i + 1
-            }: Font "${p.font.name}" should be "${formatting.allowedFont}".`,
+            }: Font "${font.name}" should be "${formatting.allowedFont}".`,
             text,
             location: range,
             canLocate: true,
           });
         }
 
-        //Text justification consistency
+        // --- Justification check ---
         if (
           formatting.enforceTextJustification &&
           alignment !== "Justified" &&
@@ -221,10 +172,10 @@ export async function analyzeFormatting() {
           alignment !== "Unknown"
         ) {
           results.push({
-            id: `s${sectionNum}-p${i + 1}-alignment`,
-            section: sectionNum,
+            id: `s${s + 1}-p${i + 1}-alignment`,
+            section: s + 1,
             type: "Justification",
-            message: `Section ${sectionNum}, Paragraph ${
+            message: `Section ${s + 1}, Paragraph ${
               i + 1
             }: Inconsistent text justification (${alignment}).`,
             text,
@@ -232,12 +183,12 @@ export async function analyzeFormatting() {
             canLocate: true,
           });
         }
-      } //end paragraph loop
+      }
 
-      //Table checks for this section
+      // --- Table header check ---
       let tables;
       try {
-        tables = section.body.tables;
+        tables = body.tables;
       } catch {
         tables = null;
       }
@@ -247,7 +198,7 @@ export async function analyzeFormatting() {
         await context.sync();
 
         if (tables.items?.length > 0) {
-          tables.items.forEach((table, t) => {
+          tables.items.forEach((table, i) => {
             const headerRow = table.rows?.items?.[0];
             if (
               formatting.enforceRepeatingHeaderRowsForContinuousTables &&
@@ -255,11 +206,11 @@ export async function analyzeFormatting() {
               !headerRow.rowFormat.repeatAsHeaderRow
             ) {
               results.push({
-                id: `s${sectionNum}-t${t + 1}-header`,
-                section: sectionNum,
+                id: `s${s + 1}-table-${i + 1}-header`,
+                section: s + 1,
                 type: "Table Header",
-                message: `Section ${sectionNum}, Table ${
-                  t + 1
+                message: `Section ${s + 1}, Table ${
+                  i + 1
                 }: Header row is not set to repeat on each page.`,
                 canLocate: false,
               });
@@ -267,44 +218,15 @@ export async function analyzeFormatting() {
           });
         }
       }
+    }
 
-      //Hyperlink checks for this section
-      if (!formatting.allowWebHyperlinks) {
-        for (let i = 0; i < paragraphs.items.length; i++) {
-          const p = paragraphs.items[i];
-          if (!p.text || !p.text.toLowerCase().includes("http")) continue;
-
-          const runs = p.getRange().getTextRanges(["Any"], true);
-          runs.load("items/hyperlink");
-          await context.sync();
-
-          if (runs.items && runs.items.length > 0) {
-            runs.items.forEach((run, j) => {
-              if (run.hyperlink && run.hyperlink.address) {
-                results.push({
-                  id: `s${sectionNum}-p${i + 1}-link${j + 1}`,
-                  section: sectionNum,
-                  type: "Hyperlink",
-                  message: `Section ${sectionNum}, Paragraph ${
-                    i + 1
-                  }: Hyperlink detected - ${run.hyperlink.address}`,
-                  text: p.text,
-                  location: run.getRange(),
-                  canLocate: true,
-                });
-              }
-            });
-          }
-        }
-      }
-    } //end section loop
-
-    //If no issues found at all
+    // If still no issues, add success message
     if (results.length === 0) {
       results.push({
         id: "info-clean",
         type: "Info",
-        message: "✅ No issues found across all sections.",
+        message: "✅ No issues found or document is empty.",
+        text: "",
         canLocate: false,
       });
     }
@@ -327,7 +249,6 @@ export async function goToError(location) {
     const range = location.getRange()
       ? location.getRange()
       : context.document.getSelection();
-
     console.log(range);
 
     range.select();

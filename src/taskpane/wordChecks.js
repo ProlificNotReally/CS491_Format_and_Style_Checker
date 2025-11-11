@@ -49,6 +49,8 @@ export async function analyzeFormatting() {
         c.toLowerCase()
       );
 
+      let name = '';
+
       // Loop through paragraphs with pre-fetched XML
       for (let i = 0; i < paragraphs.items.length; i++) {
         const p = paragraphs.items[i];
@@ -65,6 +67,8 @@ export async function analyzeFormatting() {
           !formatting.allowHighlighting &&
           (font.highlightColor && font.highlightColor !== "None")
         ) {
+          name = `highlighting_${i + 1}`;
+          range.insertBookmark(name);
           results.push({
             id: `s${s + 1}-p${i + 1}-highlight`,
             section: s + 1,
@@ -73,13 +77,15 @@ export async function analyzeFormatting() {
               i + 1
             }: Highlighting detected.`,
             text,
-            location: range,
+            location: name,
             canLocate: true,
           });
         }
 
         // --- Hidden text check ---
         if (!formatting.allowHiddenText && font.hidden) {
+          name = `hiddentext_${i + 1}`;
+          range.insertBookmark(name);
           results.push({
             id: `s${s + 1}-p${i + 1}-hidden`,
             section: s + 1,
@@ -88,7 +94,7 @@ export async function analyzeFormatting() {
               i + 1
             }: Hidden text detected.`,
             text,
-            location: range,
+            location: name,
             canLocate: true,
           });
         }
@@ -106,6 +112,9 @@ export async function analyzeFormatting() {
             (c) => !allowedColors.includes("#" + c)
           );
 
+          name = `fontcolor_${i + 1}`;
+          range.insertBookmark(name);
+
           invalidColors.forEach((badColor) => {
             results.push({
               id: `s${s + 1}-p${i + 1}-color-${badColor.replace("#", "")}`,
@@ -115,7 +124,7 @@ export async function analyzeFormatting() {
                 i + 1
               }: Contains disallowed font color "${badColor}".`,
               text,
-              location: range,
+              location: name,
               canLocate: true,
             });
           });
@@ -123,7 +132,9 @@ export async function analyzeFormatting() {
 
         // --- Font size check ---
         const [minSize, maxSize] = formatting.allowedFontSizeRange;
+        name = `fontsize_${i + 1}`;
         if (font.size == null || font.size === "") {
+          range.insertBookmark(name);
           results.push({
             id: `s${s + 1}-p${i + 1}-multisize`,
             section: s + 1,
@@ -132,10 +143,11 @@ export async function analyzeFormatting() {
               i + 1
             }: Contains multiple or undefined font sizes.`,
             text,
-            location: range,
+            location: name,
             canLocate: true,
           });
         } else if (font.size < minSize || font.size > maxSize) {
+          range.insertBookmark(name);
           results.push({
             id: `s${s + 1}-p${i + 1}-size`,
             section: s + 1,
@@ -144,13 +156,15 @@ export async function analyzeFormatting() {
               i + 1
             }: Font size ${font.size}pt is outside allowed range (${minSize}–${maxSize}).`,
             text,
-            location: range,
+            location: name,
             canLocate: true,
           });
         }
 
         // --- Font family check ---
         if (font.name && font.name !== formatting.allowedFont) {
+          name = `fontfamily_${i + 1}`;
+          range.insertBookmark(name);
           results.push({
             id: `s${s + 1}-p${i + 1}-font`,
             section: s + 1,
@@ -159,7 +173,7 @@ export async function analyzeFormatting() {
               i + 1
             }: Font "${font.name}" should be "${formatting.allowedFont}".`,
             text,
-            location: range,
+            location: name,
             canLocate: true,
           });
         }
@@ -246,12 +260,12 @@ export async function goToError(location) {
   if (!location) return;
 
   await Word.run(async (context) => {
-    const range = location.getRange()
-      ? location.getRange()
-      : context.document.getSelection();
-    console.log(range);
+    // const range = location.getRange()
+    //   ? location.getRange()
+    //   : context.document.getSelection();
 
+    const range = context.document.getBookmarkRange(location);
     range.select();
-    context.sync();
+    await context.sync();    
   });
 }

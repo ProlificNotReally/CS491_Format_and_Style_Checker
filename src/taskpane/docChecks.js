@@ -238,6 +238,7 @@ export async function checkDocument() {
 
   return Word.run(async (context) => {
     const results = [];
+    let name = '';
 
     try {
       // --- COMMENTS ---
@@ -249,15 +250,20 @@ export async function checkDocument() {
         if (comments.items.length > 0) {
           comments.items.forEach((comment, i) => {
             const range = comment.getRange();
+            name = `comment_${i + 1}`;
+            range.insertBookmark(name);
+
             results.push({
               id: `comment-${i + 1}`,
               type: "Comment",
               message: `Comment found: "${comment.content}"`,
               text: comment.content,
-              location: range,
+              location: name,
               canLocate: true,
             });
           });
+
+          // await context.sync();
         }
       }
 
@@ -267,16 +273,19 @@ export async function checkDocument() {
       await context.sync();
 
       revisions.items.forEach((rev, i) => {
-        context.trackedObjects
+        name = `revision_${i + 1}`;
+        rev.range.insertBookmark(name);
         results.push({
           id: `revision-${i + 1}`,
           type: "Revision",
           message: `Revision detected (${rev.type}).`,
           text: rev.range.text || "",
-          location: rev.range,
+          location: name,
           canLocate: true,
         });
       });
+
+      // await context.sync();
 
       // --- TEXT BOXES ---
       if (!document_checking.allowTextBoxes) {
@@ -333,17 +342,22 @@ export async function checkDocument() {
 
         refFields.items.forEach((field, i) => {
           const text = field.result.text;
+          name = `reference_${i + 1}`;
+          field.result.insertBookmark(name);
+
           if (text.includes("Error! Reference source not found")) {
             results.push({
               id: `ref-${i + 1}`,
               type: "Invalid Reference",
               message: `Invalid cross-reference found: "${text}"`,
               text,
-              location: field.result,
+              location: name,
               canLocate: true,
             });
           }
         });
+
+        // await context.sync();
       }
 
       // --- MARGINS ---
@@ -375,7 +389,7 @@ export async function checkDocument() {
             results.push({
               id: `margins-${index + 1}`,
               type: "Margins",
-              message: `Section ${index + 1} (${orientation}) has incorrect margins.`,
+              message: `Section ${index + 1} (${orientation}) has incorrect margins. Correct ${orientation} margins: top=${orientation === Word.PageOrientation.portrait ? margins.topMarginPortrait/72 : margins.topMarginLandscape/72}, bottom=${orientation === Word.PageOrientation.portrait ? margins.bottomMarginPortrait/72 : margins.bottomMarginLandscape/72}, left=${orientation === Word.PageOrientation.portrait ? margins.leftMarginPortrait/72 : margins.leftMarginLandscape/72}, right=${orientation === Word.PageOrientation.portrait ? margins.rightMarginPortrait/72 : margins.rightMarginLandscape/72} in inches`,
               canLocate: false,
             });
           }
@@ -412,6 +426,7 @@ export async function checkDocument() {
         });
       }
 
+      await context.sync();
       return results;
     } catch (err) {
       console.error("Error in checkDocument:", err);

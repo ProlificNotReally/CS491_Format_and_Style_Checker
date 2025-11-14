@@ -29,11 +29,15 @@
         "leftMarginLandscape": 72,
         "rightMarginLandscape": 72
     },
+    
     "page_size": {
         "enforcePageSize": true,
         "type": "letter"
-    }
+    },
 
+    "symbols": {
+        "allowSymbolFont": false
+    }
 
 
 }

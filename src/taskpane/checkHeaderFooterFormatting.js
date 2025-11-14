@@ -35,7 +35,6 @@ export async function checkHeaderFooterFormatting(context) {
         const range = p.getRange();
         range.insertBookmark(bkmark_name);
 
-        p.font.highlightColor = "Yellow";
         results.push({ id: `header-lines-${i}`, type: "Header", message: `Section ${i + 1} header: Expected ${header.requiredLineCount} lines, found ${headerCount}`,
           location: bkmark_name,
           canLocate: true
@@ -58,7 +57,7 @@ export async function checkHeaderFooterFormatting(context) {
         bkmark_name = `headeralignment_${j + 1}`;
         range.insertBookmark(bkmark_name);
 
-        para.font.highlightColor = "Yellow";
+        
         results.push({ id: `header-align-${i}-${j}`, type: "Header", message: `Section ${i + 1} header line ${j + 1}: Not ${header.alignment}-aligned`,
           location: bkmark_name,
           canLocate: true
@@ -69,7 +68,7 @@ export async function checkHeaderFooterFormatting(context) {
         bkmark_name = `headerunderline_${j + 1}`;
         range.insertBookmark(bkmark_name);
 
-        para.font.highlightColor = "Yellow";
+        
         results.push({ id: `header-underline-${i}`, type: "Header", message: `Section ${i + 1} header line 2: Not underlined`,
           location: bkmark_name,
           canLocate: true
@@ -80,7 +79,7 @@ export async function checkHeaderFooterFormatting(context) {
         bkmark_name = `headerfont_${j + 1}`;
         range.insertBookmark(bkmark_name);
 
-        para.font.highlightColor = "Yellow";
+        
         results.push({ id: `header-font-${i}-${j}`, type: "Header", message: `Section ${i + 1} header line ${j + 1}: Font not ${formatting.allowedFont}`,
           location: bkmark_name,
           canLocate: true
@@ -91,7 +90,7 @@ export async function checkHeaderFooterFormatting(context) {
         bkmark_name = `headerfontsize_${j + 1}`;
         range.insertBookmark(bkmark_name);
 
-        para.font.highlightColor = "Yellow";
+        
         results.push({ id: `header-size-${i}-${j}`, type: "Header", message: `Section ${i + 1} header line ${j + 1}: Font size ${size} not in allowed range`,
           location: bkmark_name,
           canLocate: true
@@ -103,7 +102,7 @@ export async function checkHeaderFooterFormatting(context) {
         bkmark_name = `headerfontcolor_${j + 1}`;
         range.insertBookmark(bkmark_name);
 
-        para.font.highlightColor = "Yellow";
+        
         results.push({ id: `header-color-${i}-${j}`, type: "Header", message: `Section ${i + 1} header line ${j + 1}: Font color "${color}" not allowed`,
           location: bkmark_name,
           canLocate: true
@@ -119,7 +118,7 @@ export async function checkHeaderFooterFormatting(context) {
         if (!before.includes("\t") && /  +$/.test(before)) {
           range.insertBookmark(bkmark_name);
 
-          para.font.highlightColor = "Yellow";
+          
           results.push({ id: `header-tab-${i}-${j}`, type: "Header", message: `Section ${i + 1} header line ${j + 1}: Page number not preceded by TAB`,
             location: bkmark_name,
             canLocate: true
@@ -147,7 +146,7 @@ export async function checkHeaderFooterFormatting(context) {
           bkmark_name = `footeralignment_${k + 1}`;
           range.insertBookmark(bkmark_name);
 
-          para.font.highlightColor = "Yellow";
+          
           results.push({
             id: `footer-image-${i}-${k}`, type: "Footer", message: `Section ${i + 1} footer line ${k + 1}: Inline image not centered`,
             location: bkmark_name,

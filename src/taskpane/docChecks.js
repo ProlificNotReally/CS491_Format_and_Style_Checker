@@ -234,7 +234,7 @@ import rules from "./config/rules.json";
  * Returns an array of issue objects, compatible with the UI mapping.
  */
 export async function checkDocument() {
-  const { document_checking, margins, page_size } = rules;
+  const { document_checking, margins, page_size, symbols } = rules;
 
   return Word.run(async (context) => {
     const results = [];
@@ -413,6 +413,35 @@ export async function checkDocument() {
             });
           }
         });
+      }
+
+      if (!symbols.allowSymbolFont) {
+        console.log("Running symbols check...");
+        const paragraphs = context.document.body.paragraphs;
+        paragraphs.load("items/font/name,text");
+        await context.sync();
+
+        let symbolCount = 0;
+        paragraphs.items.forEach((para, i) => {
+          const text = para.text;
+          name = `symbolfont_${i + 1}`;
+          if (para.font.name === "Symbol") {
+            //para.font.highlightColor = "#00CED1";  // Turquoise
+            para.getRange().insertBookmark(name);
+            results.push({
+              id: `symbol-${i+1}`,
+              type: "Symbols",
+              message: `Invalid use of font: ${para.font.name} font at paragraph ${i+1}`,
+              text,
+              location: name,
+              canLocate: true,
+            })
+            symbolCount++;
+          }
+        });
+
+        await context.sync();
+        // console.log(`Symbols check: ${symbolCount} Symbol font instance(s) highlighted.`);
       }
 
       // --- SUMMARY ---

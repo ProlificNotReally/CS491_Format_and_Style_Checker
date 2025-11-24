@@ -53,21 +53,6 @@ export async function checkHeaderFooterFormatting(context) {
 
     await context.sync();
 
-    if (section.pageSetup.orientation === "Landscape") {
-      const range = section.body.getRange();
-      const bkmark = `landscape_section_${i + 1}`;
-      range.insertBookmark(bkmark);
-      await context.sync();
-
-      results.push({
-        id: `landscape-page-${i + 1}`,
-        type: "Layout",
-        message: `Section ${i + 1} is in Landscape orientation.`,
-        location: bkmark,
-        canLocate: true,
-      });
-    }
-
     const headerObj = section.getHeader("Primary");
     const footerObj = section.getFooter("Primary");
 
@@ -255,43 +240,66 @@ export async function checkHeaderFooterFormatting(context) {
     }
   }
 
-  // Header consistency check
-  const baseHeader = headerTexts[0]?.text;
-  for (let i = 1; i < headerTexts.length; i++) {
-    if (headerTexts[i].text !== baseHeader) {
-      const range = headerTexts[i].para.getRange();
-      const bk = `inconsistent_header_${i + 1}`;
+// --- Split header/footer groups by orientation ---
+let portraitHeaders = [], landscapeHeaders = [];
+let portraitFooters = [], landscapeFooters = [];
+
+for (let i = 0; i < sections.items.length; i++) {
+  const section = sections.items[i];
+  const headerObj = section.getHeader("Primary");
+  const footerObj = section.getFooter("Primary");
+
+  const headerParas = headerObj.paragraphs;
+  const footerParas = footerObj.paragraphs;
+
+  headerParas.load("items/text");
+  footerParas.load("items/text");
+  await context.sync();
+
+  const headerText = headerParas.items.map(p => (p.text || "").replace(/\\d+/g, "").trim().toLowerCase()).join("||");
+  const footerText = footerParas.items.map(p => (p.text || "").replace(/\\d+/g, "").trim().toLowerCase()).join("||");
+
+  const hasFooterText = footerParas.items.some(p => (p.text || "").trim().length > 0);
+  const group = section.pageSetup.orientation === "Landscape" ? "landscape" : "portrait";
+
+  const headerEntry = { text: headerText, para: headerParas.items[0], index: i };
+  const footerEntry = { text: footerText, para: footerParas.items[0], index: i };
+
+  if (group === "landscape") {
+    landscapeHeaders.push(headerEntry);
+    if (hasFooterText) landscapeFooters.push(footerEntry);
+  } else {
+    portraitHeaders.push(headerEntry);
+    if (hasFooterText) portraitFooters.push(footerEntry);
+  }
+}
+
+// --- Function to check consistency within group ---
+async function checkGroupConsistency(group, label) {
+  const base = group[0]?.text;
+  for (let i = 1; i < group.length; i++) {
+    if (group[i].text !== base) {
+      const range = group[i].para.getRange();
+      const bk = `inconsistent_${label}_${group[i].index + 1}`;
       range.insertBookmark(bk);
       await context.sync();
       results.push({
-        id: `inconsistent-header-${i}`,
-        type: "Header",
-        message: `Section ${headerTexts[i].index + 1} header is inconsistent with others.`,
+        id: `inconsistent-${label}-${group[i].index + 1}`,
+        type: label.charAt(0).toUpperCase() + label.slice(1),
+        message: `Section ${group[i].index + 1} ${label} is inconsistent with other ${label}s of same orientation.`,
         location: bk,
-        canLocate: true,
+        canLocate: true
       });
     }
   }
+}
 
-  // Footer consistency check
-  if (footerTexts.length > 1) {
-    const baseFooter = footerTexts[0]?.text;
-    for (let i = 1; i < footerTexts.length; i++) {
-      if (footerTexts[i].text !== baseFooter) {
-        const range = footerTexts[i].para.getRange();
-        const bk = `inconsistent_footer_${i + 1}`;
-        range.insertBookmark(bk);
-        await context.sync();
-        results.push({
-          id: `inconsistent-footer-${i}`,
-          type: "Footer",
-          message: `Section ${footerTexts[i].index + 1} footer is inconsistent with others.`,
-          location: bk,
-          canLocate: true,
-        });
-      }
-    }
-  }
+// Apply to both portrait and landscape separately
+await checkGroupConsistency(portraitHeaders, "header");
+await checkGroupConsistency(landscapeHeaders, "header");
+await checkGroupConsistency(portraitFooters, "footer");
+await checkGroupConsistency(landscapeFooters, "footer");
+
 
   return results;
 }

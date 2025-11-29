@@ -18,6 +18,21 @@
         "allowWaterMarks": false,
         "enforceValidReferenceSources": true
     },
+    "header_footer": {
+        "checkFirstPage": true,
+        "checkEvenPages": false,
+        "header": {
+        "requireAllCaps": true,
+        "line1": { "alignment": "left", "requireTabBeforePageToken": true, "pageTokens": ["PAGE", "Page", "page"] },
+        "line2": { "alignment": "left", "minTabs": 2 }
+        },
+        "footer": {
+        "textAlignment": "left",
+        "pageTokens": ["PAGE", "Page", "page"],
+        "requireTabBeforePageToken": true,
+        "image": { "allowImageOnlyCentered": true, "mixedParagraphRequireTabBeforeImage": true }
+        }
+    },
     "margins": {
         "enforceMargins": true,
         "topMarginPortrait": 72,

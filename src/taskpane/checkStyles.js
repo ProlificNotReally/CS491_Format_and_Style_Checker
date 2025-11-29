@@ -75,67 +75,6 @@ export async function checkStyles(){
                 });
             }
 
-        //    if (!styles.allowBreakBkmarkStyles) {
-        //         const bookmarkStyles = ["Heading 1", "Heading 2", "Heading 3", "Heading 4", "Heading 5", "Heading 6", "Heading 7", "Heading 8", "Heading 9", "Caption"];
-
-        //         // ----------------------------
-        //         // 1️⃣ Detect page breaks
-        //         // ----------------------------
-        //         const pageBreaks = context.document.body.search("\f", { matchWildcards: false });
-        //         pageBreaks.load("items/paragraphs"); // Load paragraphs first
-        //         await context.sync();
-
-        //         for (let i = 0; i < pageBreaks.items.length; i++) {
-        //             const para = pageBreaks.items[i].paragraphs.getFirst();
-        //             para.load("style,text"); // Load style and text
-        //             await context.sync();
-
-        //             if (bookmarkStyles.includes(para.style)) {
-        //                 const name = `pagebreak_bkmark_${i + 1}`;
-        //                 para.getRange().insertBookmark(name);
-        //                 results.push({
-        //                     id: name,
-        //                     type: "Page Break",
-        //                     style: para.style,
-        //                     text: para.text,
-        //                     message: `Page break after bookmark style '${para.style}'`,
-        //                     location: name,
-        //                     canLocate: true,
-        //                 });
-        //             }
-        //         }
-
-        //         // ----------------------------
-        //         // 2️⃣ Detect section breaks
-        //         // ----------------------------
-        //         const sections = context.document.sections;
-        //         sections.load("items/body/paragraphs"); // Load paragraphs of all sections
-        //         await context.sync();
-
-        //         for (let i = 0; i < sections.items.length; i++) {
-        //             const paras = sections.items[i].body.paragraphs;
-        //             paras.load("items/style,text"); // Load style and text of all paragraphs
-        //             await context.sync();
-
-        //             if (paras.items.length === 0) continue;
-
-        //             const lastPara = paras.items[paras.items.length - 1];
-        //             if (bookmarkStyles.includes(lastPara.style)) {
-        //                 const name = `sectionbreak_bkmark_${i + 1}`;
-        //                 lastPara.getRange().insertBookmark(name);
-        //                 results.push({
-        //                     id: name,
-        //                     type: "Section Break",
-        //                     style: lastPara.style,
-        //                     text: lastPara.text,
-        //                     message: `Section break after bookmark style '${lastPara.style}'`,
-        //                     location: name,
-        //                     canLocate: true,
-        //                 });
-        //             }
-        //         }
-        //     }
-
             if (!styles.allowBreakBkmarkStyles){
                 const bookmarkStyles = ["Heading 1", "Heading 2", "Heading 3", "Heading 4", "Heading 5", "Heading 6", "Heading 7", "Heading 8", "Heading 9", "Caption"];
                 const pages = context.document.body.getRange().pages;

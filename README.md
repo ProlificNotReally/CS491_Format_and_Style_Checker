@@ -2,8 +2,9 @@
 A comprehensive Microsoft Word add-in that automatically detects and corrects formatting inconsistencies, style violations, and document structure issues in professional documents.
 Overview
 This project is designed to help maintain consistent document formatting standards by automatically scanning Word documents for common formatting errors and style violations. The tool identifies issues across multiple categories including formatting, general document structure, headers/footers, margins, styles, and symbols.
-Features
-🎨 Formatting Check
+
+# Features
+**🎨 Formatting Check**
 
 Text Highlighting Detection - Identifies inappropriate use of text highlighting
 Hidden Text Detection - Locates hidden text content that may cause issues
@@ -51,14 +52,14 @@ Sequential Numbering - Validates consecutive numbering in headings and captions
 
 Symbol Font Validation - Ensures symbols use appropriate fonts (not Symbol font)
 
-**Installation**
+# Installation
 
 Clone the repository
 1. Install dependencies: npm install
 2. Build the project: npm run build
 3. Load the add-in into Microsoft Word via Developer mode
 
-**Usage**
+# Usage
 
 1. Open a Microsoft Word document
 2. Launch the Document Format & Style Checker add-in

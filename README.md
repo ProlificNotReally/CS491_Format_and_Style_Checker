@@ -16,14 +16,14 @@ Orphaned Elements Detection - Identifies headings/captions separated from conten
 Table Header Validation - Ensures continuous tables maintain repeating headers
 Hyperlink Verification - Confirms websites are properly hyperlinked
 
-📄 General Document Check
+**📄 General Document Check**
 
 Field Code Error Detection - Identifies broken reference source field codes
 Comment & Track Changes Detection - Locates remaining comments or tracked changes
 Text Box Identification - Flags use of text boxes in documents
 Watermark Detection - Identifies document watermarks
 
-📋 Headers and Footers
+**📋 Headers and Footers**
 
 Style Application Validation - Ensures proper header/footer styles are applied
 Landscape Orientation Support - Validates landscape-specific header/footer styles
@@ -31,7 +31,7 @@ Draft Text Detection - Identifies "Draft" text in headers
 Information Consistency - Checks header/footer information across all pages
 Margin Compliance - Validates 0.5" header/footer margin requirements
 
-📏 Margins Check
+**📏 Margins Check**
 
 Paper Size Validation - Ensures 8.5" x 11" Letter size compliance
 Margin Standards Enforcement
@@ -40,29 +40,28 @@ Portrait: Left 1.25", Right 1.0", Top 1.0", Bottom 1.0"
 Landscape: Left 1.0", Right 1.0", Top 1.25", Bottom 1.0"
 
 
-
-🎯 Styles Check
+**🎯 Styles Check**
 
 Caption Consistency - Validates consistent use of tabs and colons in captions
 Bookmark Style Validation - Identifies misused bookmark styles on blank paragraphs
 Page Break Style Check - Ensures proper styling of page/section breaks
 Sequential Numbering - Validates consecutive numbering in headings and captions
 
-Installation
-
-Clone the repository
-Install dependencies: npm install
-Build the project: npm run build
-Load the add-in into Microsoft Word via Developer mode
-
-Usage
-
-Open a Microsoft Word document
-Launch the Document Format & Style Checker add-in
-Run comprehensive scan or select specific check categories
-Review identified issues in the results panel
-Apply suggested corrections automatically or manually
-
-🔣 Symbols Check
+**🔣 Symbols Check**
 
 Symbol Font Validation - Ensures symbols use appropriate fonts (not Symbol font)
+
+**Installation**
+
+Clone the repository
+1. Install dependencies: npm install
+2. Build the project: npm run build
+3. Load the add-in into Microsoft Word via Developer mode
+
+**Usage**
+
+1. Open a Microsoft Word document
+2. Launch the Document Format & Style Checker add-in
+3. Run comprehensive scan or select specific check categories
+4. Review identified issues in the results panel
+5. Apply suggested corrections automatically or manually

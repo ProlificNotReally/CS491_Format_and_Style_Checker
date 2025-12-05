@@ -10,6 +10,8 @@ export async function analyzeFormatting() {
   return Word.run(async (context) => {
     const { formatting } = rules;
     const results = [];
+    const blankPagesSeen = new Set();
+
 
     // Load all sections
     const sections = context.document.sections;
@@ -57,9 +59,6 @@ export async function analyzeFormatting() {
         const ooxml = ooxmlObjs[i].value || "";
         const text = p.text?.trim() || "";
         const font = p.font || {};
-        const alignment = p.paragraphFormat
-          ? p.paragraphFormat.alignment
-          : "Unknown";
         const range = p.getRange();
 
         // --- Highlighting check ---
@@ -129,35 +128,40 @@ export async function analyzeFormatting() {
         }
 
         // --- Font color check (OOXML regex-based) ---
-        const colorMatches = [
-          ...ooxml.matchAll(/<w:color[^>]*w:val="([^"]+)"/g),
-        ];
-        const uniqueColors = [
-          ...new Set(colorMatches.map((m) => m[1].toLowerCase())),
-        ];
+        const runColorRegex =
+          /<w:r\b[^>]*>[\s\S]*?<w:color[^>]*w:val="([^"]+)"[^>]*\/?[\s\S]*?<\/w:r>/gi;
+
+        const colorMatches = [...ooxml.matchAll(runColorRegex)];
+        const uniqueColors = [...new Set(colorMatches.map((m) => m[1].toLowerCase()))];
 
         if (uniqueColors.length > 0) {
-          const invalidColors = uniqueColors.filter(
-            (c) => !allowedColors.includes("#" + c)
-          );
+          const invalidColors = uniqueColors.filter((c) => {
+          if (c === "auto") return false; // auto = default = OK
+          return !allowedColors.includes("#" + c);
+        });
 
-          name = `fontcolor_${i + 1}`;
-          range.insertBookmark(name);
 
-          invalidColors.forEach((badColor) => {
-            results.push({
-              id: `s${s + 1}-p${i + 1}-color-${badColor.replace("#", "")}`,
-              section: s + 1,
-              type: "Font Color",
-              message: `Section ${s + 1}, Paragraph ${
-                i + 1
-              }: Contains disallowed font color "${badColor}".`,
-              text,
-              location: name,
-              canLocate: true,
+          if (invalidColors.length > 0) {
+            const name = `fontcolor_${i + 1}`;
+            range.insertBookmark(name);
+
+            invalidColors.forEach((badColor) => {
+              results.push({
+                id: `s${s + 1}-p${i + 1}-color-${badColor.replace("#", "")}`,
+                section: s + 1,
+                type: "Font Color",
+                message: `Section ${s + 1}, Paragraph ${
+                  i + 1
+                }: Contains disallowed font color "${badColor}".`,
+                text,
+                location: name,
+                canLocate: true,
+              });
             });
-          });
+          }
         }
+
+
 
         // --- Font size check ---
         const [minSize, maxSize] = formatting.allowedFontSizeRange;
@@ -218,7 +222,6 @@ export async function analyzeFormatting() {
               canLocate: true,
             });
 
-            continue;
           }
 
           // CASE 2 — single font detected → compare to allowed font
@@ -241,77 +244,176 @@ export async function analyzeFormatting() {
 
       // --- Justification check (XML-based, reliable) ---
       {
-        // Skip tables (captions have style = "Caption")
         const text = p.text?.trim() || "";
-        const styleName = (p.style || "").toString().toLowerCase();
-        const isCaption = styleName === "caption";
-
-        if (!text || p.isInsideTable || isCaption) {
-          // allowed cases → skip
+        if (!text) {
+          // Ignore empty paragraphs
         } else {
-          // XML analysis for alignment
-          let align = "left"; // default if <w:jc> missing
+          const styleName = (p.style || "").toString().toLowerCase();
 
-          const jcMatch = ooxml.match(/<w:jc[^>]*w:val="([^"]+)"/);
-          if (jcMatch) {
-            const raw = jcMatch[1].toLowerCase();
+          // Skip captions if you don't want to enforce justification on them
+          const isCaption = styleName === "caption";
 
-            // Translate Word XML terms into human-friendly labels
-            if (raw === "both") align = "justified";
-            else if (raw === "center") align = "centered";
-            else align = raw; // left, right
-          }
+          if (!isCaption) {
+            // Default alignment is "left" when no <w:jc/> is present
+            let align = "left";
+            const jcMatch = ooxml.match(/<w:jc[^>]*w:val="([^"]+)"/i);
+            if (jcMatch) {
+              const raw = jcMatch[1].toLowerCase();
+              if (raw === "both") align = "justified";
+              else if (raw === "center") align = "centered";
+              else align = raw; // left, right, etc.
+            }
 
-          // Only LEFT is acceptable
-          if (align !== "left") {
-            const name = `justification_${i + 1}`;
-            range.insertBookmark(name);
+            // Paragraph is inside a table?
+            const insideTable = p.isInsideTable === true;
 
-            results.push({
-              id: `s${s + 1}-p${i + 1}-alignment`,
-              section: s + 1,
-              type: "Justification",
-              message: `Section ${s + 1}, Paragraph ${i + 1}: Expected LEFT alignment, found "${align}".`,
-              text,
-              location: name,
-              canLocate: true,
-            });
+            // EXPECTED RULES:
+            //  - inside table → CENTERED
+            //  - outside table → JUSTIFIED
+            const expectedAlign = insideTable ? "centered" : "justified";
+
+            if (align !== expectedAlign) {
+              const name = `justification_${s + 1}_${i + 1}`;
+              range.insertBookmark(name);
+
+              results.push({
+                id: `s${s + 1}-p${i + 1}-alignment`,
+                section: s + 1,
+                type: "Justification",
+                message: insideTable
+                  ? `Section ${s + 1}, Paragraph ${i + 1}: Expected CENTER alignment for table text, found "${align}".`
+                  : `Section ${s + 1}, Paragraph ${i + 1}: Expected JUSTIFIED alignment, found "${align}".`,
+                text,
+                location: name,
+                canLocate: true,
+              });
+            }
           }
         }
       }
 
-      /*
-      // --- HYPERLINK DETECTION (XML <w:hyperlink> ONLY) ---
-      if (!formatting.allowWebHyperlinks) {
-        // Detect explicit Word hyperlink elements
-        const hyperlinkRegex = /<w:hyperlink\b[^>]*r:id="([^"]+)"/g;
-        const hyperlinkTags = [...ooxml.matchAll(hyperlinkRegex)];
 
-        if (hyperlinkTags.length > 0) {
+
+
+      
+      // --- HYPERLINK DETECTION (XML) ---
+      if (!formatting.allowWebHyperlinks) {
+        const styleName = (p.style || "").toString().toLowerCase();
+        const text = p.text?.trim() || "";
+
+        // 1) Skip obvious TOC / list styles
+        const isTOCStyle =
+          styleName.startsWith("toc ") ||
+          styleName.includes("table of contents") ||
+          styleName.includes("list of tables") ||
+          styleName.includes("list of figures");
+
+        // 2) Basic hyperlink markers
+        const hasExplicitTag = /<w:hyperlink\b/i.test(ooxml);
+        const hasSimpleField = /<w:fldSimple[^>]*HYPERLINK\b/i.test(ooxml);
+        const hasInstrText = /<w:instrText[^>]*>[^<]*HYPERLINK\b[^<]*/i.test(ooxml);
+
+        // Complex field: begin + "HYPERLINK" somewhere in the field code
+        const hasComplexField =
+          /<w:fldChar[^>]*w:fldCharType="begin"[^>]*>/i.test(ooxml) &&
+          /HYPERLINK\b/i.test(ooxml);
+
+        // 3) INTERNAL cross-references we want to ALLOW:
+        //    - HYPERLINK \l "_Ref..." or "_Toc..." (anchors)
+        //    - REF _Ref..., REF _Toc..., PAGEREF _Toc...
+        const isInternalAnchor =
+          /HYPERLINK\s+\\l\s+"(_Ref|_Toc)[^"]*"/i.test(ooxml);
+
+        const isCrossRef =
+          /\bREF\s+_Ref\d+/i.test(ooxml) ||
+          /\bREF\s+_Toc\d+/i.test(ooxml) ||
+          /\bPAGEREF\s+_Toc\d+/i.test(ooxml);
+
+        const shouldSkip = isTOCStyle || isInternalAnchor || isCrossRef;
+
+        const isHyperlinked =
+          hasExplicitTag || hasSimpleField || hasInstrText || hasComplexField;
+
+        if (isHyperlinked && !shouldSkip) {
           const name = `hyper_${s + 1}_${i + 1}`;
           range.insertBookmark(name);
-
-          const messages = hyperlinkTags.map(
-            (m, idx) => `Hyperlink ${idx + 1} (id=${m[1]}) detected.`
-          );
 
           results.push({
             id: `s${s + 1}-p${i + 1}-hyperlinks`,
             section: s + 1,
             type: "Hyperlink",
-            message: `Section ${s + 1}, Paragraph ${i + 1}: Contains hyperlinks.\n` + messages.join("\n"),
+            message: `Section ${s + 1}, Paragraph ${i + 1}: Contains at least one web hyperlink.`,
             text,
             location: name,
             canLocate: true,
           });
         }
       }
-      */
+
+
+
+
 
 
 
 
     }
+
+
+    {
+    console.log("===== SECTION OOXML START =====");
+    const oox = body.getOoxml();
+    await context.sync();
+    console.log(oox.value);
+    console.log("===== SECTION OOXML END =====");
+}
+
+      // --- BLANK PAGE DETECTION (OOXML PAGE SPLIT) ---
+      // --- BLANK PAGE DETECTION (OOXML PAGE SPLIT) ---
+{
+    const sectionXmlObj = body.getOoxml();
+    await context.sync();
+    const xml = sectionXmlObj.value || "";
+
+    // TRUE page breaks only
+    let pages = xml.split(/<w:br[^>]*w:type="page"[^>]*>/g);
+
+    const pageHasContent = (xml) =>
+        /<w:t\b[^>]*>[ \t\r\n]*\S[\s\S]*?<\/w:t>/.test(xml);
+
+    for (let p = 0; p < pages.length; p++) {
+        const pageXml = pages[p];
+
+        // Skip trailing non-body content (rels, styles, theme, settings)
+        if (!/<w:p\b/.test(pageXml) && !/<w:body\b/.test(pageXml)) {
+            continue;
+        }
+
+        // Detect actual blank page
+        if (!pageHasContent(pageXml)) {
+            const key = `${s + 1}-${p + 1}`;
+            if (blankPagesSeen.has(key)) continue;
+            blankPagesSeen.add(key);
+
+            let firstPara = paragraphs.items[0];
+            const name = `blankpage_${s + 1}_${p + 1}`;
+            firstPara.getRange().insertBookmark(name);
+
+            results.push({
+                id: `s${s + 1}-blankpage-${p + 1}`,
+                section: s + 1,
+                type: "Blank Page",
+                message: `Section ${s + 1}: Page ${p + 1} is blank.`,
+                location: name,
+                text: "",
+                canLocate: true,
+            });
+        }
+    }
+}
+
+
+
 
 
 
@@ -350,6 +452,9 @@ export async function analyzeFormatting() {
         }
       }
     }
+
+    
+
 
     // If still no issues, add success message
     if (results.length === 0) {

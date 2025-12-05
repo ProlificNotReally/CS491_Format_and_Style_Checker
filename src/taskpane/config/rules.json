@@ -3,7 +3,7 @@
     "allowHighlighting": false,
     "allowHiddenText": false,
     "allowedFontColors": ["black", "#000000", "automatic"],
-    "allowBlankPages": false,
+    "flagBlankPages": true,
     "allowedFontSizeRange": [8, 12],
     "allowedFont": "Times New Roman",
     "enforceTextJustification": true,

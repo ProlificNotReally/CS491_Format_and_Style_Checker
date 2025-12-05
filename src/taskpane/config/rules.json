@@ -1,0 +1,56 @@
+{
+  "formatting": {
+    "allowHighlighting": false,
+    "allowHiddenText": false,
+    "allowedFontColors": ["black", "#000000", "automatic"],
+    "allowBlankPages": false,
+    "allowedFontSizeRange": [8, 12],
+    "allowedFont": "Times New Roman",
+    "enforceTextJustification": true,
+    "allowOrphanedHeadingsOrCaptions": false,
+    "enforceRepeatingHeaderRowsForContinuousTables": true,
+    "allowWebHyperlinks": false
+  },
+
+   "document_checking": {
+        "allowComments": false,
+        "allowTextBoxes": false,
+        "allowWaterMarks": false,
+        "enforceValidReferenceSources": true
+    },
+    "margins": {
+        "enforceMargins": true,
+        "topMarginPortrait": 72,
+        "bottomMarginPortrait": 72,
+        "leftMarginPortrait": 90,
+        "rightMarginPortrait": 72,
+        "topMarginLandscape": 90,
+        "bottomMarginLandscape": 72,
+        "leftMarginLandscape": 72,
+        "rightMarginLandscape": 72
+    },
+    
+    "page_size": {
+        "enforcePageSize": true,
+        "type": "letter"
+    },
+    "header": {
+      "requiredLineCount": 2,
+      "alignment": "Left",
+      "secondLineUnderline": true,
+      "pageNumberPreTab": true
+    },
+    "footer": {
+      "imageMustBeCentered": true
+    },
+    "symbols": {
+        "allowSymbolFont": false
+    },
+    "styles": {
+        "allowInconsistentCaptions": false,
+        "allowBlankParaBkmarkStyles": false,
+        "allowBreakBkmarkStyles": false,
+        "requireConsecutiveNumbering": true
+    }
+
+}

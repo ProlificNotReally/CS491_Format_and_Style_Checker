@@ -91,11 +91,10 @@ export async function checkStyles(){
                                 id: name,
                                 type: "Section/Page Breaks",
                                 style: brStyle,
-                                message: `Break styled with bookmark style '${brStyle}'`,
+                                message: `Break styled with bookmark style '${brStyle} on page ${page.index}'`,
                                 location: name,
                                 canLocate: true,
                             });
-                            console.log(`Break on page ${page.index} has forbidden style: ${brStyle}`);
                         }
                     });
                 });

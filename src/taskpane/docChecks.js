@@ -1,232 +1,3 @@
-// import rules from "./config/rules.json";
-
-// export async function checkDocument() {
-// //Check the document for comments, text boxes, watermarks, and invalid reference sources based on toggled rules given by rules.json
-//   const { document_checking, margins, page_size } = rules;
-//   try{
-//     await Word.run(async (context) => {
-//       if(!document_checking.allowComments){
-//         const comments = context.document.comments;
-//         console.log("Attempting to load comments");
-//         comments.load("items");
-//         console.log("Loaded comments");
-//         await context.sync();
-
-//         if(comments.items.length > 0){
-//           comments.items.forEach(comment => {
-//             console.log("Comment text: ", comment.content);
-//             const range = comment.getRange();
-//             const paragraph = range.paragraphs.getFirst();
-//             paragraph.font.highlightColor = "#FF0000";
-//             console.log("Got comment and highlighted paragraph containing it");
-//           });
-//           await context.sync();
-//           console.log(`Found and highlighted ${comments.items.length} comments.`);
-//         } else {
-//           console.log("No comments found.")
-//         }
-
-//         const revisions = context.document.revisions;
-//         revisions.load("items");
-//         await context.sync();
-
-//         for (const rev of revisions.items) {
-//           console.log(`Revision type: ${rev.type}`);
-//         }
-
-//         await context.sync();
-
-//         for (const rev of revisions.items) {
-//           console.log(`Revision type: ${rev.type}`);
-//           if (rev.type === "Insert") {
-//             rev.range.font.highlightColor = "#00FF00"; 
-//           } else if (rev.type === "Delete") {
-//             rev.range.font.highlightColor = "#FF0000"; 
-//           }
-//         }
-
-//         await context.sync();
-//       } 
-
-//       if(!document_checking.allowTextBoxes){
-//         const shapes = context.document.body.shapes;
-//         shapes.load("items/type");
-//         await context.sync();
-
-//         const textBoxes = shapes.items.filter(shape => shape.type === "TextBox");
-//         console.log(`Found ${textBoxes.length} text boxes.`);
-
-//         for (const box of textBoxes) {
-//             const body = box.body;
-//             body.font.highlightColor = "#0FF000"; 
-//         }
-
-//         await context.sync();
-//       }
-
-//       if(!document_checking.allowWaterMarks){
-//         // const templates = context.application.templates;
-//         // templates.load("items/name,items/buildingBlockEntries");
-//         // await context.sync();
-
-//         // let watermarkBlocks = []
-
-//         // for (const template of templates.items){
-//         //   const blockEntries = template.buildingBlockEntries;
-//         //   const count = blockEntries.getCount();
-//         //   await context.sync();
-
-//         //   console.log(`There are ${count.value} blocks in the template named ${template.name}`);
-
-//         //   for (let i = 0; i < count.value; i++) {
-//         //     const entry = blockEntries.getItemAt(i);
-//         //     context.load(entry, "name,type,value,description,insertType");
-//         //     await context.sync();
-
-//         //     if (
-//         //         entry.type.name === "Watermarks"
-//         //     ) {
-//         //         watermarkBlocks.push({
-//         //             template: template.name,
-//         //             type: entry.type.name,
-//         //             name: entry.name,
-//         //             value: entry.value,
-//         //             description: entry.description,
-//         //             insertType: entry.insertType
-//         //         });
-//         //     }
-//         //   }
-         
-//         // }
-
-//         // console.log("Collected building block information for built-in watermarks:", watermarkBlocks);
-
-//         const sections = context.document.sections;
-//         sections.load("items");
-//         await context.sync();
-
-//         for (let i = 0; i < sections.items.length; i++) {
-//           const section = sections.items[i];
-//           const headerTypes = ["primary", "firstPage", "evenPages"];
-//           for (const type of headerTypes) {
-//             const header = section.getHeader(type);
-//             const ooxml = header.getOoxml();
-//             await context.sync();
-//             // console.log(ooxml.value);
-//             if (ooxml.value.includes("docPartGallery w:val=\"Watermarks\"")) {
-//               console.log(`Watermark detected in section ${i + 1}, header: ${type}`);
-//               let updatedXml = ooxml.value.replace(
-//                 /(<v:shape[^>]*PowerPlusWaterMarkObject[^>]*\b)fillcolor="[^"]*"/i,
-//                 '$1fillcolor="red"'
-//               );
-
-//               updatedXml = updatedXml.replace(
-//                 /(<v:fill[^>]*\b)opacity="[^"]*"/gi,
-//                 `$1opacity="1"`
-//               );
-//               header.insertOoxml(updatedXml, "Replace");
-
-//               const match = ooxml.value.match(/<v:textpath[^>]*string="([^"]+)"/i);
-              
-//               await context.sync();
-
-//               if (match && match[1]) {
-//                 console.log(`Watermark text: "${match[1]}"`);
-//               } else {
-//                 console.log("Could not extract watermark text. May be an image watermark.");
-//               }
-//             }
-//           }
-//         }    
-
-//       }
-
-//       if(document_checking.enforceValidReferenceSources){
-//         console.log("loading reference fields");
-//         const refFields = context.document.body.fields.getByTypes([Word.FieldType.ref]);
-//         refFields.load("items"); 
-//         await context.sync();
-//         console.log("loaded reference fields");
-        
-
-//         let invalidCount = 0;
-
-//         for (const field of refFields.items) {
-//           field.result.load("text");
-//         }
-
-//         await context.sync();
-
-//         for (const field of refFields.items) {
-//           const text = field.result.text;
-//           if (text.includes("Error! Reference source not found")) {
-//             console.log("Invalid cross reference found:", text);
-//             field.result.font.highlightColor = "#FFA500"; 
-//             invalidCount++;
-//           }
-//         }
-
-//         await context.sync();
-//         console.log(`Found and highlighted ${invalidCount} invalid cross references.`);
-//       }
-      
-      
-//       const sections = context.document.sections;
-//       sections.load("items/pageSetup");
-//       await context.sync();
-
-//       if(margins.enforceMargins){
-        
-//         sections.items.forEach((section, index) => {
-//           const setup = section.pageSetup;
-//           const orientation = setup.orientation;
-        
-//           if (orientation === Word.PageOrientation.portrait) {
-//             if(setup.topMargin !== margins.topMarginPortrait || setup.bottomMargin !== margins.bottomMarginPortrait ||setup.leftMargin !== margins.leftMarginPortrait || setup.rightMargin !== margins.rightMarginPortrait){
-//               console.warn(
-//                 `Section ${index + 1} (${orientation}) margins are incorrect: ` +
-//                 `Top:${setup.topMargin}, Bottom:${setup.bottomMargin}, Left:${setup.leftMargin}, Right:${setup.rightMargin}`
-//               );
-//             } else {
-//               console.log(`Section ${index + 1} (${orientation}) margins are correct.`);
-//             }
-//           } else if (orientation === Word.PageOrientation.landscape) {
-//             if(setup.topMargin !== margins.topMarginLandscape || setup.bottomMargin !== margins.bottomMarginLandscape ||setup.leftMargin !== margins.leftMarginLandscape || setup.rightMargin !== margins.rightMarginLandscape){
-//               console.warn(
-//                 `Section ${index + 1} (${orientation}) margins are incorrect: ` +
-//                 `Top:${setup.topMargin}, Bottom:${setup.bottomMargin}, Left:${setup.left}, Right:${setup.right}`
-//               );
-//             } else {
-//               console.log(`Section ${index + 1} (${orientation}) margins are correct.`);
-//             }
-//           }
-//         }); 
-
-//       }
-
-      
-//       if(page_size.enforcePageSize){
-//         sections.items.forEach((section, index) => {
-//           const setup = section.pageSetup;
-//           const orientation = setup.orientation; 
-
-//           if (page_size.type == "letter" && setup.paperSize !== Word.PaperSize.letter) {
-//             console.warn(`Section ${index + 1} paper size is not Letter.`);
-//           }
-//           else {
-//             console.log(`Section ${index + 1}: ${orientation} page size is correct.`)
-//           }
-//         });
-//       }
-      
-      
-//     });
-//   } catch (error) {
-//     console.log("Error: " + error);
-//   }
-// }
-
-
 import rules from "./config/rules.json";
 
 /**
@@ -240,12 +11,44 @@ export async function checkDocument() {
     const results = [];
     let name = '';
 
+    const comments = context.document.comments;
+    const revisions = context.document.revisions;
+    const shapes = context.document.body.shapes;
+    const sections = context.document.sections;
+    const refFields = context.document.body.fields.getByTypes([Word.FieldType.ref]);
+    const paragraphs = context.document.body.paragraphs;
+
+    if(!document_checking.allowComments){
+      comments.load("items");
+    }
+
+    revisions.load("items,type,range");
+
+    if (!document_checking.allowTextBoxes) {
+      shapes.load("items/type");
+    }
+
+    if (!document_checking.allowWaterMarks || margins.enforceMargins || page_size.enforcePageSize) {
+        sections.load("items, items/pageSetup");
+    }
+
+    if (document_checking.enforceValidReferenceSources) {
+        refFields.load("items,result");
+    }
+
+    if (!symbols.allowSymbolFont) {
+        //console.log("Running symbols check...");
+        paragraphs.load("items/font/name");
+    }
+
+    await context.sync();
+
     try {
       // --- COMMENTS ---
       if (!document_checking.allowComments) {
-        const comments = context.document.comments;
-        comments.load("items");
-        await context.sync();
+        // const comments = context.document.comments;
+        // comments.load("items");
+        // await context.sync();
 
         if (comments.items.length > 0) {
           comments.items.forEach((comment, i) => {
@@ -268,9 +71,9 @@ export async function checkDocument() {
       }
 
       // --- REVISIONS ---
-      const revisions = context.document.revisions;
-      revisions.load("items,type,range");
-      await context.sync();
+      // const revisions = context.document.revisions;
+      // revisions.load("items,type,range");
+      // await context.sync();
 
       revisions.items.forEach((rev, i) => {
         name = `revision_${i + 1}`;
@@ -285,13 +88,11 @@ export async function checkDocument() {
         });
       });
 
-      // await context.sync();
-
       // --- TEXT BOXES ---
       if (!document_checking.allowTextBoxes) {
-        const shapes = context.document.body.shapes;
-        shapes.load("items/type");
-        await context.sync();
+        // const shapes = context.document.body.shapes;
+        // shapes.load("items/type");
+        // await context.sync();
 
         const textBoxes = shapes.items.filter((shape) => shape.type === "TextBox");
         textBoxes.forEach((box, i) => {
@@ -306,46 +107,45 @@ export async function checkDocument() {
 
       // --- WATERMARKS ---
       if (!document_checking.allowWaterMarks) {
-        const sections = context.document.sections;
-        sections.load("items");
-        await context.sync();
+        const headerTypes = ["primary", "firstPage", "evenPages"];
+        const section = sections.items[0];
+         
 
-        for (let i = 0; i < sections.items.length; i++) {
-          const section = sections.items[i];
-          const headerTypes = ["primary", "firstPage", "evenPages"];
+        for (const type of headerTypes) {
+          const header = section.getHeader(type);
+          const ooxml = header.getOoxml();
+          await context.sync();
 
-          for (const type of headerTypes) {
-            const header = section.getHeader(type);
-            const ooxml = header.getOoxml();
-            await context.sync();
+          const xml = ooxml.value
 
-            if (ooxml.value.includes('docPartGallery w:val="Watermarks"')) {
-              const match = ooxml.value.match(/<v:textpath[^>]*string="([^"]+)"/i);
-              const watermarkText = match ? match[1] : "(image watermark)";
-              results.push({
-                id: `watermark-${i + 1}-${type}`,
-                type: "Watermark",
-                message: `Watermark detected in section ${i + 1}, header: ${type}.`,
-                text: watermarkText,
-                canLocate: false,
-              });
-            }
+          if (xml.includes("PowerPlusWaterMarkObject") || xml.includes("WordPictureWatermark")) {
+            const match = xml.match(/<v:textpath[^>]*string="([^"]+)"/i);
+            const watermarkText = match ? match[1] : "(image watermark)";
+            results.push({
+              id: `watermark-${type}`,
+              type: "Watermark",
+              message: `Watermark detected in document, header type: ${type}. Watermark data: ${watermarkText}`,
+              text: watermarkText,
+              canLocate: false,
+            });
+            break
           }
         }
+        
       }
 
       // --- INVALID REFERENCES ---
       if (document_checking.enforceValidReferenceSources) {
-        const refFields = context.document.body.fields.getByTypes([Word.FieldType.ref]);
-        refFields.load("items,result");
-        await context.sync();
+        // const refFields = context.document.body.fields.getByTypes([Word.FieldType.ref]);
+        // refFields.load("items,result");
+        // await context.sync();
 
         refFields.items.forEach((field, i) => {
           const text = field.result.text;
           name = `reference_${i + 1}`;
-          field.result.insertBookmark(name);
-
+        
           if (text.includes("Error! Reference source not found")) {
+            field.result.insertBookmark(name);
             results.push({
               id: `ref-${i + 1}`,
               type: "Invalid Reference",
@@ -362,9 +162,9 @@ export async function checkDocument() {
 
       // --- MARGINS ---
       if (margins.enforceMargins) {
-        const sections = context.document.sections;
-        sections.load("items/pageSetup");
-        await context.sync();
+        // const sections = context.document.sections;
+        // sections.load("items/pageSetup");
+        // await context.sync();
 
         sections.items.forEach((section, index) => {
           const s = section.pageSetup;
@@ -398,9 +198,9 @@ export async function checkDocument() {
 
       // --- PAGE SIZE ---
       if (page_size.enforcePageSize) {
-        const sections = context.document.sections;
-        sections.load("items/pageSetup");
-        await context.sync();
+        // const sections = context.document.sections;
+        // sections.load("items/pageSetup");
+        // await context.sync();
 
         sections.items.forEach((section, i) => {
           const setup = section.pageSetup;
@@ -415,33 +215,44 @@ export async function checkDocument() {
         });
       }
 
+      // -------- SYMBOL FONT (efficient) --------
       if (!symbols.allowSymbolFont) {
-        console.log("Running symbols check...");
-        const paragraphs = context.document.body.paragraphs;
-        paragraphs.load("items/font/name,text");
-        await context.sync();
+        // paragraphs.items contains only font.name (we loaded that earlier)
+        // collect indices that match Symbol, then load text only for those specific paragraphs:
+        const symbolParagraphIndexes = [];
+        for (let i = 0; i < paragraphs.items.length; i++) {
+          const p = paragraphs.items[i];
+          if (p.font && p.font.name && p.font.name.toLowerCase() === "symbol") {
+            symbolParagraphIndexes.push(i);
+          }
+        }
 
-        let symbolCount = 0;
-        paragraphs.items.forEach((para, i) => {
-          const text = para.text;
-          name = `symbolfont_${i + 1}`;
-          if (para.font.name === "Symbol") {
-            //para.font.highlightColor = "#00CED1";  // Turquoise
-            para.getRange().insertBookmark(name);
+        // If matches exist, fetch their text ranges in one batch:
+        const rangesToLoad = [];
+        for (const idx of symbolParagraphIndexes) {
+          const para = paragraphs.items[idx];
+          const range = para.getRange();
+          range.load("text");
+          rangesToLoad.push(range);
+        }
+
+        if (rangesToLoad.length > 0) {
+          await context.sync(); 
+          for (let j = 0; j < rangesToLoad.length; j++) {
+            const range = rangesToLoad[j];
+            name = `symbolfont_${j + 1}`;
+            range.insertBookmark(name);
+
             results.push({
-              id: `symbol-${i+1}`,
+              id: `symbol-${j + 1}`,
               type: "Symbols",
-              message: `Invalid use of font: ${para.font.name} font at paragraph ${i+1}`,
-              text,
+              message: `Invalid use of Symbol font in a paragraph.`,
+              text: range.text,
               location: name,
               canLocate: true,
-            })
-            symbolCount++;
+            });
           }
-        });
-
-        await context.sync();
-        // console.log(`Symbols check: ${symbolCount} Symbol font instance(s) highlighted.`);
+        }
       }
 
       // --- SUMMARY ---
@@ -470,3 +281,314 @@ export async function checkDocument() {
     }
   });
 }
+
+
+// import rules from "./config/rules.json";
+
+// /**
+//  * Fast, optimized document-level checker for Word add-ins.
+//  * Key optimizations:
+//  *  - All loads grouped before a single initial context.sync()
+//  *  - Avoids getOoxml(); detects watermarks via header shapes
+//  *  - Loads paragraph text only for Symbol-font matches
+//  *  - Inserts bookmarks in-memory and does a single final sync
+//  */
+// export async function checkDocument() {
+//   const { document_checking, margins, page_size, symbols } = rules;
+
+//   return Word.run(async (context) => {
+//     const results = [];
+//     try {
+//       //
+//       // 1) DECLARE handles up-front (so they are always defined)
+//       //
+//       const comments = context.document.comments;
+//       const revisions = context.document.revisions;
+//       const shapes = context.document.body.shapes;
+//       const sections = context.document.sections;
+//       const paragraphs = context.document.body.paragraphs;
+//       const refFields = context.document.body.fields.getByTypes([Word.FieldType.ref]);
+
+//       //
+//       // 2) CONDITIONALLY load minimal properties (batch loads)
+//       //
+
+//       if (!document_checking.allowComments) {
+//         // only need the items; we will read comment.content later
+//         comments.load("items/content");
+//       }
+
+//       // revisions are always relevant for this ruleset
+//       revisions.load("items,type,range/text");
+
+//       if (!document_checking.allowTextBoxes) {
+//         // only need shape types to find TextBoxes
+//         shapes.load("items/type");
+//       }
+
+//       if (!document_checking.allowWaterMarks) {
+//         // we'll inspect header shapes to detect watermarks (avoid OOXML)
+//         // load sections so we can get headers and their shapes later
+//         sections.load("items");
+//       }
+
+//       if (document_checking.enforceValidReferenceSources) {
+//         refFields.load("items,result");
+//       }
+
+//       // pageSetup is needed for margins and page size checks
+//       if (margins.enforceMargins || page_size.enforcePageSize) {
+//         sections.load("items/pageSetup");
+//       }
+
+//       // symbol font: load only font names (avoid loading text for every paragraph)
+//       if (!symbols.allowSymbolFont) {
+//         paragraphs.load("items/font/name");
+//       }
+
+//       // Single initial sync for all loads
+//       await context.sync();
+
+//       //
+//       // 3) PROCESS LOADED DATA (no syncs inside loops)
+//       //
+//       let bookmarkCounter = 0;
+//       const makeBookmarkName = () => `doc_check_loc_${++bookmarkCounter}`;
+
+//       // -------- COMMENTS --------
+//       if (!document_checking.allowComments) {
+//         for (let i = 0; i < comments.items.length; i++) {
+//           const comment = comments.items[i];
+//           // queue bookmark insertion (no sync yet)
+//           const bname = makeBookmarkName();
+//           comment.getRange().insertBookmark(bname);
+
+//           results.push({
+//             id: `comment-${i + 1}`,
+//             type: "Comment",
+//             message: `Comment found: "${comment.content}"`,
+//             text: comment.content,
+//             location: bname,
+//             canLocate: true,
+//           });
+//         }
+//       }
+
+//       // -------- REVISIONS --------
+//       // revisions were loaded earlier; their ranges are available
+//       for (let i = 0; i < revisions.items.length; i++) {
+//         const rev = revisions.items[i];
+//         const bname = makeBookmarkName();
+//         rev.range.insertBookmark(bname);
+
+//         results.push({
+//           id: `revision-${i + 1}`,
+//           type: "Revision",
+//           message: `Revision detected (${rev.type}).`,
+//           text: rev.range.text || "",
+//           location: bname,
+//           canLocate: true,
+//         });
+//       }
+
+//       // -------- TEXT BOXES --------
+//       if (!document_checking.allowTextBoxes) {
+//         const textBoxes = shapes.items.filter((s) => s.type === "TextBox");
+//         for (let i = 0; i < textBoxes.length; i++) {
+//           results.push({
+//             id: `textbox-${i + 1}`,
+//             type: "Text Box",
+//             message: "Text box found in document.",
+//             canLocate: false,
+//           });
+//         }
+//       }
+
+//       // --- WATERMARKS ---
+//       if (!document_checking.allowWaterMarks) {
+//         // const sections = context.document.sections;
+//         // sections.load("items");
+//         // await context.sync();
+//         const headerTypes = ["primary", "firstPage", "evenPages"];
+//         const section = sections.items[0];
+         
+
+//         for (const type of headerTypes) {
+//           const header = section.getHeader(type);
+//           const ooxml = header.getOoxml();
+//           await context.sync();
+
+//           const xml = ooxml.value
+
+//           if (xml.includes("PowerPlusWaterMarkObject") || xml.includes("WordPictureWatermark")) {
+//             const match = xml.match(/<v:textpath[^>]*string="([^"]+)"/i);
+//             const watermarkText = match ? match[1] : "(image watermark)";
+//             results.push({
+//               id: `watermark-${type}`,
+//               type: "Watermark",
+//               message: `Watermark detected in document, header type: ${type}. Watermark data: ${watermarkText}`,
+//               text: watermarkText,
+//               canLocate: false,
+//             });
+//             break
+//           }
+//         }
+        
+//       }
+
+//       // -------- INVALID REFERENCES --------
+//       if (document_checking.enforceValidReferenceSources) {
+//         for (let i = 0; i < refFields.items.length; i++) {
+//           const field = refFields.items[i];
+//           const text = field.result.text;
+//           if (text && text.includes("Error! Reference source not found")) {
+//             const b = makeBookmarkName();
+//             field.result.insertBookmark(b);
+
+//             results.push({
+//               id: `ref-${i + 1}`,
+//               type: "Invalid Reference",
+//               message: `Invalid cross-reference found: "${text}"`,
+//               text,
+//               location: b,
+//               canLocate: true,
+//             });
+//           }
+//         }
+//       }
+
+//       // -------- MARGINS --------
+//       if (margins.enforceMargins) {
+//         // We loaded sections.pageSetup earlier if needed
+//         for (let i = 0; i < sections.items.length; i++) {
+//           const s = sections.items[i].pageSetup;
+//           const isPortrait = s.orientation === Word.PageOrientation.portrait;
+
+//           const valid =
+//             (isPortrait &&
+//               s.topMargin === margins.topMarginPortrait &&
+//               s.bottomMargin === margins.bottomMarginPortrait &&
+//               s.leftMargin === margins.leftMarginPortrait &&
+//               s.rightMargin === margins.rightMarginPortrait) ||
+//             (!isPortrait &&
+//               s.topMargin === margins.topMarginLandscape &&
+//               s.bottomMargin === margins.bottomMarginLandscape &&
+//               s.leftMargin === margins.leftMarginLandscape &&
+//               s.rightMargin === margins.rightMarginLandscape);
+
+//           if (!valid) {
+//             const correct = isPortrait
+//               ? {
+//                   top: margins.topMarginPortrait / 72,
+//                   bottom: margins.bottomMarginPortrait / 72,
+//                   left: margins.leftMarginPortrait / 72,
+//                   right: margins.rightMarginPortrait / 72,
+//                 }
+//               : {
+//                   top: margins.topMarginLandscape / 72,
+//                   bottom: margins.bottomMarginLandscape / 72,
+//                   left: margins.leftMarginLandscape / 72,
+//                   right: margins.rightMarginLandscape / 72,
+//                 };
+
+//             results.push({
+//               id: `margins-${i + 1}`,
+//               type: "Margins",
+//               message: `Section ${i + 1} has incorrect margins. Expected (inches): top=${correct.top}", bottom=${correct.bottom}", left=${correct.left}", right=${correct.right}".`,
+//               canLocate: false,
+//             });
+//           }
+//         }
+//       }
+
+//       // -------- PAGE SIZE --------
+//       if (page_size.enforcePageSize) {
+//         for (let i = 0; i < sections.items.length; i++) {
+//           const setup = sections.items[i].pageSetup;
+//           if (page_size.type === "letter" && setup.paperSize !== Word.PaperSize.letter) {
+//             results.push({
+//               id: `pagesize-${i + 1}`,
+//               type: "Page Size",
+//               message: `Section ${i + 1} page size is not Letter.`,
+//               canLocate: false,
+//             });
+//           }
+//         }
+//       }
+
+
+//       // -------- SYMBOL FONT (efficient) --------
+//       if (!symbols.allowSymbolFont) {
+//         // paragraphs.items contains only font.name (we loaded that earlier)
+//         // collect indices that match Symbol, then load text only for those specific paragraphs:
+//         const symbolParagraphIndexes = [];
+//         for (let i = 0; i < paragraphs.items.length; i++) {
+//           const p = paragraphs.items[i];
+//           if (p.font && p.font.name && p.font.name.toLowerCase() === "symbol") {
+//             symbolParagraphIndexes.push(i);
+//           }
+//         }
+
+//         // If matches exist, fetch their text ranges in one batch:
+//         const rangesToLoad = [];
+//         for (const idx of symbolParagraphIndexes) {
+//           const para = paragraphs.items[idx];
+//           const range = para.getRange();
+//           range.load("text");
+//           rangesToLoad.push(range);
+//         }
+
+//         if (rangesToLoad.length > 0) {
+//           await context.sync(); // one sync to get text of only the matched paragraphs
+//           // now process them and insert bookmarks (queued)
+//           for (let j = 0; j < rangesToLoad.length; j++) {
+//             const rng = rangesToLoad[j];
+//             const b = makeBookmarkName();
+//             rng.insertBookmark(b);
+
+//             results.push({
+//               id: `symbol-${j + 1}`,
+//               type: "Symbols",
+//               message: `Invalid use of Symbol font in a paragraph.`,
+//               text: rng.text,
+//               location: b,
+//               canLocate: true,
+//             });
+//           }
+//         }
+//       }
+      
+//       // 4) FINAL SUMMARY if no issues
+//       //
+//       if (results.length === 0) {
+//         results.push({
+//           id: "info-clean",
+//           type: "Info",
+//           message: "✅ No document-level issues found.",
+//           text: "",
+//           canLocate: false,
+//         });
+//       }
+
+//       // //
+//       // // 5) Final sync: apply all insertBookmark() operations queued earlier
+//       // //
+//       // // Note: some insertBookmark calls were already queued earlier (comments, revisions, invalid refs, symbol paragraphs).
+//       // // We need a final sync to apply them to the document.
+//       await context.sync();
+
+//       return results;
+//     } catch (err) {
+//       console.error("Error in optimized checkDocument:", err);
+//       return [
+//         {
+//           id: "error",
+//           type: "Error",
+//           message: `An error occurred: ${err.message}`,
+//           canLocate: false,
+//         },
+//       ];
+//     }
+//   });
+// }
+

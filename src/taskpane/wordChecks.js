@@ -1,4 +1,3 @@
-import { checkHeaderFooterFormatting } from "./checkHeaderFooterFormatting";
 import rules from "./config/rules.json";
 
 /**
@@ -361,11 +360,8 @@ export async function analyzeFormatting() {
         canLocate: false,
       });
     }
-
     
-    const headerFooterIssues = await checkHeaderFooterFormatting(context);
-    results.push(...headerFooterIssues);
-return results;
+  return results;
   });
 }
 

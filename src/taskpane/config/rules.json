@@ -42,5 +42,15 @@
     },
     "footer": {
       "imageMustBeCentered": true
+    },
+    "symbols": {
+        "allowSymbolFont": false
+    },
+    "styles": {
+        "allowInconsistentCaptions": false,
+        "allowBlankParaBkmarkStyles": false,
+        "allowBreakBkmarkStyles": false,
+        "requireConsecutiveNumbering": true
     }
+
 }

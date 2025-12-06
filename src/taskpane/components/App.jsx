@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { analyzeFormatting, goToError } from "../wordChecks";
 import { checkDocument } from "../docChecks";
+import { checkStyles } from "../checkStyles";
+import { checkHeaderFooterFormatting } from "../checkHeaderFooterFormatting";
 
 export default function App() {
   const [results, setResults] = useState([]);
   const [docResults, setDocResults] = useState([]);
+  const [styleResults, setStyleResults] = useState([]);
+  const [compResults, setCompResults] = useState([]);
+  const [headerFooterResults, setHeaderFooterResults] = useState([]);
+
   const [isChecking, setIsChecking] = useState(false);
   const [isCheckingDocument, setIsCheckingDocument] = useState(false);
+  const [isCheckingStyles, setIsCheckingStyles] = useState(false);
+  const [isCheckingComp, setIsCheckingComp] = useState(false);
+  const [isCheckingHeaderFooter, setIsCheckingHeaderFooter] = useState(false);
 
   //Run formatting analysis
   const handleRunCheck = async () => {
@@ -33,6 +42,47 @@ export default function App() {
     }
   };
 
+  const handleRunStylesCheck = async () => {
+    try {
+      setIsCheckingStyles(true);
+      const issues = await checkStyles();
+      setStyleResults(issues);
+    } catch (err) {
+      console.error("Error running style checks:", err);
+    } finally {
+      setIsCheckingStyles(false);
+    }
+  };
+
+  const handleRunComprehensiveCheck = async() => {
+    try {
+      setIsCheckingComp(true);
+      const formatting_issues = await analyzeFormatting();
+      const general_doc_issues = await checkDocument();
+      const style_issues = await checkStyles();
+      const all_issues = [...formatting_issues, ...general_doc_issues, ...style_issues]
+      setCompResults(all_issues)
+
+    } catch (err) {
+      console.error("Error running comprehensive checks:", err)
+    } finally {
+      setIsCheckingComp(false);
+    }
+  }
+
+  // Run header/footer checker independently
+  const handleRunHeaderFooterCheck = async () => {
+    try {
+      setIsCheckingHeaderFooter(true);
+      const issues = await checkHeaderFooterFormatting();
+      setHeaderFooterResults(issues);
+    } catch (err) {
+      console.error("Error running header/footer checks:", err);
+    } finally {
+      setIsCheckingHeaderFooter(false);
+    }
+  };
+
   //Jump to a specific error in Word
   const handleGoTo = async (issue) => {
     if (issue.canLocate && issue.location) {
@@ -42,6 +92,35 @@ export default function App() {
 
   return (
     <div>
+      <div style={styles.container}>
+        <h1 style={styles.title}>Comprehensive Checker</h1>
+
+        <button onClick = {handleRunComprehensiveCheck} style={styles.button} disabled={isCheckingComp}>
+          {isCheckingComp ? "Checking..." : "Run Comprehensive Check"}
+        </button>
+
+       <div style={styles.resultsContainer}>
+          {compResults.length === 0 && !isCheckingComp && (
+            <p style={styles.placeholder}>No results yet. Click “Run Comprehensive Check”.</p>
+          )}
+
+          {compResults.map((r) => (
+            <div
+              key={r.id}
+              onClick={() => handleGoTo(r)}
+              style={{
+                ...styles.resultBox,
+                cursor: r.canLocate ? "pointer" : "default",
+                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+              }}
+            >
+              <b>{r.type}</b>
+              <p style={styles.message}>{r.message}</p>
+            </div>
+          ))}
+        </div>
+
+      </div>
       <div style={styles.container}>
         <h1 style={styles.title}>Formatting Checker</h1>
 
@@ -71,6 +150,44 @@ export default function App() {
         </div>
       </div>
 
+      {/* NEW: Header/Footer Checker section */}
+      <div style={styles.container}>
+        <h2 style={styles.title}>Header/Footer Checker</h2>
+
+        <button
+          onClick={handleRunHeaderFooterCheck}
+          style={styles.button}
+          disabled={isCheckingHeaderFooter}
+        >
+          {isCheckingHeaderFooter
+            ? "Checking..."
+            : "Run Header/Footer Check"}
+        </button>
+
+        <div style={styles.resultsContainer}>
+          {headerFooterResults.length === 0 && !isCheckingHeaderFooter && (
+            <p style={styles.placeholder}>
+              No results yet. Click “Run Header/Footer Check”.
+            </p>
+          )}
+
+          {headerFooterResults.map((r) => (
+            <div
+              key={r.id}
+              onClick={() => handleGoTo(r)}
+              style={{
+                ...styles.resultBox,
+                cursor: r.canLocate ? "pointer" : "default",
+                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+              }}
+            >
+              <b>{r.type}</b>
+              <p style={styles.message}>{r.message}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={styles.container}>
         <h2 style={styles.title}>Document Checker</h2>
 
@@ -84,6 +201,35 @@ export default function App() {
           )}
 
           {docResults.map((r) => (
+            <div
+              key={r.id}
+              onClick={() => handleGoTo(r)}
+              style={{
+                ...styles.resultBox,
+                cursor: r.canLocate ? "pointer" : "default",
+                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+              }}
+            >
+              <b>{r.type}</b>
+              <p style={styles.message}>{r.message}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={styles.container}>
+        <h2 style={styles.title}>Styles Checker</h2>
+
+        <button onClick={handleRunStylesCheck} style={styles.button} disabled={isCheckingStyles}>
+          {isCheckingStyles ? "Checking..." : "Run Styles Check"}
+        </button>
+
+        <div style={styles.resultsContainer}>
+          {styleResults.length === 0 && !isCheckingStyles && (
+            <p style={styles.placeholder}>No results yet. Click “Run Styles Check”.</p>
+          )}
+
+          {styleResults.map((r) => (
             <div
               key={r.id}
               onClick={() => handleGoTo(r)}

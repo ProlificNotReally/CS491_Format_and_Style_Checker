@@ -19,6 +19,9 @@ export async function checkDocument() {
   const { document_checking, margins, page_size } = rules;
   try{
     await Word.run(async (context) => {
+      if (rules.header_footer) {
+        await checkHeaderFooterFormatting(context, rules.header_footer);
+      }
       if(!document_checking.allowComments){
         const comments = context.document.comments;
         console.log("Attempting to load comments");
@@ -233,9 +236,110 @@ export async function checkDocument() {
         });
       }
       
-      
+      const sym = rules.symbols;
+      if (!sym.allowSymbolFont) {
+        console.log("Running symbols check...");
+        const paragraphs = context.document.body.paragraphs;
+        paragraphs.load("items/font/name");
+        await context.sync();
+
+        let symbolCount = 0;
+        for (const para of paragraphs.items) {
+          if (para.font.name === "Symbol") {
+            para.font.highlightColor = "#00CED1";  // Turquoise
+            symbolCount++;
+          }
+        }
+        await context.sync();
+        console.log(`Symbols check: ${symbolCount} Symbol font instance(s) highlighted.`);
+      }
+
     });
   } catch (error) {
     console.log("Error: " + error);
   }
+}
+
+async function checkHeaderFooterFormatting() {
+  await Word.run(async (context) => {
+    const sections = context.document.sections;
+    sections.load("items");
+    await context.sync();
+
+    for (let i = 0; i < sections.items.length; i++) {
+      const section = sections.items[i];
+      const header = section.getHeader("Primary");
+      const footer = section.getFooter("Primary");
+
+      const headerParas = header.paragraphs;
+      const footerParas = footer.paragraphs;
+
+      headerParas.load("items");
+      footerParas.load("items");
+      await context.sync();
+
+      // --- HEADER RULES ---
+      const headerCount = headerParas.items.length;
+
+      // Rule 1: Must be exactly 2 lines
+      if (headerCount !== 2) {
+        headerParas.items.forEach(p => p.font.highlightColor = "Yellow");
+        console.log(`❌ Section ${i + 1} header: Expected 2 lines, found ${headerCount}`);
+      }
+
+      for (let j = 0; j < Math.min(headerCount, 2); j++) {
+        const para = headerParas.items[j];
+        para.load(["alignment", "font/underline", "text"]);
+        await context.sync();
+
+        // Rule 2: Each header line must be left-aligned
+        if (para.alignment !== "Left") {
+          para.font.highlightColor = "Yellow";
+          console.log(`❌ Section ${i + 1} header line ${j + 1}: Not left-aligned`);
+        }
+
+        // Rule 3: Second line must be underlined
+        if (j === 1 && para.font.underline === "None") {
+          para.font.highlightColor = "Yellow";
+          console.log(`❌ Section ${i + 1} header line 2: Not underlined`);
+        }
+
+        // Rule 4: Page number must be preceded by a TAB, not spaces
+        const text = para.text || "";
+        if (/\d+$/.test(text)) {
+          const numIndex = text.search(/\d+$/);
+          const before = text.slice(0, numIndex);
+          if (!before.includes("\t") && / {2,}$/.test(before)) {
+            para.font.highlightColor = "Yellow";
+            console.log(`❌ Section ${i + 1} header line ${j + 1}: Page number not preceded by a TAB`);
+          }
+        }
+      }
+
+      // --- FOOTER RULES ---
+      for (let k = 0; k < footerParas.items.length; k++) {
+        const para = footerParas.items[k];
+        para.load(["inlinePictures", "text"]);
+        await context.sync();
+
+        const pics = para.inlinePictures;
+        pics.load("items");
+        await context.sync();
+
+        if (pics.items.length > 0) {
+          const paraText = para.text || "";
+
+          const imageCentered = para.alignment === "Centered" || paraText.includes("\t");
+
+          if (!imageCentered) {
+            para.font.highlightColor = "Yellow";
+            console.log(`❌ Section ${i + 1} footer line ${k + 1}: Inline image not visually centered`);
+          }
+        }
+      }
+    }
+
+    await context.sync();
+    console.log("✅ Format check complete");
+  });
 }

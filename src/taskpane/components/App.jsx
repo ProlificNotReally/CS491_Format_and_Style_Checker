@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { analyzeFormatting, goToError } from "../wordChecks";
 import { checkDocument } from "../docChecks";
 import { checkStyles } from "../checkStyles";
-import { checkHeaderFooterFormatting } from "../checkHeaderFooterFormatting";
+import {
+  checkHeaderFooterFormatting,
+  fixHeaderFooterIssue,
+  syncHeaderFooterByOrientation,
+} from "../checkHeaderFooterFormatting";
+
+
 
 export default function App() {
   const [results, setResults] = useState([]);
@@ -16,6 +22,7 @@ export default function App() {
   const [isCheckingStyles, setIsCheckingStyles] = useState(false);
   const [isCheckingComp, setIsCheckingComp] = useState(false);
   const [isCheckingHeaderFooter, setIsCheckingHeaderFooter] = useState(false);
+  const [isFixingHeaderFooter, setIsFixingHeaderFooter] = useState(false);
 
   //Run formatting analysis
   const handleRunCheck = async () => {
@@ -29,6 +36,69 @@ export default function App() {
       setIsChecking(false);
     }
   };
+
+  // Run header/footer checker independently (unchanged)
+  const handleRunHeaderFooterCheck = async () => {
+    try {
+      setIsCheckingHeaderFooter(true);
+      const issues = await checkHeaderFooterFormatting();
+      setHeaderFooterResults(issues);
+    } catch (err) {
+      console.error("Error running header/footer checks:", err);
+    } finally {
+      setIsCheckingHeaderFooter(false);
+    }
+  };
+
+  // Fix a single header/footer issue (one row)
+  const handleFixHeaderFooterIssue = async (issue) => {
+    try {
+      setIsFixingHeaderFooter(true);
+      await fixHeaderFooterIssue(issue);          // normalize headers/footers
+      const refreshed = await checkHeaderFooterFormatting(); // re-check
+      setHeaderFooterResults(refreshed);
+    } catch (err) {
+      console.error("Error fixing single header/footer issue:", err);
+    } finally {
+      setIsFixingHeaderFooter(false);
+    }
+  };
+
+
+const handleFixAllHeaderFooter = async () => {
+  try {
+    setIsFixingHeaderFooter(true);
+
+    // 1. Get the current list of header/footer issues
+    const initialIssues = await Word.run(async (context) => {
+      return await checkHeaderFooterFormatting(context);
+    });
+
+    // 2. Fix each issue individually (same as clicking each row's GoFix)
+    for (const issue of initialIssues) {
+      try {
+        await fixHeaderFooterIssue(issue); // your existing per-issue fix
+      } catch (e) {
+        console.error("Error fixing header/footer issue", issue, e);
+      }
+    }
+
+    // 3. Run the majority-based sync *after* individual fixes
+    await syncHeaderFooterByOrientation();
+
+    // 4. Re-run the checker so the UI shows what's left (if anything)
+    const finalIssues = await Word.run(async (context) => {
+      return await checkHeaderFooterFormatting(context);
+    });
+    setHeaderFooterResults(finalIssues);
+  } catch (err) {
+    console.error("Error fixing all header/footer issues:", err);
+  } finally {
+    setIsFixingHeaderFooter(false);
+  }
+};
+
+
 
   const handleRunDocumentCheck = async () => {
     try {
@@ -58,9 +128,10 @@ export default function App() {
     try {
       setIsCheckingComp(true);
       const formatting_issues = await analyzeFormatting();
+      const header_footer_issues = await handleRunHeaderFooterCheck();
       const general_doc_issues = await checkDocument();
       const style_issues = await checkStyles();
-      const all_issues = [...formatting_issues, ...general_doc_issues, ...style_issues]
+      const all_issues = [...formatting_issues, ...header_footer_issues, ...general_doc_issues, ...style_issues]
       setCompResults(all_issues)
 
     } catch (err) {
@@ -69,19 +140,6 @@ export default function App() {
       setIsCheckingComp(false);
     }
   }
-
-  // Run header/footer checker independently
-  const handleRunHeaderFooterCheck = async () => {
-    try {
-      setIsCheckingHeaderFooter(true);
-      const issues = await checkHeaderFooterFormatting();
-      setHeaderFooterResults(issues);
-    } catch (err) {
-      console.error("Error running header/footer checks:", err);
-    } finally {
-      setIsCheckingHeaderFooter(false);
-    }
-  };
 
   //Jump to a specific error in Word
   const handleGoTo = async (issue) => {
@@ -150,43 +208,78 @@ export default function App() {
         </div>
       </div>
 
-      {/* NEW: Header/Footer Checker section */}
-      <div style={styles.container}>
-        <h2 style={styles.title}>Header/Footer Checker</h2>
+{/* HEADER/FOOTER CHECKER */}
+<div style={styles.container}>
+  <h2 style={styles.title}>Header/Footer Checker</h2>
 
-        <button
-          onClick={handleRunHeaderFooterCheck}
-          style={styles.button}
-          disabled={isCheckingHeaderFooter}
+  <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+    <button
+      onClick={handleRunHeaderFooterCheck}
+      style={styles.button}
+      disabled={isCheckingHeaderFooter || isFixingHeaderFooter}
+    >
+      {isCheckingHeaderFooter ? "Checking..." : "Run Header/Footer Check"}
+    </button>
+
+    <button
+      onClick={handleFixAllHeaderFooter}
+      style={styles.secondaryButton}
+      disabled={
+        isCheckingHeaderFooter ||
+        isFixingHeaderFooter ||
+        headerFooterResults.length === 0
+      }
+    >
+      {isFixingHeaderFooter ? "Fixing..." : "Fix All Header/Footer"}
+    </button>
+  </div>
+
+  <div style={styles.resultsContainer}>
+    {headerFooterResults.length === 0 &&
+      !isCheckingHeaderFooter &&
+      !isFixingHeaderFooter && (
+        <p style={styles.placeholder}>
+          No results yet. Click “Run Header/Footer Check”.
+        </p>
+      )}
+
+    {headerFooterResults.map((r) => (
+      <div key={r.id} style={styles.resultRow}>
+        <div
+          style={{
+            ...styles.resultBox,
+            flex: 1,
+            cursor: r.canLocate ? "pointer" : "default",
+            backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+          }}
+          onClick={() => r.canLocate && handleGoTo(r)}
         >
-          {isCheckingHeaderFooter
-            ? "Checking..."
-            : "Run Header/Footer Check"}
-        </button>
+          <b>{r.type}</b>
+          <p style={styles.message}>{r.message}</p>
+        </div>
 
-        <div style={styles.resultsContainer}>
-          {headerFooterResults.length === 0 && !isCheckingHeaderFooter && (
-            <p style={styles.placeholder}>
-              No results yet. Click “Run Header/Footer Check”.
-            </p>
-          )}
-
-          {headerFooterResults.map((r) => (
-            <div
-              key={r.id}
+        <div style={styles.resultActions}>
+          {r.canLocate && (
+            <button
+              style={styles.smallButton}
               onClick={() => handleGoTo(r)}
-              style={{
-                ...styles.resultBox,
-                cursor: r.canLocate ? "pointer" : "default",
-                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
-              }}
             >
-              <b>{r.type}</b>
-              <p style={styles.message}>{r.message}</p>
-            </div>
-          ))}
+              Go
+            </button>
+          )}
+          <button
+            style={styles.smallButton}
+            disabled={isFixingHeaderFooter}
+            onClick={() => handleFixHeaderFooterIssue(r)}
+          >
+            {isFixingHeaderFooter ? "Fixing..." : "Fix"}
+          </button>
         </div>
       </div>
+    ))}
+  </div>
+</div>
+
 
       <div style={styles.container}>
         <h2 style={styles.title}>Document Checker</h2>

@@ -124,7 +124,8 @@ export async function checkDocument() {
             results.push({
               id: `watermark-${type}`,
               type: "Watermark",
-              message: `Watermark detected in document, header type: ${type}. Watermark data: ${watermarkText}`,
+              message: `Watermark detected in document, header type: ${type}. Watermark data: ${watermarkText}.
+              Remove it manually: Design -> Watermark -> Remove Watermark`,
               text: watermarkText,
               canLocate: false,
             });
@@ -255,16 +256,16 @@ export async function checkDocument() {
         }
       }
 
-      // --- SUMMARY ---
-      if (results.length === 0) {
-        results.push({
-          id: "info-clean",
-          type: "Info",
-          message: "✅ No document-level issues found.",
-          text: "",
-          canLocate: false,
-        });
-      }
+      // // --- SUMMARY ---
+      // if (results.length === 0) {
+      //   results.push({
+      //     id: "info-clean",
+      //     type: "Info",
+      //     message: "✅ No document-level issues found.",
+      //     text: "",
+      //     canLocate: false,
+      //   });
+      // }
 
       await context.sync();
       return results;

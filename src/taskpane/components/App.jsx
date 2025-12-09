@@ -7,7 +7,7 @@ import {
   fixHeaderFooterIssue,
   syncHeaderFooterByOrientation,
 } from "../checkHeaderFooterFormatting";
-
+import { fixGeneralDocumentIssue } from "../fixGeneralDocIssues"
 
 
 export default function App() {
@@ -23,6 +23,8 @@ export default function App() {
   const [isCheckingComp, setIsCheckingComp] = useState(false);
   const [isCheckingHeaderFooter, setIsCheckingHeaderFooter] = useState(false);
   const [isFixingHeaderFooter, setIsFixingHeaderFooter] = useState(false);
+  const [isFixingGeneralIssue, setIsFixingGeneralIssue] = useState(false);
+  const [isFixingAllGeneral, setIsFixingAllGeneral] = useState(false);
 
   //Run formatting analysis
   const handleRunCheck = async () => {
@@ -111,6 +113,49 @@ const handleFixAllHeaderFooter = async () => {
       setIsCheckingDocument(false);
     }
   };
+
+  const handleFixGeneralIssue = async (issue) => {
+    try {
+      setIsFixingGeneralIssue(true);
+      await fixGeneralDocumentIssue(issue);          // normalize headers/footers
+      const refreshed = await checkDocument(); // re-check
+      setDocResults(refreshed);
+    } catch (err) {
+      console.error("Error fixing single general document issue:", err);
+    } finally {
+      setIsFixingGeneralIssue(false);
+    }
+  };
+
+  const handleFixAllGeneralIssues = async () => {
+  try {
+    setIsFixingAllGeneral(true);
+
+    // 1. Get the current list of header/footer issues
+    const initialIssues = await Word.run(async (context) => {
+      return await checkDocument(context);
+    });
+
+    // 2. Fix each issue individually (same as clicking each row's GoFix)
+    for (const issue of initialIssues) {
+      try {
+        await fixGeneralDocumentIssue(issue); // your existing per-issue fix
+      } catch (e) {
+        console.error("Error fixing general document issue", issue, e);
+      }
+    }
+
+    // 4. Re-run the checker so the UI shows what's left (if anything)
+    const finalIssues = await Word.run(async (context) => {
+      return await checkDocument(context);
+    });
+    setDocResults(finalIssues);
+  } catch (err) {
+    console.error("Error fixing all header/footer issues:", err);
+  } finally {
+    setIsFixingAllGeneral(false);
+  }
+};
 
   const handleRunStylesCheck = async () => {
     try {
@@ -284,12 +329,35 @@ const handleFixAllHeaderFooter = async () => {
       <div style={styles.container}>
         <h2 style={styles.title}>Document Checker</h2>
 
-        <button onClick={handleRunDocumentCheck} style={styles.button} disabled={isCheckingDocument}>
+        {/* <button onClick={handleRunDocumentCheck} style={styles.button} disabled={isCheckingDocument}>
           {isCheckingDocument ? "Checking..." : "Run Document Check"}
-        </button>
+        </button> */}
+
+       <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+          <button
+            onClick={handleRunDocumentCheck}
+            style={styles.button}
+            disabled={isCheckingDocument || isFixingGeneralIssue || isFixingAllGeneral}
+          >
+            {isCheckingDocument? "Checking..." : "Run Document Check"}
+          </button>
+
+          <button
+            onClick={handleFixAllGeneralIssues}
+            style={styles.secondaryButton}
+            disabled={
+              isCheckingDocument ||
+               isFixingGeneralIssue ||
+               isFixingAllGeneral ||
+               docResults.length === 0
+            }
+          >
+            {isFixingAllGeneral ? "Fixing..." : "Fix All General Document Issues"}
+          </button>
+        </div>
 
         <div style={styles.resultsContainer}>
-          {docResults.length === 0 && !isCheckingDocument && (
+          {docResults.length === 0 && !isCheckingDocument &&  !isFixingGeneralIssue && !isFixingAllGeneral && (
             <p style={styles.placeholder}>No results yet. Click “Run Document Check”.</p>
           )}
 
@@ -305,8 +373,27 @@ const handleFixAllHeaderFooter = async () => {
             >
               <b>{r.type}</b>
               <p style={styles.message}>{r.message}</p>
+
+              <div style={styles.resultActions}>
+                {r.canLocate && (
+                  <button
+                    style={styles.smallButton}
+                    onClick={() => handleGoTo(r)}
+                  >
+                    Go
+                  </button>
+                )}
+                <button
+                  style={styles.smallButton}
+                  disabled={ isCheckingDocument || isFixingGeneralIssue || isFixingAllGeneral}
+                  onClick={() => handleFixGeneralIssue(r)}
+                >
+                  {isFixingGeneralIssue ? "Fixing..." : "Fix"}
+                </button>
+              </div>
             </div>
           ))}
+
         </div>
       </div>
 

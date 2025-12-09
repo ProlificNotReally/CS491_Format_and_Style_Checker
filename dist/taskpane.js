@@ -9382,7 +9382,7 @@ function App() {
     style: styles.placeholder
   }, "No results yet. Click \"Run Header/Footer Check\"."), headerFooterResults.length === 0 && !isCheckingHeaderFooter && hasRunHeaderFooter && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.successMessage
-  }, "\uD83C\uDF89 Congrats! No errors found."), !isCheckingHeaderFooter && headerFooterResults.map(function (r) {
+  }, "\uD83C\uDF89 All header/footer checks complete!", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 Portrait Header style applied", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 Portrait Footer style applied", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 Landscape Header style applied", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 Landscape Footer style applied", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 \"Draft\" appears in headers", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 Header information consistent on each page", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 Footer information consistent on each page", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "\u2713 Header/footer margin settings conform to 0.5\""), !isCheckingHeaderFooter && headerFooterResults.map(function (r) {
     var canFix = r.type !== "Info" && !r.id.includes("draft") && !r.id.includes("inconsistent");
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       key: r.id,
@@ -9580,7 +9580,7 @@ var styles = {
     color: "#107c10",
     fontWeight: "600",
     fontSize: "16px",
-    textAlign: "center",
+    textAlign: "left",
     padding: "20px",
     backgroundColor: "#f0f9f0",
     borderRadius: "6px",

@@ -399,7 +399,17 @@ export default function App() {
           )}
 
           {headerFooterResults.length === 0 && !isCheckingHeaderFooter && hasRunHeaderFooter && (
-            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
+            <p style={styles.successMessage}>
+              🎉 All header/footer checks complete!<br />
+              ✓ Portrait Header style applied<br />
+              ✓ Portrait Footer style applied<br />
+              ✓ Landscape Header style applied<br />
+              ✓ Landscape Footer style applied<br />
+              ✓ "Draft" appears in headers<br />
+              ✓ Header information consistent on each page<br />
+              ✓ Footer information consistent on each page<br />
+              ✓ Header/footer margin settings conform to 0.5"
+            </p>
           )}
 
           {!isCheckingHeaderFooter && headerFooterResults.map((r) => {
@@ -617,7 +627,7 @@ const styles = {
     color: "#107c10",
     fontWeight: "600",
     fontSize: "16px",
-    textAlign: "center",
+    textAlign: "left",
     padding: "20px",
     backgroundColor: "#f0f9f0",
     borderRadius: "6px",

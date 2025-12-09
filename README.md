@@ -48,7 +48,37 @@ This project helps maintain consistent document formatting standards by automati
 - **Sequential Numbering** - Validates consecutive numbering in headings and captions
 
 ### 🔣 Symbols Check
+
 - **Symbol Font Validation** - Ensures symbols use appropriate fonts (not Symbol font)
+
+### 🔧 Auto-Fix Functionality
+
+- **Automatic Corrections** - Toggle to enable automatic fixing of issues
+- **Manual Fix Button** - On-demand "Fix Issues Now" button for each checker
+- **Fix Results Display** - Shows count of successfully fixed and unfixed issues
+- **Supported Fixes**:
+  - Font corrections (Times New Roman)
+  - Font size adjustments (8-12pt range)
+  - Font color normalization (black)
+  - Highlighting removal
+  - Hidden text removal
+  - Text justification (justified alignment)
+  - Hyperlink removal
+  - Comment deletion
+  - Revision acceptance
+  - Blank paragraph mark removal
+
+### 🎨 Visual Features
+
+- **Loading Indicators** - Animated spinner with status messages during checks
+- **Color-Coded Categories** - Quick visual identification of issue types:
+  - 🔵 **Light Blue** - Formatting issues
+  - 🟠 **Light Orange** - General document issues
+  - 🟣 **Light Purple** - Header/Footer issues
+  - 🔴 **Light Pink** - Margin issues
+  - 🟢 **Light Green** - Style issues
+  - 🟡 **Light Yellow** - Symbol issues
+- **Color Legend** - Reference guide displayed at the top of the Comprehensive Checker
 
 ---
 

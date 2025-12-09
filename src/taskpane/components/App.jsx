@@ -248,8 +248,8 @@ export default function App() {
   return (
     <div>
       {/* 1. Comprehensive Checker */}
-      <div style={{ ...styles.container, backgroundColor: "#f9f0ef", borderLeft: "4px solid #914137" }}>
-        <h1 style={{ ...styles.title, color: "#914137" }}>Comprehensive Checker</h1>
+      <div style={styles.container}>
+        <h1 style={styles.title}>Comprehensive Checker</h1>
 
         <button onClick = {handleRunComprehensiveCheck} style={{ ...styles.button, backgroundColor: "#914137" }} disabled={isCheckingComp}>
           {isCheckingComp ? "Checking..." : "Run Comprehensive Check"}
@@ -286,8 +286,8 @@ export default function App() {
       </div>
 
       {/* 2. Formatting Checker */}
-      <div style={{ ...styles.container, backgroundColor: "#eef2f1", borderLeft: "4px solid #29423f" }}>
-        <h1 style={{ ...styles.title, color: "#29423f" }}>Formatting Checker</h1>
+      <div style={styles.container}>
+        <h2 style={styles.title}>Formatting Checker</h2>
 
         <button onClick={handleRunCheck} style={{ ...styles.button, backgroundColor: "#29423f" }} disabled={isChecking}>
           {isChecking ? "Checking..." : "Run Formatting Check"}
@@ -324,8 +324,8 @@ export default function App() {
       </div>
 
       {/* 3. General Document Checker */}
-      <div style={{ ...styles.container, backgroundColor: "#f9eff1", borderLeft: "4px solid #7c152d" }}>
-        <h2 style={{ ...styles.title, color: "#7c152d" }}>General Document Checker</h2>
+      <div style={styles.container}>
+        <h2 style={styles.title}>General Document Checker</h2>
 
         <button onClick={handleRunDocumentCheck} style={{ ...styles.button, backgroundColor: "#7c152d" }} disabled={isCheckingDocument}>
           {isCheckingDocument ? "Checking..." : "Run Document Check"}
@@ -362,8 +362,8 @@ export default function App() {
       </div>
 
       {/* 4. Headers and Footers Checker */}
-      <div style={{ ...styles.container, backgroundColor: "#f5f2f2", borderLeft: "4px solid #684e4e" }}>
-        <h2 style={{ ...styles.title, color: "#684e4e" }}>Headers and Footers Checker</h2>
+      <div style={styles.container}>
+        <h2 style={styles.title}>Headers and Footers Checker</h2>
 
         <div style={{ display: "flex", gap: "10px", marginBottom: "14px" }}>
           <button
@@ -454,14 +454,14 @@ export default function App() {
       </div>
 
       {/* 5. Margins Checker - Placeholder */}
-      <div style={{ ...styles.container, backgroundColor: "#eeebeb", borderLeft: "4px solid #451516" }}>
-        <h2 style={{ ...styles.title, color: "#451516" }}>Margins Checker</h2>
+      <div style={styles.container}>
+        <h2 style={styles.title}>Margins Checker</h2>
         <p style={styles.placeholder}>Coming soon - Margin validation will be added here.</p>
       </div>
 
       {/* 6. Styles Checker */}
-      <div style={{ ...styles.container, backgroundColor: "#fef5f3", borderLeft: "4px solid #ef6641" }}>
-        <h2 style={{ ...styles.title, color: "#ef6641" }}>Styles Checker</h2>
+      <div style={styles.container}>
+        <h2 style={styles.title}>Styles Checker</h2>
 
         <button onClick={handleRunStylesCheck} style={{ ...styles.button, backgroundColor: "#ef6641" }} disabled={isCheckingStyles}>
           {isCheckingStyles ? "Checking..." : "Run Styles Check"}
@@ -498,8 +498,8 @@ export default function App() {
       </div>
 
       {/* 7. Symbols Checker */}
-      <div style={{ ...styles.container, backgroundColor: "#eef3f9", borderLeft: "4px solid #365d9f" }}>
-        <h2 style={{ ...styles.title, color: "#365d9f" }}>Symbols Checker</h2>
+      <div style={styles.container}>
+        <h2 style={styles.title}>Symbols Checker</h2>
 
         <div style={{ display: "flex", gap: "10px", marginBottom: "14px" }}>
           <button

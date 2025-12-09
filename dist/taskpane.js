@@ -9240,14 +9240,9 @@ function App() {
     };
   }();
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: _objectSpread(_objectSpread({}, styles.container), {}, {
-      backgroundColor: "#f9f0ef",
-      borderLeft: "4px solid #914137"
-    })
+    style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
-    style: _objectSpread(_objectSpread({}, styles.title), {}, {
-      color: "#914137"
-    })
+    style: styles.title
   }, "Comprehensive Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleRunComprehensiveCheck,
     style: _objectSpread(_objectSpread({}, styles.button), {}, {
@@ -9276,14 +9271,9 @@ function App() {
       style: styles.message
     }, r.message));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: _objectSpread(_objectSpread({}, styles.container), {}, {
-      backgroundColor: "#eef2f1",
-      borderLeft: "4px solid #29423f"
-    })
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
-    style: _objectSpread(_objectSpread({}, styles.title), {}, {
-      color: "#29423f"
-    })
+    style: styles.container
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
+    style: styles.title
   }, "Formatting Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleRunCheck,
     style: _objectSpread(_objectSpread({}, styles.button), {}, {
@@ -9312,14 +9302,9 @@ function App() {
       style: styles.message
     }, r.message));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: _objectSpread(_objectSpread({}, styles.container), {}, {
-      backgroundColor: "#f9eff1",
-      borderLeft: "4px solid #7c152d"
-    })
+    style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: _objectSpread(_objectSpread({}, styles.title), {}, {
-      color: "#7c152d"
-    })
+    style: styles.title
   }, "General Document Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleRunDocumentCheck,
     style: _objectSpread(_objectSpread({}, styles.button), {}, {
@@ -9348,14 +9333,9 @@ function App() {
       style: styles.message
     }, r.message));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: _objectSpread(_objectSpread({}, styles.container), {}, {
-      backgroundColor: "#f5f2f2",
-      borderLeft: "4px solid #684e4e"
-    })
+    style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: _objectSpread(_objectSpread({}, styles.title), {}, {
-      color: "#684e4e"
-    })
+    style: styles.title
   }, "Headers and Footers Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: {
       display: "flex",
@@ -9413,25 +9393,15 @@ function App() {
       style: styles.fixButton
     }, "Fix")));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: _objectSpread(_objectSpread({}, styles.container), {}, {
-      backgroundColor: "#eeebeb",
-      borderLeft: "4px solid #451516"
-    })
+    style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: _objectSpread(_objectSpread({}, styles.title), {}, {
-      color: "#451516"
-    })
+    style: styles.title
   }, "Margins Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
   }, "Coming soon - Margin validation will be added here.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: _objectSpread(_objectSpread({}, styles.container), {}, {
-      backgroundColor: "#fef5f3",
-      borderLeft: "4px solid #ef6641"
-    })
+    style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: _objectSpread(_objectSpread({}, styles.title), {}, {
-      color: "#ef6641"
-    })
+    style: styles.title
   }, "Styles Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleRunStylesCheck,
     style: _objectSpread(_objectSpread({}, styles.button), {}, {
@@ -9460,14 +9430,9 @@ function App() {
       style: styles.message
     }, r.message));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: _objectSpread(_objectSpread({}, styles.container), {}, {
-      backgroundColor: "#eef3f9",
-      borderLeft: "4px solid #365d9f"
-    })
+    style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: _objectSpread(_objectSpread({}, styles.title), {}, {
-      color: "#365d9f"
-    })
+    style: styles.title
   }, "Symbols Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: {
       display: "flex",

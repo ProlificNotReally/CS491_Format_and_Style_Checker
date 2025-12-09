@@ -84,26 +84,39 @@ export async function checkHeaderFooterFormatting() {
         }
       }
 
+      // Check if "DRAFT" exists in line 1 or 2
+      let hasDraft = false;
+      for (let j = 0; j < Math.min(headerCount, 2); j++) {
+        const para = headerParas.items[j];
+        para.load("text");
+        await context.sync();
+        if ((para.text || "").toLowerCase().includes("draft")) {
+          hasDraft = true;
+          break;
+        }
+      }
+
+      // Flag if DRAFT is missing from lines 1-2
+      if (!hasDraft && headerCount >= 1) {
+        const range = headerParas.items[0].getRange();
+        const bk = `header_draft_${i + 1}`;
+        range.insertBookmark(bk);
+        await context.sync();
+
+        results.push({
+          id: `header-draft-${i + 1}`,
+          type: "Header",
+          message: `Section ${i + 1} header is missing "DRAFT" in line 1 or 2.`,
+          location: bk,
+          canLocate: true
+        });
+      }
+
       for (let j = 0; j < Math.min(headerCount, header.requiredLineCount); j++) {
         const para = headerParas.items[j];
         const range = para.getRange();
         para.load(["alignment", "font/underline", "font/name", "font/size", "font/color", "text"]);
         await context.sync();
-
-        if ((para.text || "").toLowerCase().includes("draft")) {
-          const range = para.getRange();
-          const bk = `header_draft_${i + 1}_${j + 1}`;
-          range.insertBookmark(bk);
-          await context.sync();
-
-          results.push({
-            id: `header-draft-${i + 1}-${j + 1}`,
-            type: "Header",
-            message: `Section ${i + 1} header line ${j + 1} contains the word "Draft".`,
-            location: bk,
-            canLocate: true
-          });
-        }
 
         const { name, size, color, underline } = para.font;
 
@@ -304,4 +317,172 @@ export async function checkHeaderFooterFormatting() {
 
     return results;
   });
+}
+// Fix individual header/footer issue
+export async function fixHeaderFooterIssue(issue) {
+  return Word.run(async (context) => {
+    const { formatting, header, footer } = rules;
+    const sections = context.document.sections;
+    sections.load("items");
+    await context.sync();
+
+    // Extract section index from issue ID
+    // ID formats: header-margin-1, header-align-0-1, footer-margin-1, etc.
+    let sectionIndex = 0;
+    
+    if (issue.id.includes("header-margin") || issue.id.includes("footer-margin")) {
+      const match = issue.id.match(/margin-(\d+)/);
+      sectionIndex = match ? parseInt(match[1]) - 1 : 0;
+    } else if (issue.id.includes("header-") || issue.id.includes("footer-")) {
+      const match = issue.id.match(/-(\d+)-/);
+      sectionIndex = match ? parseInt(match[1]) : 0;
+    }
+    
+    if (sectionIndex < 0 || sectionIndex >= sections.items.length) {
+      return { success: false, message: `Invalid section index: ${sectionIndex}` };
+    }
+
+    const section = sections.items[sectionIndex];
+
+    try {
+      // Fix header margin
+      if (issue.id.includes("header-margin")) {
+        section.pageSetup.load("headerDistance");
+        await context.sync();
+        section.pageSetup.headerDistance = 36; // 0.5 inches
+        await context.sync();
+        return { success: true, message: "Header margin fixed to 0.5 inches" };
+      }
+
+      // Fix footer margin
+      if (issue.id.includes("footer-margin")) {
+        section.pageSetup.load("footerDistance");
+        await context.sync();
+        section.pageSetup.footerDistance = 36; // 0.5 inches
+        await context.sync();
+        return { success: true, message: "Footer margin fixed to 0.5 inches" };
+      }
+
+      // Fix header alignment
+      if (issue.id.includes("header-align")) {
+        const headerObj = section.getHeader("Primary");
+        const headerParas = headerObj.paragraphs;
+        headerParas.load("items");
+        await context.sync();
+        
+        const paraMatch = issue.id.match(/-(\d+)$/);
+        const paraIndex = paraMatch ? parseInt(paraMatch[1]) : 0;
+        if (headerParas.items[paraIndex]) {
+          headerParas.items[paraIndex].alignment = header.alignment;
+          await context.sync();
+          return { success: true, message: "Header alignment fixed" };
+        }
+      }
+
+      // Fix header underline
+      if (issue.id.includes("header-underline")) {
+        const headerObj = section.getHeader("Primary");
+        const headerParas = headerObj.paragraphs;
+        headerParas.load("items");
+        await context.sync();
+        
+        if (headerParas.items[1]) {
+          headerParas.items[1].font.underline = "Single";
+          await context.sync();
+          return { success: true, message: "Header underline applied" };
+        }
+      }
+
+      // Fix header font
+      if (issue.id.includes("header-font") && !issue.id.includes("size") && !issue.id.includes("color")) {
+        const headerObj = section.getHeader("Primary");
+        const headerParas = headerObj.paragraphs;
+        headerParas.load("items");
+        await context.sync();
+        
+        const paraMatch = issue.id.match(/-(\d+)$/);
+        const paraIndex = paraMatch ? parseInt(paraMatch[1]) : 0;
+        if (headerParas.items[paraIndex]) {
+          headerParas.items[paraIndex].font.name = formatting.allowedFont;
+          await context.sync();
+          return { success: true, message: "Header font fixed" };
+        }
+      }
+
+      // Fix header font size
+      if (issue.id.includes("header-size") || issue.id.includes("headerfontsize")) {
+        const headerObj = section.getHeader("Primary");
+        const headerParas = headerObj.paragraphs;
+        headerParas.load("items");
+        await context.sync();
+        
+        const paraMatch = issue.id.match(/-(\d+)$/);
+        const paraIndex = paraMatch ? parseInt(paraMatch[1]) : 0;
+        if (headerParas.items[paraIndex]) {
+          headerParas.items[paraIndex].font.size = formatting.allowedFontSizeRange[0];
+          await context.sync();
+          return { success: true, message: "Header font size fixed" };
+        }
+      }
+
+      // Fix header font color
+      if (issue.id.includes("header-color") || issue.id.includes("headerfontcolor")) {
+        const headerObj = section.getHeader("Primary");
+        const headerParas = headerObj.paragraphs;
+        headerParas.load("items");
+        await context.sync();
+        
+        const paraMatch = issue.id.match(/-(\d+)$/);
+        const paraIndex = paraMatch ? parseInt(paraMatch[1]) : 0;
+        if (headerParas.items[paraIndex]) {
+          headerParas.items[paraIndex].font.color = "#000000";
+          await context.sync();
+          return { success: true, message: "Header font color fixed" };
+        }
+      }
+
+      // Fix footer image alignment
+      if (issue.id.includes("footer-image") || issue.id.includes("footeralignment")) {
+        const footerObj = section.getFooter("Primary");
+        const footerParas = footerObj.paragraphs;
+        footerParas.load("items");
+        await context.sync();
+        
+        const paraMatch = issue.id.match(/-(\d+)$/);
+        const paraIndex = paraMatch ? parseInt(paraMatch[1]) : 0;
+        if (footerParas.items[paraIndex]) {
+          footerParas.items[paraIndex].alignment = "Centered";
+          await context.sync();
+          return { success: true, message: "Footer image centered" };
+        }
+      }
+
+      return { success: false, message: `Fix not implemented for issue type: ${issue.id}` };
+    } catch (err) {
+      console.error("Error in fixHeaderFooterIssue:", err);
+      return { success: false, message: `Error: ${err.message}` };
+    }
+  });
+}
+
+// Fix all header/footer issues at once
+export async function fixAllHeaderFooterIssues(issues) {
+  const results = [];
+  
+  for (const issue of issues) {
+    // Skip info messages and non-fixable issues
+    if (issue.type === "Info" || issue.id.includes("draft") || issue.id.includes("inconsistent")) {
+      results.push({ issue: issue.id, success: false, message: "Not auto-fixable" });
+      continue;
+    }
+
+    try {
+      const result = await fixHeaderFooterIssue(issue);
+      results.push({ issue: issue.id, ...result });
+    } catch (err) {
+      results.push({ issue: issue.id, success: false, message: err.message });
+    }
+  }
+
+  return results;
 }

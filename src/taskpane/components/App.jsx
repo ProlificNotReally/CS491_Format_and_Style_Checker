@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { analyzeFormatting, goToError } from "../wordChecks";
 import { checkDocument } from "../docChecks";
 import { checkStyles } from "../checkStyles";
-import { checkHeaderFooterFormatting } from "../checkHeaderFooterFormatting";
+import { checkHeaderFooterFormatting, fixHeaderFooterIssue, fixAllHeaderFooterIssues } from "../checkHeaderFooterFormatting";
 
 export default function App() {
   const [results, setResults] = useState([]);
@@ -16,6 +16,7 @@ export default function App() {
   const [isCheckingStyles, setIsCheckingStyles] = useState(false);
   const [isCheckingComp, setIsCheckingComp] = useState(false);
   const [isCheckingHeaderFooter, setIsCheckingHeaderFooter] = useState(false);
+  const [isFixingHeaderFooter, setIsFixingHeaderFooter] = useState(false);
 
   //Run formatting analysis
   const handleRunCheck = async () => {
@@ -80,6 +81,68 @@ export default function App() {
       console.error("Error running header/footer checks:", err);
     } finally {
       setIsCheckingHeaderFooter(false);
+    }
+  };
+
+  // Fix individual header/footer issue
+  const handleFixSingleIssue = async (issue) => {
+    try {
+      console.log("Fixing issue:", issue);
+      const result = await fixHeaderFooterIssue(issue);
+      console.log("Fix result:", result);
+      
+      if (result.success) {
+        // Re-run check to update results
+        const updatedIssues = await checkHeaderFooterFormatting();
+        setHeaderFooterResults(updatedIssues);
+        alert(`✅ ${result.message}`);
+      } else {
+        alert(`❌ Could not fix: ${result.message}\n\nIssue ID: ${issue.id}`);
+      }
+    } catch (err) {
+      console.error("Error fixing issue:", err);
+      alert(`❌ Error: ${err.message}\n\nIssue ID: ${issue.id}`);
+    }
+  };
+
+  // Fix all header/footer issues at once
+  const handleFixAllHeaderFooter = async () => {
+    try {
+      setIsFixingHeaderFooter(true);
+      const fixableIssues = headerFooterResults.filter(
+        r => r.type !== "Info" && !r.id.includes("draft") && !r.id.includes("inconsistent")
+      );
+      
+      if (fixableIssues.length === 0) {
+        alert("No fixable issues found.");
+        return;
+      }
+
+      console.log("Fixing issues:", fixableIssues.map(i => i.id));
+      const results = await fixAllHeaderFooterIssues(fixableIssues);
+      console.log("Fix results:", results);
+      
+      const successCount = results.filter(r => r.success).length;
+      const failedIssues = results.filter(r => !r.success);
+      
+      // Re-run check to update results
+      const updatedIssues = await checkHeaderFooterFormatting();
+      setHeaderFooterResults(updatedIssues);
+      
+      let message = `✅ Fixed ${successCount} out of ${fixableIssues.length} issues.`;
+      if (failedIssues.length > 0) {
+        message += `\n\n❌ Failed to fix ${failedIssues.length} issues:\n`;
+        message += failedIssues.slice(0, 3).map(f => `- ${f.message}`).join('\n');
+        if (failedIssues.length > 3) {
+          message += `\n... and ${failedIssues.length - 3} more`;
+        }
+      }
+      alert(message);
+    } catch (err) {
+      console.error("Error fixing all issues:", err);
+      alert(`❌ Error: ${err.message}`);
+    } finally {
+      setIsFixingHeaderFooter(false);
     }
   };
 
@@ -154,15 +217,27 @@ export default function App() {
       <div style={styles.container}>
         <h2 style={styles.title}>Header/Footer Checker</h2>
 
-        <button
-          onClick={handleRunHeaderFooterCheck}
-          style={styles.button}
-          disabled={isCheckingHeaderFooter}
-        >
-          {isCheckingHeaderFooter
-            ? "Checking..."
-            : "Run Header/Footer Check"}
-        </button>
+        <div style={{ display: "flex", gap: "10px", marginBottom: "14px" }}>
+          <button
+            onClick={handleRunHeaderFooterCheck}
+            style={styles.button}
+            disabled={isCheckingHeaderFooter}
+          >
+            {isCheckingHeaderFooter
+              ? "Checking..."
+              : "Run Header/Footer Check"}
+          </button>
+
+          {headerFooterResults.length > 0 && (
+            <button
+              onClick={handleFixAllHeaderFooter}
+              style={{ ...styles.button, backgroundColor: "#107c10" }}
+              disabled={isFixingHeaderFooter || isCheckingHeaderFooter}
+            >
+              {isFixingHeaderFooter ? "Fixing..." : "Fix All Issues"}
+            </button>
+          )}
+        </div>
 
         <div style={styles.resultsContainer}>
           {headerFooterResults.length === 0 && !isCheckingHeaderFooter && (
@@ -171,20 +246,44 @@ export default function App() {
             </p>
           )}
 
-          {headerFooterResults.map((r) => (
-            <div
-              key={r.id}
-              onClick={() => handleGoTo(r)}
-              style={{
-                ...styles.resultBox,
-                cursor: r.canLocate ? "pointer" : "default",
-                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
-              }}
-            >
-              <b>{r.type}</b>
-              <p style={styles.message}>{r.message}</p>
-            </div>
-          ))}
+          {headerFooterResults.map((r) => {
+            const canFix = r.type !== "Info" && !r.id.includes("draft") && !r.id.includes("inconsistent");
+            
+            return (
+              <div
+                key={r.id}
+                style={{
+                  ...styles.resultBox,
+                  backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <div
+                    onClick={() => handleGoTo(r)}
+                    style={{ 
+                      flex: 1, 
+                      cursor: r.canLocate ? "pointer" : "default" 
+                    }}
+                  >
+                    <b>{r.type}</b>
+                    <p style={styles.message}>{r.message}</p>
+                  </div>
+                  
+                  {canFix && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleFixSingleIssue(r);
+                      }}
+                      style={styles.fixButton}
+                    >
+                      Fix
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -290,5 +389,16 @@ const styles = {
   placeholder: {
     color: "#666",
     fontStyle: "italic",
+  },
+  fixButton: {
+    backgroundColor: "#107c10",
+    color: "#fff",
+    padding: "6px 12px",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "12px",
+    marginLeft: "10px",
+    flexShrink: 0,
   },
 };

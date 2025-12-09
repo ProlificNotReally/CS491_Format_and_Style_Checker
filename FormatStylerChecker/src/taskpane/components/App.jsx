@@ -4,9 +4,10 @@ import Header from "./Header";
 import HeroList from "./HeroList";
 import DocumentCheck from "./DocumentCheck"
 import TextInsertion from "./TextInsertion";
-import { makeStyles } from "@fluentui/react-components";
+import { makeStyles, Button } from "@fluentui/react-components";
 import { Ribbon24Regular, LockOpen24Regular, DesignIdeas24Regular } from "@fluentui/react-icons";
 import { insertText, checkDocument } from "../taskpane";
+import { fixBasicFormatting } from "./fixers";
 
 const useStyles = makeStyles({
   root: {
@@ -40,7 +41,14 @@ const App = (props) => {
       <HeroList message="Discover what this add-in can do for you today!" items={listItems} />
       {/* <TextInsertion insertText={insertText} /> */}
       <DocumentCheck checkDocument={checkDocument}/>
-    </div>
+   
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+        <h3>Automated Corrections</h3>
+        <Button appearance="primary" onClick={fixBasicFormatting}>
+    Fix Basic Formatting
+</Button>
+      </div>
+      </div>
   );
 };
 

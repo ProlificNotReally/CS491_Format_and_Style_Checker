@@ -8653,7 +8653,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordChecks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../wordChecks */ "./src/taskpane/wordChecks.js");
 /* harmony import */ var _docChecks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../docChecks */ "./src/taskpane/docChecks.js");
 /* harmony import */ var _checkStyles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../checkStyles */ "./src/taskpane/checkStyles.js");
-/* harmony import */ var _checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../checkHeaderFooterFormatting */ "./src/taskpane/checkHeaderFooterFormatting.js");
+/* harmony import */ var _symbolChecks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../symbolChecks */ "./src/taskpane/symbolChecks.js");
+/* harmony import */ var _checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../checkHeaderFooterFormatting */ "./src/taskpane/checkHeaderFooterFormatting.js");
 /* provided dependency */ var Promise = __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js")["Promise"];
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -8680,6 +8681,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
 function App() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
@@ -8701,30 +8703,70 @@ function App() {
     _useState0 = _slicedToArray(_useState9, 2),
     headerFooterResults = _useState0[0],
     setHeaderFooterResults = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState10 = _slicedToArray(_useState1, 2),
-    isChecking = _useState10[0],
-    setIsChecking = _useState10[1];
+    symbolResults = _useState10[0],
+    setSymbolResults = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState12 = _slicedToArray(_useState11, 2),
-    isCheckingDocument = _useState12[0],
-    setIsCheckingDocument = _useState12[1];
+    isChecking = _useState12[0],
+    setIsChecking = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState14 = _slicedToArray(_useState13, 2),
-    isCheckingStyles = _useState14[0],
-    setIsCheckingStyles = _useState14[1];
+    isCheckingDocument = _useState14[0],
+    setIsCheckingDocument = _useState14[1];
   var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState16 = _slicedToArray(_useState15, 2),
-    isCheckingComp = _useState16[0],
-    setIsCheckingComp = _useState16[1];
+    isCheckingStyles = _useState16[0],
+    setIsCheckingStyles = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState18 = _slicedToArray(_useState17, 2),
-    isCheckingHeaderFooter = _useState18[0],
-    setIsCheckingHeaderFooter = _useState18[1];
+    isCheckingComp = _useState18[0],
+    setIsCheckingComp = _useState18[1];
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState20 = _slicedToArray(_useState19, 2),
-    isFixingHeaderFooter = _useState20[0],
-    setIsFixingHeaderFooter = _useState20[1];
+    isCheckingHeaderFooter = _useState20[0],
+    setIsCheckingHeaderFooter = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState22 = _slicedToArray(_useState21, 2),
+    isFixingHeaderFooter = _useState22[0],
+    setIsFixingHeaderFooter = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState24 = _slicedToArray(_useState23, 2),
+    isCheckingSymbols = _useState24[0],
+    setIsCheckingSymbols = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState26 = _slicedToArray(_useState25, 2),
+    isFixingSymbols = _useState26[0],
+    setIsFixingSymbols = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState28 = _slicedToArray(_useState27, 2),
+    fixingItemId = _useState28[0],
+    setFixingItemId = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState30 = _slicedToArray(_useState29, 2),
+    hasRunFormatting = _useState30[0],
+    setHasRunFormatting = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState32 = _slicedToArray(_useState31, 2),
+    hasRunDocument = _useState32[0],
+    setHasRunDocument = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState34 = _slicedToArray(_useState33, 2),
+    hasRunStyles = _useState34[0],
+    setHasRunStyles = _useState34[1];
+  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState36 = _slicedToArray(_useState35, 2),
+    hasRunComp = _useState36[0],
+    setHasRunComp = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState38 = _slicedToArray(_useState37, 2),
+    hasRunHeaderFooter = _useState38[0],
+    setHasRunHeaderFooter = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState40 = _slicedToArray(_useState39, 2),
+    hasRunSymbols = _useState40[0],
+    setHasRunSymbols = _useState40[1];
 
   //Run formatting analysis
   var handleRunCheck = /*#__PURE__*/function () {
@@ -8740,6 +8782,7 @@ function App() {
           case 1:
             issues = _context.v;
             setResults(issues);
+            setHasRunFormatting(true);
             _context.n = 3;
             break;
           case 2:
@@ -8772,6 +8815,7 @@ function App() {
           case 1:
             issues = _context2.v;
             setDocResults(issues);
+            setHasRunDocument(true);
             _context2.n = 3;
             break;
           case 2:
@@ -8804,6 +8848,7 @@ function App() {
           case 1:
             issues = _context3.v;
             setStyleResults(issues);
+            setHasRunStyles(true);
             _context3.n = 3;
             break;
           case 2:
@@ -8823,154 +8868,189 @@ function App() {
       return _ref3.apply(this, arguments);
     };
   }();
-  var handleRunComprehensiveCheck = /*#__PURE__*/function () {
+  var handleRunSymbolsCheck = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-      var formatting_issues, general_doc_issues, style_issues, all_issues, _t4;
+      var issues, _t4;
       return _regenerator().w(function (_context4) {
         while (1) switch (_context4.p = _context4.n) {
           case 0:
             _context4.p = 0;
-            setIsCheckingComp(true);
+            setIsCheckingSymbols(true);
             _context4.n = 1;
-            return (0,_wordChecks__WEBPACK_IMPORTED_MODULE_1__.analyzeFormatting)();
+            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
           case 1:
-            formatting_issues = _context4.v;
-            _context4.n = 2;
-            return (0,_docChecks__WEBPACK_IMPORTED_MODULE_2__.checkDocument)();
-          case 2:
-            general_doc_issues = _context4.v;
+            issues = _context4.v;
+            setSymbolResults(issues);
+            setHasRunSymbols(true);
             _context4.n = 3;
-            return (0,_checkStyles__WEBPACK_IMPORTED_MODULE_3__.checkStyles)();
-          case 3:
-            style_issues = _context4.v;
-            all_issues = [].concat(_toConsumableArray(formatting_issues), _toConsumableArray(general_doc_issues), _toConsumableArray(style_issues));
-            setCompResults(all_issues);
-            _context4.n = 5;
             break;
-          case 4:
-            _context4.p = 4;
+          case 2:
+            _context4.p = 2;
             _t4 = _context4.v;
-            console.error("Error running comprehensive checks:", _t4);
-          case 5:
-            _context4.p = 5;
-            setIsCheckingComp(false);
-            return _context4.f(5);
-          case 6:
+            console.error("Error running symbols check:", _t4);
+          case 3:
+            _context4.p = 3;
+            setIsCheckingSymbols(false);
+            return _context4.f(3);
+          case 4:
             return _context4.a(2);
         }
-      }, _callee4, null, [[0, 4, 5, 6]]);
+      }, _callee4, null, [[0, 2, 3, 4]]);
+    }));
+    return function handleRunSymbolsCheck() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  var handleRunComprehensiveCheck = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+      var formatting_issues, general_doc_issues, style_issues, all_issues, _t5;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
+          case 0:
+            _context5.p = 0;
+            setIsCheckingComp(true);
+            _context5.n = 1;
+            return (0,_wordChecks__WEBPACK_IMPORTED_MODULE_1__.analyzeFormatting)();
+          case 1:
+            formatting_issues = _context5.v;
+            _context5.n = 2;
+            return (0,_docChecks__WEBPACK_IMPORTED_MODULE_2__.checkDocument)();
+          case 2:
+            general_doc_issues = _context5.v;
+            _context5.n = 3;
+            return (0,_checkStyles__WEBPACK_IMPORTED_MODULE_3__.checkStyles)();
+          case 3:
+            style_issues = _context5.v;
+            all_issues = [].concat(_toConsumableArray(formatting_issues), _toConsumableArray(general_doc_issues), _toConsumableArray(style_issues));
+            setCompResults(all_issues);
+            setHasRunComp(true);
+            _context5.n = 5;
+            break;
+          case 4:
+            _context5.p = 4;
+            _t5 = _context5.v;
+            console.error("Error running comprehensive checks:", _t5);
+          case 5:
+            _context5.p = 5;
+            setIsCheckingComp(false);
+            return _context5.f(5);
+          case 6:
+            return _context5.a(2);
+        }
+      }, _callee5, null, [[0, 4, 5, 6]]);
     }));
     return function handleRunComprehensiveCheck() {
-      return _ref4.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
   // Run header/footer checker independently
   var handleRunHeaderFooterCheck = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-      var issues, _t5;
-      return _regenerator().w(function (_context5) {
-        while (1) switch (_context5.p = _context5.n) {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
+      var issues, _t6;
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.p = _context6.n) {
           case 0:
-            _context5.p = 0;
+            _context6.p = 0;
             setIsCheckingHeaderFooter(true);
-            _context5.n = 1;
-            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_4__.checkHeaderFooterFormatting)();
+            _context6.n = 1;
+            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.checkHeaderFooterFormatting)();
           case 1:
-            issues = _context5.v;
+            issues = _context6.v;
             setHeaderFooterResults(issues);
-            _context5.n = 3;
+            setHasRunHeaderFooter(true);
+            _context6.n = 3;
             break;
           case 2:
-            _context5.p = 2;
-            _t5 = _context5.v;
-            console.error("Error running header/footer checks:", _t5);
+            _context6.p = 2;
+            _t6 = _context6.v;
+            console.error("Error running header/footer checks:", _t6);
           case 3:
-            _context5.p = 3;
+            _context6.p = 3;
             setIsCheckingHeaderFooter(false);
-            return _context5.f(3);
+            return _context6.f(3);
           case 4:
-            return _context5.a(2);
+            return _context6.a(2);
         }
-      }, _callee5, null, [[0, 2, 3, 4]]);
+      }, _callee6, null, [[0, 2, 3, 4]]);
     }));
     return function handleRunHeaderFooterCheck() {
-      return _ref5.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
 
   // Fix individual header/footer issue
   var handleFixSingleIssue = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(issue) {
-      var result, updatedIssues, _t6;
-      return _regenerator().w(function (_context6) {
-        while (1) switch (_context6.p = _context6.n) {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(issue) {
+      var result, updatedIssues, _t7;
+      return _regenerator().w(function (_context7) {
+        while (1) switch (_context7.p = _context7.n) {
           case 0:
-            _context6.p = 0;
+            _context7.p = 0;
             console.log("Fixing issue:", issue);
-            _context6.n = 1;
-            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_4__.fixHeaderFooterIssue)(issue);
+            _context7.n = 1;
+            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.fixHeaderFooterIssue)(issue);
           case 1:
-            result = _context6.v;
+            result = _context7.v;
             console.log("Fix result:", result);
             if (!result.success) {
-              _context6.n = 3;
+              _context7.n = 3;
               break;
             }
-            _context6.n = 2;
-            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_4__.checkHeaderFooterFormatting)();
+            _context7.n = 2;
+            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.checkHeaderFooterFormatting)();
           case 2:
-            updatedIssues = _context6.v;
+            updatedIssues = _context7.v;
             setHeaderFooterResults(updatedIssues);
             alert("\u2705 ".concat(result.message));
-            _context6.n = 4;
+            _context7.n = 4;
             break;
           case 3:
             alert("\u274C Could not fix: ".concat(result.message, "\n\nIssue ID: ").concat(issue.id));
           case 4:
-            _context6.n = 6;
+            _context7.n = 6;
             break;
           case 5:
-            _context6.p = 5;
-            _t6 = _context6.v;
-            console.error("Error fixing issue:", _t6);
-            alert("\u274C Error: ".concat(_t6.message, "\n\nIssue ID: ").concat(issue.id));
+            _context7.p = 5;
+            _t7 = _context7.v;
+            console.error("Error fixing issue:", _t7);
+            alert("\u274C Error: ".concat(_t7.message, "\n\nIssue ID: ").concat(issue.id));
           case 6:
-            return _context6.a(2);
+            return _context7.a(2);
         }
-      }, _callee6, null, [[0, 5]]);
+      }, _callee7, null, [[0, 5]]);
     }));
     return function handleFixSingleIssue(_x) {
-      return _ref6.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
 
   // Fix all header/footer issues at once
   var handleFixAllHeaderFooter = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7() {
-      var fixableIssues, _results, successCount, failedIssues, updatedIssues, message, _t7;
-      return _regenerator().w(function (_context7) {
-        while (1) switch (_context7.p = _context7.n) {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8() {
+      var fixableIssues, _results, successCount, failedIssues, updatedIssues, message, _t8;
+      return _regenerator().w(function (_context8) {
+        while (1) switch (_context8.p = _context8.n) {
           case 0:
-            _context7.p = 0;
+            _context8.p = 0;
             setIsFixingHeaderFooter(true);
             fixableIssues = headerFooterResults.filter(function (r) {
               return r.type !== "Info" && !r.id.includes("draft") && !r.id.includes("inconsistent");
             });
             if (!(fixableIssues.length === 0)) {
-              _context7.n = 1;
+              _context8.n = 1;
               break;
             }
             alert("No fixable issues found.");
-            return _context7.a(2);
+            return _context8.a(2);
           case 1:
             console.log("Fixing issues:", fixableIssues.map(function (i) {
               return i.id;
             }));
-            _context7.n = 2;
-            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_4__.fixAllHeaderFooterIssues)(fixableIssues);
+            _context8.n = 2;
+            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.fixAllHeaderFooterIssues)(fixableIssues);
           case 2:
-            _results = _context7.v;
+            _results = _context8.v;
             console.log("Fix results:", _results);
             successCount = _results.filter(function (r) {
               return r.success;
@@ -8978,10 +9058,10 @@ function App() {
             failedIssues = _results.filter(function (r) {
               return !r.success;
             }); // Re-run check to update results
-            _context7.n = 3;
-            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_4__.checkHeaderFooterFormatting)();
+            _context8.n = 3;
+            return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.checkHeaderFooterFormatting)();
           case 3:
-            updatedIssues = _context7.v;
+            updatedIssues = _context8.v;
             setHeaderFooterResults(updatedIssues);
             message = "\u2705 Fixed ".concat(successCount, " out of ").concat(fixableIssues.length, " issues.");
             if (failedIssues.length > 0) {
@@ -8994,61 +9074,195 @@ function App() {
               }
             }
             alert(message);
-            _context7.n = 5;
+            _context8.n = 5;
             break;
           case 4:
-            _context7.p = 4;
-            _t7 = _context7.v;
-            console.error("Error fixing all issues:", _t7);
-            alert("\u274C Error: ".concat(_t7.message));
+            _context8.p = 4;
+            _t8 = _context8.v;
+            console.error("Error fixing all issues:", _t8);
+            alert("\u274C Error: ".concat(_t8.message));
           case 5:
-            _context7.p = 5;
+            _context8.p = 5;
             setIsFixingHeaderFooter(false);
-            return _context7.f(5);
+            return _context8.f(5);
           case 6:
-            return _context7.a(2);
+            return _context8.a(2);
         }
-      }, _callee7, null, [[0, 4, 5, 6]]);
+      }, _callee8, null, [[0, 4, 5, 6]]);
     }));
     return function handleFixAllHeaderFooter() {
-      return _ref7.apply(this, arguments);
+      return _ref8.apply(this, arguments);
+    };
+  }();
+
+  // Fix individual symbol issue
+  var handleFixSingleSymbol = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9(issue) {
+      var result, updatedIssues, _t9;
+      return _regenerator().w(function (_context9) {
+        while (1) switch (_context9.p = _context9.n) {
+          case 0:
+            setFixingItemId(issue.id);
+            _context9.n = 1;
+            return new Promise(function (resolve) {
+              return setTimeout(resolve, 10);
+            });
+          case 1:
+            _context9.p = 1;
+            console.log("Fixing symbol issue:", issue);
+            _context9.n = 2;
+            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.fixSymbolIssue)(issue);
+          case 2:
+            result = _context9.v;
+            console.log("Fix result:", result);
+            if (!result.success) {
+              _context9.n = 4;
+              break;
+            }
+            _context9.n = 3;
+            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
+          case 3:
+            updatedIssues = _context9.v;
+            setSymbolResults(updatedIssues);
+            alert("\u2705 Symbol font applied successfully!");
+            _context9.n = 5;
+            break;
+          case 4:
+            alert("\u274C Could not fix: ".concat(result.error, "\n\nIssue ID: ").concat(issue.id));
+          case 5:
+            _context9.n = 7;
+            break;
+          case 6:
+            _context9.p = 6;
+            _t9 = _context9.v;
+            console.error("Error fixing symbol issue:", _t9);
+            alert("\u274C Error: ".concat(_t9.message, "\n\nIssue ID: ").concat(issue.id));
+          case 7:
+            _context9.p = 7;
+            setFixingItemId(null);
+            return _context9.f(7);
+          case 8:
+            return _context9.a(2);
+        }
+      }, _callee9, null, [[1, 6, 7, 8]]);
+    }));
+    return function handleFixSingleSymbol(_x2) {
+      return _ref9.apply(this, arguments);
+    };
+  }();
+
+  // Fix all symbol issues at once
+  var handleFixAllSymbols = /*#__PURE__*/function () {
+    var _ref0 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0() {
+      var _results2, successCount, failedIssues, updatedIssues, message, _t0;
+      return _regenerator().w(function (_context0) {
+        while (1) switch (_context0.p = _context0.n) {
+          case 0:
+            _context0.p = 0;
+            setIsFixingSymbols(true);
+            if (!(symbolResults.length === 0)) {
+              _context0.n = 1;
+              break;
+            }
+            alert("No fixable issues found.");
+            return _context0.a(2);
+          case 1:
+            console.log("Fixing symbol issues:", symbolResults.map(function (i) {
+              return i.id;
+            }));
+            _context0.n = 2;
+            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.fixAllSymbolIssues)(symbolResults);
+          case 2:
+            _results2 = _context0.v;
+            console.log("Fix results:", _results2);
+            successCount = _results2.filter(function (r) {
+              return r.success;
+            }).length;
+            failedIssues = _results2.filter(function (r) {
+              return !r.success;
+            });
+            _context0.n = 3;
+            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
+          case 3:
+            updatedIssues = _context0.v;
+            setSymbolResults(updatedIssues);
+            message = "\u2705 Fixed ".concat(successCount, " out of ").concat(symbolResults.length, " issues.");
+            if (failedIssues.length > 0) {
+              message += "\n\n\u274C Failed to fix ".concat(failedIssues.length, " issues:\n");
+              message += failedIssues.slice(0, 3).map(function (f) {
+                return "- ".concat(f.error);
+              }).join('\n');
+              if (failedIssues.length > 3) {
+                message += "\n... and ".concat(failedIssues.length - 3, " more");
+              }
+            }
+            alert(message);
+            _context0.n = 5;
+            break;
+          case 4:
+            _context0.p = 4;
+            _t0 = _context0.v;
+            console.error("Error fixing all symbol issues:", _t0);
+            alert("\u274C Error: ".concat(_t0.message));
+          case 5:
+            _context0.p = 5;
+            setIsFixingSymbols(false);
+            return _context0.f(5);
+          case 6:
+            return _context0.a(2);
+        }
+      }, _callee0, null, [[0, 4, 5, 6]]);
+    }));
+    return function handleFixAllSymbols() {
+      return _ref0.apply(this, arguments);
     };
   }();
 
   //Jump to a specific error in Word
   var handleGoTo = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8(issue) {
-      return _regenerator().w(function (_context8) {
-        while (1) switch (_context8.n) {
+    var _ref1 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1(issue) {
+      return _regenerator().w(function (_context1) {
+        while (1) switch (_context1.n) {
           case 0:
             if (!(issue.canLocate && issue.location)) {
-              _context8.n = 1;
+              _context1.n = 1;
               break;
             }
-            _context8.n = 1;
+            _context1.n = 1;
             return (0,_wordChecks__WEBPACK_IMPORTED_MODULE_1__.goToError)(issue.location);
           case 1:
-            return _context8.a(2);
+            return _context1.a(2);
         }
-      }, _callee8);
+      }, _callee1);
     }));
-    return function handleGoTo(_x2) {
-      return _ref8.apply(this, arguments);
+    return function handleGoTo(_x3) {
+      return _ref1.apply(this, arguments);
     };
   }();
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.container
+    style: _objectSpread(_objectSpread({}, styles.container), {}, {
+      backgroundColor: "#f9f0ef",
+      borderLeft: "4px solid #914137"
+    })
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
-    style: styles.title
+    style: _objectSpread(_objectSpread({}, styles.title), {}, {
+      color: "#914137"
+    })
   }, "Comprehensive Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleRunComprehensiveCheck,
-    style: styles.button,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#914137"
+    }),
     disabled: isCheckingComp
   }, isCheckingComp ? "Checking..." : "Run Comprehensive Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: styles.resultsContainer
-  }, compResults.length === 0 && !isCheckingComp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+  }, isCheckingComp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.loadingMessage
+  }, "Loading..."), compResults.length === 0 && !isCheckingComp && !hasRunComp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
-  }, "No results yet. Click \u201CRun Comprehensive Check\u201D."), compResults.map(function (r) {
+  }, "No results yet. Click \"Run Comprehensive Check\"."), compResults.length === 0 && !isCheckingComp && hasRunComp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.successMessage
+  }, "\uD83C\uDF89 Congrats! No errors found."), !isCheckingComp && compResults.map(function (r) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       key: r.id,
       onClick: function onClick() {
@@ -9062,18 +9276,29 @@ function App() {
       style: styles.message
     }, r.message));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.container
+    style: _objectSpread(_objectSpread({}, styles.container), {}, {
+      backgroundColor: "#eef2f1",
+      borderLeft: "4px solid #29423f"
+    })
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
-    style: styles.title
+    style: _objectSpread(_objectSpread({}, styles.title), {}, {
+      color: "#29423f"
+    })
   }, "Formatting Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleRunCheck,
-    style: styles.button,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#29423f"
+    }),
     disabled: isChecking
   }, isChecking ? "Checking..." : "Run Formatting Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: styles.resultsContainer
-  }, results.length === 0 && !isChecking && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+  }, isChecking && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.loadingMessage
+  }, "Loading..."), results.length === 0 && !isChecking && !hasRunFormatting && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
-  }, "No results yet. Click \u201CRun Formatting Check\u201D."), results.map(function (r) {
+  }, "No results yet. Click \"Run Formatting Check\"."), results.length === 0 && !isChecking && hasRunFormatting && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.successMessage
+  }, "\uD83C\uDF89 Congrats! No errors found."), !isChecking && results.map(function (r) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       key: r.id,
       onClick: function onClick() {
@@ -9087,10 +9312,51 @@ function App() {
       style: styles.message
     }, r.message));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.container
+    style: _objectSpread(_objectSpread({}, styles.container), {}, {
+      backgroundColor: "#f9eff1",
+      borderLeft: "4px solid #7c152d"
+    })
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: styles.title
-  }, "Header/Footer Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: _objectSpread(_objectSpread({}, styles.title), {}, {
+      color: "#7c152d"
+    })
+  }, "General Document Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: handleRunDocumentCheck,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#7c152d"
+    }),
+    disabled: isCheckingDocument
+  }, isCheckingDocument ? "Checking..." : "Run Document Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: styles.resultsContainer
+  }, isCheckingDocument && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.loadingMessage
+  }, "Loading..."), docResults.length === 0 && !isCheckingDocument && !hasRunDocument && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.placeholder
+  }, "No results yet. Click \"Run Document Check\"."), docResults.length === 0 && !isCheckingDocument && hasRunDocument && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.successMessage
+  }, "\uD83C\uDF89 Congrats! No errors found."), !isCheckingDocument && docResults.map(function (r) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: r.id,
+      onClick: function onClick() {
+        return handleGoTo(r);
+      },
+      style: _objectSpread(_objectSpread({}, styles.resultBox), {}, {
+        cursor: r.canLocate ? "pointer" : "default",
+        backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9"
+      })
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, r.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+      style: styles.message
+    }, r.message));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: _objectSpread(_objectSpread({}, styles.container), {}, {
+      backgroundColor: "#f5f2f2",
+      borderLeft: "4px solid #684e4e"
+    })
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
+    style: _objectSpread(_objectSpread({}, styles.title), {}, {
+      color: "#684e4e"
+    })
+  }, "Headers and Footers Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: {
       display: "flex",
       gap: "10px",
@@ -9098,7 +9364,9 @@ function App() {
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleRunHeaderFooterCheck,
-    style: styles.button,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#684e4e"
+    }),
     disabled: isCheckingHeaderFooter
   }, isCheckingHeaderFooter ? "Checking..." : "Run Header/Footer Check"), headerFooterResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: handleFixAllHeaderFooter,
@@ -9108,9 +9376,13 @@ function App() {
     disabled: isFixingHeaderFooter || isCheckingHeaderFooter
   }, isFixingHeaderFooter ? "Fixing..." : "Fix All Issues")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: styles.resultsContainer
-  }, headerFooterResults.length === 0 && !isCheckingHeaderFooter && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+  }, isCheckingHeaderFooter && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.loadingMessage
+  }, "Loading..."), headerFooterResults.length === 0 && !isCheckingHeaderFooter && !hasRunHeaderFooter && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
-  }, "No results yet. Click \u201CRun Header/Footer Check\u201D."), headerFooterResults.map(function (r) {
+  }, "No results yet. Click \"Run Header/Footer Check\"."), headerFooterResults.length === 0 && !isCheckingHeaderFooter && hasRunHeaderFooter && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.successMessage
+  }, "\uD83C\uDF89 Congrats! No errors found."), !isCheckingHeaderFooter && headerFooterResults.map(function (r) {
     var canFix = r.type !== "Info" && !r.id.includes("draft") && !r.id.includes("inconsistent");
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       key: r.id,
@@ -9141,18 +9413,40 @@ function App() {
       style: styles.fixButton
     }, "Fix")));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.container
+    style: _objectSpread(_objectSpread({}, styles.container), {}, {
+      backgroundColor: "#eeebeb",
+      borderLeft: "4px solid #451516"
+    })
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: styles.title
-  }, "Document Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    onClick: handleRunDocumentCheck,
-    style: styles.button,
-    disabled: isCheckingDocument
-  }, isCheckingDocument ? "Checking..." : "Run Document Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.resultsContainer
-  }, docResults.length === 0 && !isCheckingDocument && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: _objectSpread(_objectSpread({}, styles.title), {}, {
+      color: "#451516"
+    })
+  }, "Margins Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
-  }, "No results yet. Click \u201CRun Document Check\u201D."), docResults.map(function (r) {
+  }, "Coming soon - Margin validation will be added here.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: _objectSpread(_objectSpread({}, styles.container), {}, {
+      backgroundColor: "#fef5f3",
+      borderLeft: "4px solid #ef6641"
+    })
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
+    style: _objectSpread(_objectSpread({}, styles.title), {}, {
+      color: "#ef6641"
+    })
+  }, "Styles Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: handleRunStylesCheck,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#ef6641"
+    }),
+    disabled: isCheckingStyles
+  }, isCheckingStyles ? "Checking..." : "Run Styles Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: styles.resultsContainer
+  }, isCheckingStyles && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.loadingMessage
+  }, "Loading..."), styleResults.length === 0 && !isCheckingStyles && !hasRunStyles && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.placeholder
+  }, "No results yet. Click \"Run Styles Check\"."), styleResults.length === 0 && !isCheckingStyles && hasRunStyles && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.successMessage
+  }, "\uD83C\uDF89 Congrats! No errors found."), !isCheckingStyles && styleResults.map(function (r) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       key: r.id,
       onClick: function onClick() {
@@ -9166,30 +9460,70 @@ function App() {
       style: styles.message
     }, r.message));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.container
+    style: _objectSpread(_objectSpread({}, styles.container), {}, {
+      backgroundColor: "#eef3f9",
+      borderLeft: "4px solid #365d9f"
+    })
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: styles.title
-  }, "Styles Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    onClick: handleRunStylesCheck,
-    style: styles.button,
-    disabled: isCheckingStyles
-  }, isCheckingStyles ? "Checking..." : "Run Styles Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: _objectSpread(_objectSpread({}, styles.title), {}, {
+      color: "#365d9f"
+    })
+  }, "Symbols Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: {
+      display: "flex",
+      gap: "10px",
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: handleRunSymbolsCheck,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#365d9f"
+    }),
+    disabled: isCheckingSymbols
+  }, isCheckingSymbols ? "Checking..." : "Run Symbols Check"), symbolResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: handleFixAllSymbols,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#107c10"
+    }),
+    disabled: isFixingSymbols || isCheckingSymbols
+  }, isFixingSymbols ? "Fixing..." : "Fix All Issues")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: styles.resultsContainer
-  }, styleResults.length === 0 && !isCheckingStyles && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+  }, isCheckingSymbols && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.loadingMessage
+  }, "Loading..."), symbolResults.length === 0 && !isCheckingSymbols && !hasRunSymbols && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
-  }, "No results yet. Click \u201CRun Styles Check\u201D."), styleResults.map(function (r) {
+  }, "No results yet. Click \"Run Symbols Check\"."), symbolResults.length === 0 && !isCheckingSymbols && hasRunSymbols && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.successMessage
+  }, "\uD83C\uDF89 Congrats! No errors found."), !isCheckingSymbols && symbolResults.map(function (r) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       key: r.id,
+      style: _objectSpread(_objectSpread({}, styles.resultBox), {}, {
+        backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9"
+      })
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-start"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       onClick: function onClick() {
         return handleGoTo(r);
       },
-      style: _objectSpread(_objectSpread({}, styles.resultBox), {}, {
-        cursor: r.canLocate ? "pointer" : "default",
-        backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9"
-      })
+      style: {
+        flex: 1,
+        cursor: r.canLocate ? "pointer" : "default"
+      }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, r.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
       style: styles.message
-    }, r.message));
+    }, r.message)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      onClick: function onClick(e) {
+        e.stopPropagation();
+        handleFixSingleSymbol(r);
+      },
+      style: styles.fixButton,
+      disabled: fixingItemId === r.id || isFixingSymbols
+    }, fixingItemId === r.id ? "Fixing..." : "Fix")));
   }))));
 }
 
@@ -9197,12 +9531,13 @@ function App() {
 var styles = {
   container: {
     padding: "16px",
-    fontFamily: "Segoe UI, sans-serif"
+    fontFamily: "'Times New Roman', Times, serif"
   },
   title: {
     fontSize: "20px",
     fontWeight: 600,
-    marginBottom: "12px"
+    marginBottom: "12px",
+    fontFamily: "'Times New Roman', Times, serif"
   },
   button: {
     backgroundColor: "#2b579a",
@@ -9233,6 +9568,23 @@ var styles = {
   placeholder: {
     color: "#666",
     fontStyle: "italic"
+  },
+  loadingMessage: {
+    color: "#2b579a",
+    fontStyle: "italic",
+    fontSize: "14px",
+    textAlign: "center",
+    padding: "10px"
+  },
+  successMessage: {
+    color: "#107c10",
+    fontWeight: "600",
+    fontSize: "16px",
+    textAlign: "center",
+    padding: "20px",
+    backgroundColor: "#f0f9f0",
+    borderRadius: "6px",
+    border: "2px solid #107c10"
   },
   fixButton: {
     backgroundColor: "#107c10",
@@ -9614,6 +9966,285 @@ Office.onReady(function () {
 });
 if (false) // removed by dead control flow
 {}
+
+/***/ }),
+
+/***/ "./src/taskpane/symbolChecks.js":
+/*!**************************************!*\
+  !*** ./src/taskpane/symbolChecks.js ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   checkSymbols: function() { return /* binding */ checkSymbols; },
+/* harmony export */   fixAllSymbolIssues: function() { return /* binding */ fixAllSymbolIssues; },
+/* harmony export */   fixSymbolIssue: function() { return /* binding */ fixSymbolIssue; }
+/* harmony export */ });
+/* harmony import */ var _config_rules_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/rules.json */ "./src/taskpane/config/rules.json");
+/* provided dependency */ var Promise = __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js")["Promise"];
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+
+/**
+ * Runs symbols check to detect valid symbols that are NOT styled with Symbol font
+ * Valid symbols should be in Symbol font - if they're not, it's an error
+ * Returns an array of issue objects
+ */
+function checkSymbols() {
+  return _checkSymbols.apply(this, arguments);
+}
+
+/**
+ * Fixes a single symbol issue by changing the font to Symbol
+ */
+function _checkSymbols() {
+  _checkSymbols = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+    return _regenerator().w(function (_context2) {
+      while (1) switch (_context2.n) {
+        case 0:
+          return _context2.a(2, Word.run(/*#__PURE__*/function () {
+            var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(context) {
+              var results, validSymbols, paragraphs, issueCount, i, para, text, _iterator, _step, symbol, range, name, _t;
+              return _regenerator().w(function (_context) {
+                while (1) switch (_context.p = _context.n) {
+                  case 0:
+                    results = []; // Common mathematical and special symbols that should be in Symbol font
+                    validSymbols = [
+                    // Greek letters
+                    'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
+                    // Mathematical operators
+                    '±', '×', '÷', '≠', '≈', '≡', '≤', '≥', '∞', '∑', '∏', '∫', '∂', '√', '∆',
+                    // Arrows
+                    '←', '→', '↑', '↓', '↔', '⇐', '⇒', '⇔',
+                    // Other symbols
+                    '°', '′', '″', '∠', '⊥', '∥', '⊂', '⊃', '⊆', '⊇', '∈', '∉', '∅', '∩', '∪', '¬', '∧', '∨', '∀', '∃', '⊕', '⊗', '℃', '℉', '†', '‡', '§', '¶', '•', '◦'];
+                    paragraphs = context.document.body.paragraphs;
+                    paragraphs.load("items");
+                    _context.n = 1;
+                    return context.sync();
+                  case 1:
+                    issueCount = 0;
+                    i = 0;
+                  case 2:
+                    if (!(i < paragraphs.items.length)) {
+                      _context.n = 13;
+                      break;
+                    }
+                    para = paragraphs.items[i];
+                    para.load("text");
+                    _context.n = 3;
+                    return context.sync();
+                  case 3:
+                    text = para.text || ""; // Check if paragraph contains any valid symbols
+                    _iterator = _createForOfIteratorHelper(validSymbols);
+                    _context.p = 4;
+                    _iterator.s();
+                  case 5:
+                    if ((_step = _iterator.n()).done) {
+                      _context.n = 9;
+                      break;
+                    }
+                    symbol = _step.value;
+                    if (!text.includes(symbol)) {
+                      _context.n = 8;
+                      break;
+                    }
+                    // Found a valid symbol, now check if it's using Symbol font
+                    range = para.getRange();
+                    range.load("font/name");
+                    _context.n = 6;
+                    return context.sync();
+                  case 6:
+                    if (!(range.font.name.toLowerCase() !== "symbol")) {
+                      _context.n = 8;
+                      break;
+                    }
+                    name = "symbol_not_styled_".concat(issueCount + 1);
+                    range.insertBookmark(name);
+                    _context.n = 7;
+                    return context.sync();
+                  case 7:
+                    results.push({
+                      id: "symbol-missing-font-".concat(issueCount + 1),
+                      type: "Symbols",
+                      message: "Symbol \"".concat(symbol, "\" found but not styled with Symbol font (currently using ").concat(range.font.name, ")."),
+                      text: text.substring(0, 100) + (text.length > 100 ? "..." : ""),
+                      location: name,
+                      canLocate: true
+                    });
+                    issueCount++;
+                    return _context.a(3, 9);
+                  case 8:
+                    _context.n = 5;
+                    break;
+                  case 9:
+                    _context.n = 11;
+                    break;
+                  case 10:
+                    _context.p = 10;
+                    _t = _context.v;
+                    _iterator.e(_t);
+                  case 11:
+                    _context.p = 11;
+                    _iterator.f();
+                    return _context.f(11);
+                  case 12:
+                    i++;
+                    _context.n = 2;
+                    break;
+                  case 13:
+                    return _context.a(2, results);
+                }
+              }, _callee, null, [[4, 10, 11, 12]]);
+            }));
+            return function (_x3) {
+              return _ref.apply(this, arguments);
+            };
+          }()));
+      }
+    }, _callee2);
+  }));
+  return _checkSymbols.apply(this, arguments);
+}
+function fixSymbolIssue(_x) {
+  return _fixSymbolIssue.apply(this, arguments);
+}
+
+/**
+ * Fixes all symbol issues by changing fonts to Symbol
+ */
+function _fixSymbolIssue() {
+  _fixSymbolIssue = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(issue) {
+    return _regenerator().w(function (_context4) {
+      while (1) switch (_context4.n) {
+        case 0:
+          return _context4.a(2, Word.run(/*#__PURE__*/function () {
+            var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(context) {
+              var idMatch, bookmarkName, bookmarks, bookmark, range, _t2;
+              return _regenerator().w(function (_context3) {
+                while (1) switch (_context3.p = _context3.n) {
+                  case 0:
+                    _context3.p = 0;
+                    // Parse the issue ID to get the bookmark name
+                    idMatch = issue.id.match(/symbol-missing-font-(\d+)/);
+                    if (idMatch) {
+                      _context3.n = 1;
+                      break;
+                    }
+                    console.error("Could not parse symbol issue ID:", issue.id);
+                    return _context3.a(2, {
+                      success: false,
+                      error: "Invalid issue ID format"
+                    });
+                  case 1:
+                    bookmarkName = "symbol_not_styled_".concat(idMatch[1]); // Get the bookmarked range
+                    bookmarks = context.document.body.bookmarks;
+                    bookmarks.load("items");
+                    _context3.n = 2;
+                    return context.sync();
+                  case 2:
+                    bookmark = bookmarks.items.find(function (b) {
+                      return b.name === bookmarkName;
+                    });
+                    if (bookmark) {
+                      _context3.n = 3;
+                      break;
+                    }
+                    console.error("Bookmark not found:", bookmarkName);
+                    return _context3.a(2, {
+                      success: false,
+                      error: "Bookmark not found"
+                    });
+                  case 3:
+                    range = bookmark.getRange();
+                    range.load("font");
+                    _context3.n = 4;
+                    return context.sync();
+                  case 4:
+                    // Change font to Symbol
+                    range.font.name = "Symbol";
+                    _context3.n = 5;
+                    return context.sync();
+                  case 5:
+                    return _context3.a(2, {
+                      success: true
+                    });
+                  case 6:
+                    _context3.p = 6;
+                    _t2 = _context3.v;
+                    console.error("Error fixing symbol issue:", _t2);
+                    return _context3.a(2, {
+                      success: false,
+                      error: _t2.message
+                    });
+                }
+              }, _callee3, null, [[0, 6]]);
+            }));
+            return function (_x4) {
+              return _ref2.apply(this, arguments);
+            };
+          }()));
+      }
+    }, _callee4);
+  }));
+  return _fixSymbolIssue.apply(this, arguments);
+}
+function fixAllSymbolIssues(_x2) {
+  return _fixAllSymbolIssues.apply(this, arguments);
+}
+function _fixAllSymbolIssues() {
+  _fixAllSymbolIssues = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(issues) {
+    var results, _iterator2, _step2, issue, result, _t3;
+    return _regenerator().w(function (_context5) {
+      while (1) switch (_context5.p = _context5.n) {
+        case 0:
+          results = [];
+          _iterator2 = _createForOfIteratorHelper(issues);
+          _context5.p = 1;
+          _iterator2.s();
+        case 2:
+          if ((_step2 = _iterator2.n()).done) {
+            _context5.n = 5;
+            break;
+          }
+          issue = _step2.value;
+          _context5.n = 3;
+          return fixSymbolIssue(issue);
+        case 3:
+          result = _context5.v;
+          results.push({
+            issue: issue,
+            success: result.success,
+            error: result.error
+          });
+        case 4:
+          _context5.n = 2;
+          break;
+        case 5:
+          _context5.n = 7;
+          break;
+        case 6:
+          _context5.p = 6;
+          _t3 = _context5.v;
+          _iterator2.e(_t3);
+        case 7:
+          _context5.p = 7;
+          _iterator2.f();
+          return _context5.f(7);
+        case 8:
+          return _context5.a(2, results);
+      }
+    }, _callee5, null, [[1, 6, 7, 8]]);
+  }));
+  return _fixAllSymbolIssues.apply(this, arguments);
+}
 
 /***/ }),
 

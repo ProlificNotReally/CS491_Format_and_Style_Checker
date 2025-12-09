@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { analyzeFormatting, goToError } from "../wordChecks";
 import { checkDocument } from "../docChecks";
 import { checkStyles } from "../checkStyles";
+import { checkSymbols, fixSymbolIssue, fixAllSymbolIssues } from "../symbolChecks";
 import { checkHeaderFooterFormatting, fixHeaderFooterIssue, fixAllHeaderFooterIssues } from "../checkHeaderFooterFormatting";
 
 export default function App() {
@@ -10,6 +11,7 @@ export default function App() {
   const [styleResults, setStyleResults] = useState([]);
   const [compResults, setCompResults] = useState([]);
   const [headerFooterResults, setHeaderFooterResults] = useState([]);
+  const [symbolResults, setSymbolResults] = useState([]);
 
   const [isChecking, setIsChecking] = useState(false);
   const [isCheckingDocument, setIsCheckingDocument] = useState(false);
@@ -17,6 +19,16 @@ export default function App() {
   const [isCheckingComp, setIsCheckingComp] = useState(false);
   const [isCheckingHeaderFooter, setIsCheckingHeaderFooter] = useState(false);
   const [isFixingHeaderFooter, setIsFixingHeaderFooter] = useState(false);
+  const [isCheckingSymbols, setIsCheckingSymbols] = useState(false);
+  const [isFixingSymbols, setIsFixingSymbols] = useState(false);
+  const [fixingItemId, setFixingItemId] = useState(null);
+
+  const [hasRunFormatting, setHasRunFormatting] = useState(false);
+  const [hasRunDocument, setHasRunDocument] = useState(false);
+  const [hasRunStyles, setHasRunStyles] = useState(false);
+  const [hasRunComp, setHasRunComp] = useState(false);
+  const [hasRunHeaderFooter, setHasRunHeaderFooter] = useState(false);
+  const [hasRunSymbols, setHasRunSymbols] = useState(false);
 
   //Run formatting analysis
   const handleRunCheck = async () => {
@@ -24,6 +36,7 @@ export default function App() {
       setIsChecking(true);
       const issues = await analyzeFormatting();
       setResults(issues);
+      setHasRunFormatting(true);
     } catch (err) {
       console.error("Error running formatting checks:", err);
     } finally {
@@ -36,6 +49,7 @@ export default function App() {
       setIsCheckingDocument(true);
       const issues = await checkDocument();
       setDocResults(issues);
+      setHasRunDocument(true);
     } catch (err) {
       console.error("Error running formatting checks:", err);
     } finally {
@@ -48,10 +62,24 @@ export default function App() {
       setIsCheckingStyles(true);
       const issues = await checkStyles();
       setStyleResults(issues);
+      setHasRunStyles(true);
     } catch (err) {
       console.error("Error running style checks:", err);
     } finally {
       setIsCheckingStyles(false);
+    }
+  };
+
+  const handleRunSymbolsCheck = async () => {
+    try {
+      setIsCheckingSymbols(true);
+      const issues = await checkSymbols();
+      setSymbolResults(issues);
+      setHasRunSymbols(true);
+    } catch (err) {
+      console.error("Error running symbols check:", err);
+    } finally {
+      setIsCheckingSymbols(false);
     }
   };
 
@@ -63,6 +91,7 @@ export default function App() {
       const style_issues = await checkStyles();
       const all_issues = [...formatting_issues, ...general_doc_issues, ...style_issues]
       setCompResults(all_issues)
+      setHasRunComp(true);
 
     } catch (err) {
       console.error("Error running comprehensive checks:", err)
@@ -77,6 +106,7 @@ export default function App() {
       setIsCheckingHeaderFooter(true);
       const issues = await checkHeaderFooterFormatting();
       setHeaderFooterResults(issues);
+      setHasRunHeaderFooter(true);
     } catch (err) {
       console.error("Error running header/footer checks:", err);
     } finally {
@@ -146,6 +176,68 @@ export default function App() {
     }
   };
 
+  // Fix individual symbol issue
+  const handleFixSingleSymbol = async (issue) => {
+    setFixingItemId(issue.id);
+    await new Promise(resolve => setTimeout(resolve, 10)); // Ensure UI updates
+    
+    try {
+      console.log("Fixing symbol issue:", issue);
+      const result = await fixSymbolIssue(issue);
+      console.log("Fix result:", result);
+      
+      if (result.success) {
+        const updatedIssues = await checkSymbols();
+        setSymbolResults(updatedIssues);
+        alert(`✅ Symbol font applied successfully!`);
+      } else {
+        alert(`❌ Could not fix: ${result.error}\n\nIssue ID: ${issue.id}`);
+      }
+    } catch (err) {
+      console.error("Error fixing symbol issue:", err);
+      alert(`❌ Error: ${err.message}\n\nIssue ID: ${issue.id}`);
+    } finally {
+      setFixingItemId(null);
+    }
+  };
+
+  // Fix all symbol issues at once
+  const handleFixAllSymbols = async () => {
+    try {
+      setIsFixingSymbols(true);
+      
+      if (symbolResults.length === 0) {
+        alert("No fixable issues found.");
+        return;
+      }
+
+      console.log("Fixing symbol issues:", symbolResults.map(i => i.id));
+      const results = await fixAllSymbolIssues(symbolResults);
+      console.log("Fix results:", results);
+      
+      const successCount = results.filter(r => r.success).length;
+      const failedIssues = results.filter(r => !r.success);
+      
+      const updatedIssues = await checkSymbols();
+      setSymbolResults(updatedIssues);
+      
+      let message = `✅ Fixed ${successCount} out of ${symbolResults.length} issues.`;
+      if (failedIssues.length > 0) {
+        message += `\n\n❌ Failed to fix ${failedIssues.length} issues:\n`;
+        message += failedIssues.slice(0, 3).map(f => `- ${f.error}`).join('\n');
+        if (failedIssues.length > 3) {
+          message += `\n... and ${failedIssues.length - 3} more`;
+        }
+      }
+      alert(message);
+    } catch (err) {
+      console.error("Error fixing all symbol issues:", err);
+      alert(`❌ Error: ${err.message}`);
+    } finally {
+      setIsFixingSymbols(false);
+    }
+  };
+
   //Jump to a specific error in Word
   const handleGoTo = async (issue) => {
     if (issue.canLocate && issue.location) {
@@ -155,19 +247,28 @@ export default function App() {
 
   return (
     <div>
-      <div style={styles.container}>
-        <h1 style={styles.title}>Comprehensive Checker</h1>
+      {/* 1. Comprehensive Checker */}
+      <div style={{ ...styles.container, backgroundColor: "#f9f0ef", borderLeft: "4px solid #914137" }}>
+        <h1 style={{ ...styles.title, color: "#914137" }}>Comprehensive Checker</h1>
 
-        <button onClick = {handleRunComprehensiveCheck} style={styles.button} disabled={isCheckingComp}>
+        <button onClick = {handleRunComprehensiveCheck} style={{ ...styles.button, backgroundColor: "#914137" }} disabled={isCheckingComp}>
           {isCheckingComp ? "Checking..." : "Run Comprehensive Check"}
         </button>
 
        <div style={styles.resultsContainer}>
-          {compResults.length === 0 && !isCheckingComp && (
-            <p style={styles.placeholder}>No results yet. Click “Run Comprehensive Check”.</p>
+          {isCheckingComp && (
+            <p style={styles.loadingMessage}>Loading...</p>
           )}
 
-          {compResults.map((r) => (
+          {compResults.length === 0 && !isCheckingComp && !hasRunComp && (
+            <p style={styles.placeholder}>No results yet. Click "Run Comprehensive Check".</p>
+          )}
+
+          {compResults.length === 0 && !isCheckingComp && hasRunComp && (
+            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
+          )}
+
+          {!isCheckingComp && compResults.map((r) => (
             <div
               key={r.id}
               onClick={() => handleGoTo(r)}
@@ -182,21 +283,30 @@ export default function App() {
             </div>
           ))}
         </div>
-
       </div>
-      <div style={styles.container}>
-        <h1 style={styles.title}>Formatting Checker</h1>
 
-        <button onClick={handleRunCheck} style={styles.button} disabled={isChecking}>
+      {/* 2. Formatting Checker */}
+      <div style={{ ...styles.container, backgroundColor: "#eef2f1", borderLeft: "4px solid #29423f" }}>
+        <h1 style={{ ...styles.title, color: "#29423f" }}>Formatting Checker</h1>
+
+        <button onClick={handleRunCheck} style={{ ...styles.button, backgroundColor: "#29423f" }} disabled={isChecking}>
           {isChecking ? "Checking..." : "Run Formatting Check"}
         </button>
 
         <div style={styles.resultsContainer}>
-          {results.length === 0 && !isChecking && (
-            <p style={styles.placeholder}>No results yet. Click “Run Formatting Check”.</p>
+          {isChecking && (
+            <p style={styles.loadingMessage}>Loading...</p>
           )}
 
-          {results.map((r) => (
+          {results.length === 0 && !isChecking && !hasRunFormatting && (
+            <p style={styles.placeholder}>No results yet. Click "Run Formatting Check".</p>
+          )}
+
+          {results.length === 0 && !isChecking && hasRunFormatting && (
+            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
+          )}
+
+          {!isChecking && results.map((r) => (
             <div
               key={r.id}
               onClick={() => handleGoTo(r)}
@@ -213,14 +323,52 @@ export default function App() {
         </div>
       </div>
 
-      {/* NEW: Header/Footer Checker section */}
-      <div style={styles.container}>
-        <h2 style={styles.title}>Header/Footer Checker</h2>
+      {/* 3. General Document Checker */}
+      <div style={{ ...styles.container, backgroundColor: "#f9eff1", borderLeft: "4px solid #7c152d" }}>
+        <h2 style={{ ...styles.title, color: "#7c152d" }}>General Document Checker</h2>
+
+        <button onClick={handleRunDocumentCheck} style={{ ...styles.button, backgroundColor: "#7c152d" }} disabled={isCheckingDocument}>
+          {isCheckingDocument ? "Checking..." : "Run Document Check"}
+        </button>
+
+        <div style={styles.resultsContainer}>
+          {isCheckingDocument && (
+            <p style={styles.loadingMessage}>Loading...</p>
+          )}
+
+          {docResults.length === 0 && !isCheckingDocument && !hasRunDocument && (
+            <p style={styles.placeholder}>No results yet. Click "Run Document Check".</p>
+          )}
+
+          {docResults.length === 0 && !isCheckingDocument && hasRunDocument && (
+            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
+          )}
+
+          {!isCheckingDocument && docResults.map((r) => (
+            <div
+              key={r.id}
+              onClick={() => handleGoTo(r)}
+              style={{
+                ...styles.resultBox,
+                cursor: r.canLocate ? "pointer" : "default",
+                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+              }}
+            >
+              <b>{r.type}</b>
+              <p style={styles.message}>{r.message}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Headers and Footers Checker */}
+      <div style={{ ...styles.container, backgroundColor: "#f5f2f2", borderLeft: "4px solid #684e4e" }}>
+        <h2 style={{ ...styles.title, color: "#684e4e" }}>Headers and Footers Checker</h2>
 
         <div style={{ display: "flex", gap: "10px", marginBottom: "14px" }}>
           <button
             onClick={handleRunHeaderFooterCheck}
-            style={styles.button}
+            style={{ ...styles.button, backgroundColor: "#684e4e" }}
             disabled={isCheckingHeaderFooter}
           >
             {isCheckingHeaderFooter
@@ -240,13 +388,21 @@ export default function App() {
         </div>
 
         <div style={styles.resultsContainer}>
-          {headerFooterResults.length === 0 && !isCheckingHeaderFooter && (
+          {isCheckingHeaderFooter && (
+            <p style={styles.loadingMessage}>Loading...</p>
+          )}
+
+          {headerFooterResults.length === 0 && !isCheckingHeaderFooter && !hasRunHeaderFooter && (
             <p style={styles.placeholder}>
-              No results yet. Click “Run Header/Footer Check”.
+              No results yet. Click "Run Header/Footer Check".
             </p>
           )}
 
-          {headerFooterResults.map((r) => {
+          {headerFooterResults.length === 0 && !isCheckingHeaderFooter && hasRunHeaderFooter && (
+            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
+          )}
+
+          {!isCheckingHeaderFooter && headerFooterResults.map((r) => {
             const canFix = r.type !== "Info" && !r.id.includes("draft") && !r.id.includes("inconsistent");
             
             return (
@@ -287,19 +443,34 @@ export default function App() {
         </div>
       </div>
 
-      <div style={styles.container}>
-        <h2 style={styles.title}>Document Checker</h2>
+      {/* 5. Margins Checker - Placeholder */}
+      <div style={{ ...styles.container, backgroundColor: "#eeebeb", borderLeft: "4px solid #451516" }}>
+        <h2 style={{ ...styles.title, color: "#451516" }}>Margins Checker</h2>
+        <p style={styles.placeholder}>Coming soon - Margin validation will be added here.</p>
+      </div>
 
-        <button onClick={handleRunDocumentCheck} style={styles.button} disabled={isCheckingDocument}>
-          {isCheckingDocument ? "Checking..." : "Run Document Check"}
+      {/* 6. Styles Checker */}
+      <div style={{ ...styles.container, backgroundColor: "#fef5f3", borderLeft: "4px solid #ef6641" }}>
+        <h2 style={{ ...styles.title, color: "#ef6641" }}>Styles Checker</h2>
+
+        <button onClick={handleRunStylesCheck} style={{ ...styles.button, backgroundColor: "#ef6641" }} disabled={isCheckingStyles}>
+          {isCheckingStyles ? "Checking..." : "Run Styles Check"}
         </button>
 
         <div style={styles.resultsContainer}>
-          {docResults.length === 0 && !isCheckingDocument && (
-            <p style={styles.placeholder}>No results yet. Click “Run Document Check”.</p>
+          {isCheckingStyles && (
+            <p style={styles.loadingMessage}>Loading...</p>
           )}
 
-          {docResults.map((r) => (
+          {styleResults.length === 0 && !isCheckingStyles && !hasRunStyles && (
+            <p style={styles.placeholder}>No results yet. Click "Run Styles Check".</p>
+          )}
+
+          {styleResults.length === 0 && !isCheckingStyles && hasRunStyles && (
+            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
+          )}
+
+          {!isCheckingStyles && styleResults.map((r) => (
             <div
               key={r.id}
               onClick={() => handleGoTo(r)}
@@ -316,30 +487,74 @@ export default function App() {
         </div>
       </div>
 
-      <div style={styles.container}>
-        <h2 style={styles.title}>Styles Checker</h2>
+      {/* 7. Symbols Checker */}
+      <div style={{ ...styles.container, backgroundColor: "#eef3f9", borderLeft: "4px solid #365d9f" }}>
+        <h2 style={{ ...styles.title, color: "#365d9f" }}>Symbols Checker</h2>
 
-        <button onClick={handleRunStylesCheck} style={styles.button} disabled={isCheckingStyles}>
-          {isCheckingStyles ? "Checking..." : "Run Styles Check"}
-        </button>
+        <div style={{ display: "flex", gap: "10px", marginBottom: "14px" }}>
+          <button
+            onClick={handleRunSymbolsCheck}
+            style={{ ...styles.button, backgroundColor: "#365d9f" }}
+            disabled={isCheckingSymbols}
+          >
+            {isCheckingSymbols ? "Checking..." : "Run Symbols Check"}
+          </button>
+
+          {symbolResults.length > 0 && (
+            <button
+              onClick={handleFixAllSymbols}
+              style={{ ...styles.button, backgroundColor: "#107c10" }}
+              disabled={isFixingSymbols || isCheckingSymbols}
+            >
+              {isFixingSymbols ? "Fixing..." : "Fix All Issues"}
+            </button>
+          )}
+        </div>
 
         <div style={styles.resultsContainer}>
-          {styleResults.length === 0 && !isCheckingStyles && (
-            <p style={styles.placeholder}>No results yet. Click “Run Styles Check”.</p>
+          {isCheckingSymbols && (
+            <p style={styles.loadingMessage}>Loading...</p>
           )}
 
-          {styleResults.map((r) => (
+          {symbolResults.length === 0 && !isCheckingSymbols && !hasRunSymbols && (
+            <p style={styles.placeholder}>No results yet. Click "Run Symbols Check".</p>
+          )}
+
+          {symbolResults.length === 0 && !isCheckingSymbols && hasRunSymbols && (
+            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
+          )}
+
+          {!isCheckingSymbols && symbolResults.map((r) => (
             <div
               key={r.id}
-              onClick={() => handleGoTo(r)}
               style={{
                 ...styles.resultBox,
-                cursor: r.canLocate ? "pointer" : "default",
                 backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
               }}
             >
-              <b>{r.type}</b>
-              <p style={styles.message}>{r.message}</p>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div
+                  onClick={() => handleGoTo(r)}
+                  style={{ 
+                    flex: 1, 
+                    cursor: r.canLocate ? "pointer" : "default" 
+                  }}
+                >
+                  <b>{r.type}</b>
+                  <p style={styles.message}>{r.message}</p>
+                </div>
+                
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleFixSingleSymbol(r);
+                  }}
+                  style={styles.fixButton}
+                  disabled={fixingItemId === r.id || isFixingSymbols}
+                >
+                  {fixingItemId === r.id ? "Fixing..." : "Fix"}
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -353,12 +568,13 @@ export default function App() {
 const styles = {
   container: {
     padding: "16px",
-    fontFamily: "Segoe UI, sans-serif",
+    fontFamily: "'Times New Roman', Times, serif",
   },
   title: {
     fontSize: "20px",
     fontWeight: 600,
     marginBottom: "12px",
+    fontFamily: "'Times New Roman', Times, serif",
   },
   button: {
     backgroundColor: "#2b579a",
@@ -389,6 +605,23 @@ const styles = {
   placeholder: {
     color: "#666",
     fontStyle: "italic",
+  },
+  loadingMessage: {
+    color: "#2b579a",
+    fontStyle: "italic",
+    fontSize: "14px",
+    textAlign: "center",
+    padding: "10px",
+  },
+  successMessage: {
+    color: "#107c10",
+    fontWeight: "600",
+    fontSize: "16px",
+    textAlign: "center",
+    padding: "20px",
+    backgroundColor: "#f0f9f0",
+    borderRadius: "6px",
+    border: "2px solid #107c10",
   },
   fixButton: {
     backgroundColor: "#107c10",

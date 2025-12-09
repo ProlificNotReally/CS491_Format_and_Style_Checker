@@ -6,6 +6,38 @@ A comprehensive Microsoft Word add-in that automatically detects and corrects fo
 
 This project helps maintain consistent document formatting standards by automatically scanning Word documents for common formatting errors and style violations. The tool identifies issues across multiple categories including formatting, general document structure, headers/footers, margins, styles, and symbols.
 
+## 🏗️ Project Architecture
+
+```
+CS491_Format_and_Style_Checker/
+├── src/                          # Main source code (Word Add-in)
+│   ├── commands/                 # Office command handlers
+│   │   ├── commands.html
+│   │   └── commands.js
+│   └── taskpane/                 # Task pane UI and logic
+│       ├── components/           # React components
+│       │   └── App.jsx          # Main UI component with all checkers
+│       ├── config/              # Configuration files
+│       │   └── rules.json       # Formatting rules and validation criteria
+│       ├── checkHeaderFooterFormatting.js  # Header/footer validation & fixes
+│       ├── checkStyles.js                   # Style consistency checks
+│       ├── docChecks.js                     # Document structure validation
+│       ├── symbolChecks.js                  # Symbol font validation & fixes
+│       ├── wordChecks.js                    # Word formatting checks
+│       ├── index.jsx                        # React entry point
+│       ├── taskpane.html                    # Task pane HTML template
+│       └── taskpane.js                      # Task pane initialization
+├── assets/                       # Image assets (icons, logos)
+├── dist/                         # Compiled output (generated)
+├── app.py                        # Flask web interface (separate tool)
+├── static/                       # Flask static files
+├── templates/                    # Flask HTML templates
+├── manifest.xml                  # Office Add-in manifest
+├── webpack.config.js             # Build configuration
+├── package.json                  # Node dependencies
+└── README.md                     # This file
+```
+
 ---
 
 ## ✨ Features
@@ -31,9 +63,10 @@ This project helps maintain consistent document formatting standards by automati
 ### 📋 Headers and Footers
 - **Style Application Validation** - Ensures proper header/footer styles are applied
 - **Landscape Orientation Support** - Validates landscape-specific header/footer styles
-- **Draft Text Detection** - Identifies "Draft" text in headers
+- **Draft Text Detection** - Identifies missing "DRAFT" text in headers (lines 1-2)
 - **Information Consistency** - Checks header/footer information across all pages
 - **Margin Compliance** - Validates 0.5" header/footer margin requirements
+- **Auto-Fix Support** - Individual and bulk fixes for margins, alignment, fonts, colors, and images
 
 ### 📏 Margins Check
 - **Paper Size Validation** - Ensures 8.5" x 11" Letter size compliance

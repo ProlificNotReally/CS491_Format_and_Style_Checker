@@ -9,17 +9,19 @@ export async function checkHeaderFooterFormatting() {
     sections.load("items");
     await context.sync();
 
-    // --- First pass: per-section checks ---
+    let headerTexts = [];
+    let footerTexts = [];
+
     for (let i = 0; i < sections.items.length; i++) {
       const section = sections.items[i];
 
-      // Load page setup (orientation + header/footer distances)
-      section.pageSetup.load(["orientation", "headerDistance", "footerDistance"]);
+      // Check for Landscape orientation
+      section.pageSetup.load("orientation");
+      section.pageSetup.load(["headerDistance", "footerDistance"]);
       await context.sync();
 
       const expectedDistance = 36; // 0.5 inches in points
 
-      // Header margin distance
       if (Math.abs(section.pageSetup.headerDistance - expectedDistance) > 0.1) {
         const range = section.body.getRange();
         const bk = `header_margin_${i + 1}`;
@@ -31,11 +33,10 @@ export async function checkHeaderFooterFormatting() {
           type: "Header",
           message: `Section ${i + 1} header margin is not set to 0.5 inches.`,
           location: bk,
-          canLocate: true,
+          canLocate: true
         });
       }
 
-      // Footer margin distance
       if (Math.abs(section.pageSetup.footerDistance - expectedDistance) > 0.1) {
         const range = section.body.getRange();
         const bk = `footer_margin_${i + 1}`;
@@ -47,9 +48,11 @@ export async function checkHeaderFooterFormatting() {
           type: "Footer",
           message: `Section ${i + 1} footer margin is not set to 0.5 inches.`,
           location: bk,
-          canLocate: true,
+          canLocate: true
         });
       }
+
+      await context.sync();
 
       const headerObj = section.getHeader("Primary");
       const footerObj = section.getFooter("Primary");
@@ -57,53 +60,45 @@ export async function checkHeaderFooterFormatting() {
       const headerParas = headerObj.paragraphs;
       const footerParas = footerObj.paragraphs;
 
-      // We need header text loaded so we can ignore empty paragraphs
-      headerParas.load("items/text");
+      headerParas.load("items");
       footerParas.load("items");
       await context.sync();
 
-      // Only count HEADER lines that actually have text
-      const nonEmptyHeaderParas = headerParas.items.filter(
-        (p) => (p.text || "").trim().length > 0
-      );
-      const headerCount = nonEmptyHeaderParas.length;
+      const headerCount = headerParas.items.length;
 
-      // If line count is wrong, create ONE issue anchored to the first non-empty line
-      if (
-        typeof header.requiredLineCount === "number" &&
-        headerCount !== header.requiredLineCount &&
-        nonEmptyHeaderParas.length > 0
-      ) {
-        const firstPara = nonEmptyHeaderParas[0];
-        const range = firstPara.getRange();
-        const bkmark = `headerlinecount_${i + 1}_1`;
-        range.insertBookmark(bkmark);
-        await context.sync();
+      if (headerCount !== header.requiredLineCount) {
+        for (let j = 0; j < headerParas.items.length; j++) {
+          const p = headerParas.items[j];
+          const range = p.getRange();
+          const bkmark = `headerlinecount_${i + 1}_${j + 1}`;
+          range.insertBookmark(bkmark);
+          await context.sync();
 
-        results.push({
-          id: `header-lines-${i}`, // one issue per section now
-          type: "Header",
-          message: `Section ${i + 1} header: Expected ${header.requiredLineCount} lines, found ${headerCount}`,
-          location: bkmark,
-          canLocate: true,
-        });
+          results.push({
+            id: `header-lines-${i}-${j}`,
+            type: "Header",
+            message: `Section ${i + 1} header: Expected ${header.requiredLineCount} lines, found ${headerCount}`,
+            location: bkmark,
+            canLocate: true,
+          });
+        }
       }
 
-
-      // Check if "DRAFT" exists in any line of the header
+      // Check if "DRAFT" exists in line 1 or 2
       let hasDraft = false;
-      for (let j = 0; j < nonEmptyHeaderParas.length; j++) {
-        const para = nonEmptyHeaderParas[j];
-        const text = para.text || "";
-        if (text.toLowerCase().includes("draft")) {
+      for (let j = 0; j < Math.min(headerCount, 2); j++) {
+        const para = headerParas.items[j];
+        para.load("text");
+        await context.sync();
+        if ((para.text || "").toLowerCase().includes("draft")) {
           hasDraft = true;
           break;
         }
       }
 
-      // Flag if DRAFT is missing from header
+      // Flag if DRAFT is missing from lines 1-2
       if (!hasDraft && headerCount >= 1) {
-        const range = nonEmptyHeaderParas[0].getRange();
+        const range = headerParas.items[0].getRange();
         const bk = `header_draft_${i + 1}`;
         range.insertBookmark(bk);
         await context.sync();
@@ -111,31 +106,20 @@ export async function checkHeaderFooterFormatting() {
         results.push({
           id: `header-draft-${i + 1}`,
           type: "Header",
-          message: `Section ${i + 1}: "DRAFT" is missing from header.`,
+          message: `Section ${i + 1} header is missing "DRAFT" in line 1 or 2.`,
           location: bk,
           canLocate: true
         });
       }
 
-      // --- Per-header-line formatting checks ---
       for (let j = 0; j < Math.min(headerCount, header.requiredLineCount); j++) {
-        const para = nonEmptyHeaderParas[j];
+        const para = headerParas.items[j];
         const range = para.getRange();
-        para.load([
-          "alignment",
-          "font/underline",
-          "font/name",
-          "font/size",
-          "font/color",
-          "text",
-        ]);
+        para.load(["alignment", "font/underline", "font/name", "font/size", "font/color", "text"]);
         await context.sync();
-
-        const text = para.text || "";
 
         const { name, size, color, underline } = para.font;
 
-        // Alignment
         if (para.alignment !== header.alignment) {
           const bkmark = `headeralignment_${i + 1}_${j + 1}`;
           range.insertBookmark(bkmark);
@@ -149,7 +133,6 @@ export async function checkHeaderFooterFormatting() {
           });
         }
 
-        // Second line underline
         if (j === 1 && header.secondLineUnderline && underline === "None") {
           const bkmark = `headerunderline_${i + 1}_${j + 1}`;
           range.insertBookmark(bkmark);
@@ -163,7 +146,6 @@ export async function checkHeaderFooterFormatting() {
           });
         }
 
-        // Font family
         if (name !== formatting.allowedFont) {
           const bkmark = `headerfont_${i + 1}_${j + 1}`;
           range.insertBookmark(bkmark);
@@ -177,11 +159,7 @@ export async function checkHeaderFooterFormatting() {
           });
         }
 
-        // Font size
-        if (
-          size < formatting.allowedFontSizeRange[0] ||
-          size > formatting.allowedFontSizeRange[1]
-        ) {
+        if (size < formatting.allowedFontSizeRange[0] || size > formatting.allowedFontSizeRange[1]) {
           const bkmark = `headerfontsize_${i + 1}_${j + 1}`;
           range.insertBookmark(bkmark);
           await context.sync();
@@ -194,8 +172,7 @@ export async function checkHeaderFooterFormatting() {
           });
         }
 
-        // Font color
-        const allowedColors = formatting.allowedFontColors.map((c) => c.toLowerCase());
+        const allowedColors = formatting.allowedFontColors.map(c => c.toLowerCase());
         if (!allowedColors.includes((color || "").toLowerCase())) {
           const bkmark = `headerfontcolor_${i + 1}_${j + 1}`;
           range.insertBookmark(bkmark);
@@ -209,7 +186,7 @@ export async function checkHeaderFooterFormatting() {
           });
         }
 
-        // Page number preceding TAB
+        const text = para.text || "";
         if (header.pageNumberPreTab && /\d+$/.test(text)) {
           const numIndex = text.search(/\d+$/);
           const before = text.slice(0, numIndex);
@@ -228,7 +205,6 @@ export async function checkHeaderFooterFormatting() {
         }
       }
 
-      // --- Footer checks (inline image centered) ---
       for (let k = 0; k < footerParas.items.length; k++) {
         const para = footerParas.items[k];
         const range = para.getRange();
@@ -256,260 +232,92 @@ export async function checkHeaderFooterFormatting() {
           }
         }
       }
-    }
 
-    // --- Second pass: consistency by orientation ---
-    const portraitHeaders = [];
-    const landscapeHeaders = [];
-    const portraitFooters = [];
-    const landscapeFooters = [];
+      // Gather cleaned content for consistency check
+      const headerText = headerParas.items.map(p => (p.text || "").replace(/\\d+/g, "").trim().toLowerCase()).join("||");
+      const footerText = footerParas.items.map(p => (p.text || "").replace(/\\d+/g, "").trim().toLowerCase()).join("||");
 
-    for (let i = 0; i < sections.items.length; i++) {
-      const section = sections.items[i];
-      const headerObj = section.getHeader("Primary");
-      const footerObj = section.getFooter("Primary");
+      headerTexts.push({ text: headerText, para: headerParas.items[0], index: i });
 
-      const headerParas = headerObj.paragraphs;
-      const footerParas = footerObj.paragraphs;
-
-      headerParas.load("items/text");
-      footerParas.load("items/text");
-      await context.sync();
-
-      const headerText = headerParas.items
-        .map((p) => (p.text || "").replace(/\d+/g, "").trim().toLowerCase())
-        .join("||");
-      const footerText = footerParas.items
-        .map((p) => (p.text || "").replace(/\d+/g, "").trim().toLowerCase())
-        .join("||");
-
-      const hasFooterText = footerParas.items.some((p) => (p.text || "").trim().length > 0);
-      const isLandscape = section.pageSetup.orientation === "Landscape";
-
-      const headerEntry = { text: headerText, sectionIndex: i };
-      const footerEntry = { text: footerText, sectionIndex: i };
-
-      if (isLandscape) {
-        landscapeHeaders.push(headerEntry);
-        if (hasFooterText) landscapeFooters.push(footerEntry);
-      } else {
-        portraitHeaders.push(headerEntry);
-        if (hasFooterText) portraitFooters.push(footerEntry);
-      }
-    }
-
-    async function checkGroupConsistency(group, label) {
-      if (!group.length) return;
-      const base = group[0].text;
-      for (let i = 1; i < group.length; i++) {
-        if (group[i].text !== base) {
-          const idx = group[i].sectionIndex;
-          const section = sections.items[idx];
-          const obj = label === "header" ? section.getHeader("Primary") : section.getFooter("Primary");
-          const firstPara = obj.paragraphs.getFirst();
-          const range = firstPara.getRange();
-          const bk = `inconsistent_${label}_${idx + 1}`;
-          range.insertBookmark(bk);
-          await context.sync();
-          results.push({
-            id: `inconsistent-${label}-${idx + 1}`,
-            type: label.charAt(0).toUpperCase() + label.slice(1),
-            message: `Section ${idx + 1} ${label} is inconsistent with other ${label}s of same orientation.`,
-            location: bk,
-            canLocate: true,
+      const hasFooterText = footerParas.items.some(p => (p.text || "").trim().length > 0);
+      if (hasFooterText) {
+        footerTexts.push({ text: footerText, para: footerParas.items[0], index: i });
+        // --- Append (Landscape) note if section is landscape and has errors ---
+        const isLandscape = section.pageSetup.orientation === "Landscape";
+        if (isLandscape) {
+          results.forEach(entry => {
+            if (entry.message.includes(`Section ${i + 1}`)) {
+              entry.message += " (Landscape)";
+            }
           });
         }
       }
     }
 
-    await checkGroupConsistency(portraitHeaders, "header");
-    await checkGroupConsistency(landscapeHeaders, "header");
-    await checkGroupConsistency(portraitFooters, "footer");
-    await checkGroupConsistency(landscapeFooters, "footer");
+  // --- Split header/footer groups by orientation ---
+  let portraitHeaders = [], landscapeHeaders = [];
+  let portraitFooters = [], landscapeFooters = [];
+
+  for (let i = 0; i < sections.items.length; i++) {
+    const section = sections.items[i];
+    const headerObj = section.getHeader("Primary");
+    const footerObj = section.getFooter("Primary");
+
+    const headerParas = headerObj.paragraphs;
+    const footerParas = footerObj.paragraphs;
+
+    headerParas.load("items/text");
+    footerParas.load("items/text");
+    await context.sync();
+
+    const headerText = headerParas.items.map(p => (p.text || "").replace(/\\d+/g, "").trim().toLowerCase()).join("||");
+    const footerText = footerParas.items.map(p => (p.text || "").replace(/\\d+/g, "").trim().toLowerCase()).join("||");
+
+    const hasFooterText = footerParas.items.some(p => (p.text || "").trim().length > 0);
+    const group = section.pageSetup.orientation === "Landscape" ? "landscape" : "portrait";
+
+    const headerEntry = { text: headerText, para: headerParas.items[0], index: i };
+    const footerEntry = { text: footerText, para: footerParas.items[0], index: i };
+
+    if (group === "landscape") {
+      landscapeHeaders.push(headerEntry);
+      if (hasFooterText) landscapeFooters.push(footerEntry);
+    } else {
+      portraitHeaders.push(headerEntry);
+      if (hasFooterText) portraitFooters.push(footerEntry);
+    }
+  }
+
+  // --- Function to check consistency within group ---
+  async function checkGroupConsistency(group, label) {
+    const base = group[0]?.text;
+    for (let i = 1; i < group.length; i++) {
+      if (group[i].text !== base) {
+        const range = group[i].para.getRange();
+        const bk = `inconsistent_${label}_${group[i].index + 1}`;
+        range.insertBookmark(bk);
+        await context.sync();
+        results.push({
+          id: `inconsistent-${label}-${group[i].index + 1}`,
+          type: label.charAt(0).toUpperCase() + label.slice(1),
+          message: `Section ${group[i].index + 1} ${label} is inconsistent with other ${label}s of same orientation.`,
+          location: bk,
+          canLocate: true
+        });
+      }
+    }
+  }
+
+  // Apply to both portrait and landscape separately
+  await checkGroupConsistency(portraitHeaders, "header");
+  await checkGroupConsistency(landscapeHeaders, "header");
+  await checkGroupConsistency(portraitFooters, "footer");
+  await checkGroupConsistency(landscapeFooters, "footer");
+
 
     return results;
   });
 }
-
-// Final pass: for each orientation (portrait / landscape), find the most
-// common header + footer pattern and copy those (text + images + PAGE fields)
-// to sections that don't match, without mixing portrait and landscape.
-export async function syncHeaderFooterByOrientation() {
-  return Word.run(async (context) => {
-    const doc = context.document;
-    const sections = doc.sections;
-
-    sections.load("items/pageSetup");
-    await context.sync();
-
-    if (!sections.items.length) return;
-
-    // Separate sections by orientation
-    const portrait = [];   // { section, headerBody, footerBody, index }
-    const landscape = [];
-
-    for (let i = 0; i < sections.items.length; i++) {
-      const s = sections.items[i];
-      const entry = {
-        section: s,
-        headerBody: s.getHeader("Primary"),
-        footerBody: s.getFooter("Primary"),
-        index: i, // 0-based section index
-      };
-      if (s.pageSetup.orientation === "Landscape") {
-        landscape.push(entry);
-      } else {
-        portrait.push(entry);
-      }
-    }
-
-    // Helper: normalize text so we can compare headers/footers ignoring page numbers
-    const normalizeText = (t) =>
-      (t || "")
-        .replace(/\d+/g, "")       // strip digits (page numbers)
-        .replace(/\s+/g, " ")      // collapse whitespace
-        .trim()
-        .toLowerCase();
-
-    async function syncGroup(group, label) {
-      if (!group.length) return;
-
-      // Load text + OOXML for each header/footer in the group
-      const headerRanges = group.map((g) => g.headerBody.getRange());
-      const footerRanges = group.map((g) => g.footerBody.getRange());
-
-      // Load plain text for comparison
-      headerRanges.forEach((r) => r.load("text"));
-      footerRanges.forEach((r) => r.load("text"));
-
-      // Request OOXML (this carries fields, images, formatting, etc.)
-      const headerOOXML = headerRanges.map((r) => r.getOoxml());
-      const footerOOXML = footerRanges.map((r) => r.getOoxml());
-
-      await context.sync();
-
-      // Build frequency maps of normalized header/footer text
-      const headerFreq = new Map(); // key -> { count, index }
-      const footerFreq = new Map();
-
-      for (let i = 0; i < group.length; i++) {
-        const hNorm = normalizeText(headerRanges[i].text);
-        const fNorm = normalizeText(footerRanges[i].text);
-
-        if (hNorm) {
-          const prev = headerFreq.get(hNorm);
-          if (prev) {
-            prev.count++;
-          } else {
-            headerFreq.set(hNorm, { count: 1, index: i });
-          }
-        }
-
-        if (fNorm) {
-          const prev = footerFreq.get(fNorm);
-          if (prev) {
-            prev.count++;
-          } else {
-            footerFreq.set(fNorm, { count: 1, index: i });
-          }
-        }
-      }
-
-      // Pick canonical header/footer = most frequent pattern (majority wins)
-      let canonicalHeaderNorm = "";
-      let canonicalFooterNorm = "";
-      let canonicalHeaderXml = "";
-      let canonicalFooterXml = "";
-      let canonicalHeaderSection = -1;
-      let canonicalFooterSection = -1;
-
-      // Header
-      let maxHeaderCount = 0;
-      for (const [norm, info] of headerFreq.entries()) {
-        if (info.count > maxHeaderCount) {
-          maxHeaderCount = info.count;
-          canonicalHeaderNorm = norm;
-          canonicalHeaderXml = headerOOXML[info.index].value || "";
-          canonicalHeaderSection = group[info.index].index;
-        }
-      }
-
-      // Footer
-      let maxFooterCount = 0;
-      for (const [norm, info] of footerFreq.entries()) {
-        if (info.count > maxFooterCount) {
-          maxFooterCount = info.count;
-          canonicalFooterNorm = norm;
-          canonicalFooterXml = footerOOXML[info.index].value || "";
-          canonicalFooterSection = group[info.index].index;
-        }
-      }
-
-      // Debug logs
-      if (canonicalHeaderXml) {
-        console.log(
-          `[Header/Footer Sync] ${label} canonical HEADER (majority pattern) from Section ${
-            canonicalHeaderSection + 1
-          }`
-        );
-      } else {
-        console.log(
-          `[Header/Footer Sync] ${label} canonical HEADER (majority pattern): none found`
-        );
-      }
-
-      if (canonicalFooterXml) {
-        console.log(
-          `[Header/Footer Sync] ${label} canonical FOOTER (majority pattern) from Section ${
-            canonicalFooterSection + 1
-          }`
-        );
-      } else {
-        console.log(
-          `[Header/Footer Sync] ${label} canonical FOOTER (majority pattern): none found`
-        );
-      }
-
-      // If there's nothing to copy, bail out
-      if (!canonicalHeaderXml && !canonicalFooterXml) return;
-
-      // Now copy canonicals only where the normalized pattern differs
-      for (let i = 0; i < group.length; i++) {
-        const { section, headerBody, footerBody } = group[i];
-
-        const currentHeaderNorm = normalizeText(headerRanges[i].text);
-        const currentFooterNorm = normalizeText(footerRanges[i].text);
-
-        if (canonicalHeaderXml && currentHeaderNorm && currentHeaderNorm !== canonicalHeaderNorm) {
-          const hr = headerBody.getRange();
-          hr.clear();
-          hr.insertOoxml(canonicalHeaderXml, "Start");
-        }
-
-        if (canonicalFooterXml && currentFooterNorm && currentFooterNorm !== canonicalFooterNorm) {
-          const fr = footerBody.getRange();
-          fr.clear();
-          fr.insertOoxml(canonicalFooterXml, "Start");
-        }
-
-        // Always enforce 0.5" margins
-        try {
-          section.pageSetup.headerDistance = 36;
-          section.pageSetup.footerDistance = 36;
-        } catch (e) {
-          // ignore if not supported
-        }
-      }
-
-      await context.sync();
-    }
-
-    // Portrait and landscape are handled completely separately
-    await syncGroup(portrait, "Portrait");
-    await syncGroup(landscape, "Landscape");
-  });
-}
-
 // Fix individual header/footer issue
 export async function fixHeaderFooterIssue(issue) {
   return Word.run(async (context) => {

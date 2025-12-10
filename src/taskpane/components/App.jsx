@@ -3,7 +3,13 @@ import { analyzeFormatting, goToError } from "../wordChecks";
 import { checkDocument } from "../docChecks";
 import { checkStyles } from "../checkStyles";
 import { checkSymbols, fixSymbolIssue, fixAllSymbolIssues } from "../symbolChecks";
-import { checkHeaderFooterFormatting, fixHeaderFooterIssue, fixAllHeaderFooterIssues } from "../checkHeaderFooterFormatting";
+import {
+  checkHeaderFooterFormatting, fixHeaderFooterIssue, fixAllHeaderFooterIssues,
+  syncHeaderFooterByOrientation,
+} from "../checkHeaderFooterFormatting";
+import { fixGeneralDocumentIssue } from "../fixGeneralDocIssues";
+import { checkMargins } from "../marginChecks";
+
 
 export default function App() {
   const [results, setResults] = useState([]);
@@ -12,6 +18,7 @@ export default function App() {
   const [compResults, setCompResults] = useState([]);
   const [headerFooterResults, setHeaderFooterResults] = useState([]);
   const [symbolResults, setSymbolResults] = useState([]);
+  const [marginResults, setMarginResults] = useState([]);
 
   const [isChecking, setIsChecking] = useState(false);
   const [isCheckingDocument, setIsCheckingDocument] = useState(false);
@@ -21,6 +28,7 @@ export default function App() {
   const [isFixingHeaderFooter, setIsFixingHeaderFooter] = useState(false);
   const [isCheckingSymbols, setIsCheckingSymbols] = useState(false);
   const [isFixingSymbols, setIsFixingSymbols] = useState(false);
+  const [isCheckingMargins, setIsCheckingMargins] = useState(false);
   const [fixingItemId, setFixingItemId] = useState(null);
 
   const [hasRunFormatting, setHasRunFormatting] = useState(false);
@@ -29,6 +37,9 @@ export default function App() {
   const [hasRunComp, setHasRunComp] = useState(false);
   const [hasRunHeaderFooter, setHasRunHeaderFooter] = useState(false);
   const [hasRunSymbols, setHasRunSymbols] = useState(false);
+  const [hasRunMargins, setHasRunMargins] = useState(false);
+  const [isFixingGeneralIssue, setIsFixingGeneralIssue] = useState(false);
+  const [isFixingAllGeneral, setIsFixingAllGeneral] = useState(false);
 
   //Run formatting analysis
   const handleRunCheck = async () => {
@@ -57,6 +68,49 @@ export default function App() {
     }
   };
 
+  const handleFixGeneralIssue = async (issue) => {
+    try {
+      setIsFixingGeneralIssue(true);
+      await fixGeneralDocumentIssue(issue);          // fix the selected general document issue
+      const refreshed = await checkDocument(); // re-check
+      setDocResults(refreshed);
+    } catch (err) {
+      console.error("Error fixing single general document issue:", err);
+    } finally {
+      setIsFixingGeneralIssue(false);
+    }
+  };
+
+  const handleFixAllGeneralIssues = async () => {
+  try {
+    setIsFixingAllGeneral(true);
+
+    // 1. Get the current list of header/footer issues
+    const initialIssues = await Word.run(async (context) => {
+      return await checkDocument(context);
+    });
+
+    // 2. Fix each issue individually (same as clicking each row's GoFix)
+    for (const issue of initialIssues) {
+      try {
+        await fixGeneralDocumentIssue(issue); // your existing per-issue fix
+      } catch (e) {
+        console.error("Error fixing general document issue", issue, e);
+      }
+    }
+
+    // 4. Re-run the checker so the UI shows what's left (if anything)
+    const finalIssues = await Word.run(async (context) => {
+      return await checkDocument(context);
+    });
+    setDocResults(finalIssues);
+  } catch (err) {
+    console.error("Error fixing all general document issues:", err);
+  } finally {
+    setIsFixingAllGeneral(false);
+  }
+};
+
   const handleRunStylesCheck = async () => {
     try {
       setIsCheckingStyles(true);
@@ -83,13 +137,29 @@ export default function App() {
     }
   };
 
+  const handleRunMarginsCheck = async () => {
+    try {
+      setIsCheckingMargins(true);
+      const issues = await checkMargins();
+      setMarginResults(issues);
+      setHasRunMargins(true);
+    } catch (err) {
+      console.error("Error running margins check:", err);
+    } finally {
+      setIsCheckingMargins(false);
+    }
+  };
+
   const handleRunComprehensiveCheck = async() => {
     try {
       setIsCheckingComp(true);
       const formatting_issues = await analyzeFormatting();
+      const header_footer_issues = await handleRunHeaderFooterCheck();
       const general_doc_issues = await checkDocument();
       const style_issues = await checkStyles();
-      const all_issues = [...formatting_issues, ...general_doc_issues, ...style_issues]
+      const symbol_issues = await checkSymbols();
+      const margin_issues = await checkMargins();
+      const all_issues = [...formatting_issues, ...header_footer_issues, ...general_doc_issues, ...style_issues, ...symbol_issues, ...margin_issues]
       setCompResults(all_issues)
       setHasRunComp(true);
 
@@ -245,6 +315,26 @@ export default function App() {
     }
   };
 
+  // Get color based on issue type to match individual checker sections
+  const getTypeColor = (type) => {
+    switch(type) {
+      case "Formatting": return "#9c8fb9"; // Formatting Checker purple
+      case "Header":
+      case "Footer": return "#e89a3c"; // Headers & Footers Checker orange
+      case "General":
+      case "Comment":
+      case "Revision":
+      case "TextBox":
+      case "Watermark":
+      case "Reference":
+      case "PageSize": return "#61854f"; // General Document Checker green
+      case "Style": return "#c75450"; // Styles Checker red
+      case "Symbol": return "#365d9f"; // Symbols Checker blue
+      case "Margins": return "#6c757d"; // Margins Checker gray
+      default: return "#f9f9f9"; // Default gray
+    }
+  };
+
   return (
     <div>
       {/* 1. Comprehensive Checker */}
@@ -275,7 +365,8 @@ export default function App() {
               style={{
                 ...styles.resultBox,
                 cursor: r.canLocate ? "pointer" : "default",
-                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+                backgroundColor: r.canLocate ? getTypeColor(r.type) : "#f9f9f9",
+                opacity: r.canLocate ? 0.3 : 1,
               }}
             >
               <b>{r.type}</b>
@@ -307,44 +398,6 @@ export default function App() {
           )}
 
           {!isChecking && results.map((r) => (
-            <div
-              key={r.id}
-              onClick={() => handleGoTo(r)}
-              style={{
-                ...styles.resultBox,
-                cursor: r.canLocate ? "pointer" : "default",
-                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
-              }}
-            >
-              <b>{r.type}</b>
-              <p style={styles.message}>{r.message}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 3. General Document Checker */}
-      <div style={styles.container}>
-        <h2 style={styles.title}>General Document Checker</h2>
-
-        <button onClick={handleRunDocumentCheck} style={{ ...styles.button, backgroundColor: "#7c152d" }} disabled={isCheckingDocument}>
-          {isCheckingDocument ? "Checking..." : "Run Document Check"}
-        </button>
-
-        <div style={styles.resultsContainer}>
-          {isCheckingDocument && (
-            <p style={styles.loadingMessage}>Loading...</p>
-          )}
-
-          {docResults.length === 0 && !isCheckingDocument && !hasRunDocument && (
-            <p style={styles.placeholder}>No results yet. Click "Run Document Check".</p>
-          )}
-
-          {docResults.length === 0 && !isCheckingDocument && hasRunDocument && (
-            <p style={styles.successMessage}>🎉 Congrats! No errors found.</p>
-          )}
-
-          {!isCheckingDocument && docResults.map((r) => (
             <div
               key={r.id}
               onClick={() => handleGoTo(r)}
@@ -453,10 +506,65 @@ export default function App() {
         </div>
       </div>
 
-      {/* 5. Margins Checker - Placeholder */}
+      {/* 5. Margins Checker */}
       <div style={styles.container}>
         <h2 style={styles.title}>Margins Checker</h2>
-        <p style={styles.placeholder}>Coming soon - Margin validation will be added here.</p>
+
+        <button
+          onClick={handleRunMarginsCheck}
+          style={{ ...styles.button, backgroundColor: "#6c757d" }}
+          disabled={isCheckingMargins}
+        >
+          {isCheckingMargins ? "Checking..." : "Run Margins Check"}
+        </button>
+
+        <div style={{ 
+          backgroundColor: "#fff3cd", 
+          border: "1px solid #ffc107",
+          borderRadius: "4px",
+          padding: "10px",
+          margin: "10px 0",
+          fontFamily: "'Times New Roman', Times, serif"
+        }}>
+          <p style={{ margin: 0, fontSize: "14px" }}>
+            ⚠️ <strong>Note:</strong> Due to Microsoft Word API restrictions, margins cannot be automatically corrected. 
+            To fix margin issues manually:
+          </p>
+          <ol style={{ marginTop: "8px", marginBottom: 0, paddingLeft: "20px", fontSize: "13px" }}>
+            <li>Go to <strong>Layout</strong> tab → <strong>Margins</strong> → <strong>Custom Margins</strong></li>
+            <li>Set the margins as shown in the error message</li>
+            <li>Click <strong>OK</strong> to apply</li>
+          </ol>
+        </div>
+
+        <div style={styles.resultsContainer}>
+          {isCheckingMargins && (
+            <p style={styles.loadingMessage}>Loading...</p>
+          )}
+
+          {marginResults.length === 0 && !isCheckingMargins && !hasRunMargins && (
+            <p style={styles.placeholder}>No results yet. Click "Run Margins Check".</p>
+          )}
+
+          {marginResults.length === 0 && !isCheckingMargins && hasRunMargins && (
+            <p style={styles.successMessage}>🎉 Congrats! All margins are correct.</p>
+          )}
+
+          {!isCheckingMargins && marginResults.map((r) => (
+            <div
+              key={r.id}
+              onClick={() => handleGoTo(r)}
+              style={{
+                ...styles.resultBox,
+                cursor: r.canLocate ? "pointer" : "default",
+                backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9",
+              }}
+            >
+              <b>{r.type}</b>
+              <p style={styles.message}>{r.message}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* 6. Styles Checker */}
@@ -472,7 +580,7 @@ export default function App() {
             <p style={styles.loadingMessage}>Loading...</p>
           )}
 
-          {styleResults.length === 0 && !isCheckingStyles && !hasRunStyles && (
+          {styleResults.length === 0 && !isCheckingStyles && !hasRunStyles &&  !isFixingGeneralIssue && !isFixingAllGeneral && (
             <p style={styles.placeholder}>No results yet. Click "Run Styles Check".</p>
           )}
 
@@ -492,8 +600,27 @@ export default function App() {
             >
               <b>{r.type}</b>
               <p style={styles.message}>{r.message}</p>
+
+              <div style={styles.resultActions}>
+                {r.canLocate && (
+                  <button
+                    style={styles.smallButton}
+                    onClick={() => handleGoTo(r)}
+                  >
+                    Go
+                  </button>
+                )}
+                <button
+                  style={styles.smallButton}
+                  disabled={ isCheckingDocument || isFixingGeneralIssue || isFixingAllGeneral}
+                  onClick={() => handleFixGeneralIssue(r)}
+                >
+                  {isFixingGeneralIssue ? "Fixing..." : "Fix"}
+                </button>
+              </div>
             </div>
           ))}
+
         </div>
       </div>
 

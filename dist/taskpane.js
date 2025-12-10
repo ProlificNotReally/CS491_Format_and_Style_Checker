@@ -7548,7 +7548,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   checkHeaderFooterFormatting: function() { return /* binding */ checkHeaderFooterFormatting; },
 /* harmony export */   fixAllHeaderFooterIssues: function() { return /* binding */ fixAllHeaderFooterIssues; },
-/* harmony export */   fixHeaderFooterIssue: function() { return /* binding */ fixHeaderFooterIssue; }
+/* harmony export */   fixHeaderFooterIssue: function() { return /* binding */ fixHeaderFooterIssue; },
+/* harmony export */   syncHeaderFooterByOrientation: function() { return /* binding */ syncHeaderFooterByOrientation; }
 /* harmony export */ });
 /* harmony import */ var _config_rules_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/rules.json */ "./src/taskpane/config/rules.json");
 /* provided dependency */ var Promise = __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js")["Promise"];
@@ -7558,10 +7559,13 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _regeneratorValues(e) { if (null != e) { var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"], r = 0; if (t) return t.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) return { next: function next() { return e && r >= e.length && (e = void 0), { value: e && e[r++], done: !e }; } }; } throw new TypeError(_typeof(e) + " is not iterable"); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -7570,55 +7574,67 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 function checkHeaderFooterFormatting() {
   return _checkHeaderFooterFormatting.apply(this, arguments);
 }
-// Fix individual header/footer issue
+
+// Final pass: for each orientation (portrait / landscape), find the most
+// common header + footer pattern and copy those (text + images + PAGE fields)
+// to sections that don't match, without mixing portrait and landscape.
 function _checkHeaderFooterFormatting() {
   _checkHeaderFooterFormatting = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-    return _regenerator().w(function (_context4) {
-      while (1) switch (_context4.n) {
+    return _regenerator().w(function (_context3) {
+      while (1) switch (_context3.n) {
         case 0:
-          return _context4.a(2, Word.run(/*#__PURE__*/function () {
+          return _context3.a(2, Word.run(/*#__PURE__*/function () {
             var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(context) {
-              var results, formatting, header, footer, sections, headerTexts, footerTexts, _loop, i, portraitHeaders, landscapeHeaders, portraitFooters, landscapeFooters, _i, section, headerObj, footerObj, headerParas, footerParas, headerText, footerText, hasFooterText, group, headerEntry, footerEntry, checkGroupConsistency, _checkGroupConsistency;
-              return _regenerator().w(function (_context3) {
-                while (1) switch (_context3.n) {
+              var results, formatting, header, footer, sections, i, section, expectedDistance, range, bk, _range, _bk, headerObj, footerObj, headerParas, footerParas, nonEmptyHeaderParas, headerCount, firstPara, _range2, bkmark, hasDraft, j, para, text, _range3, _bk2, _j, _para, _range4, _text, _para$font, name, size, color, underline, _bkmark, _bkmark2, _bkmark3, _bkmark4, allowedColors, _bkmark5, numIndex, before, _bkmark6, k, _para2, _range5, pics, _text2, isCentered, _bkmark7, portraitHeaders, landscapeHeaders, portraitFooters, landscapeFooters, _i, _section, _headerObj, _footerObj, _headerParas, _footerParas, headerText, footerText, hasFooterText, isLandscape, headerEntry, footerEntry, checkGroupConsistency, _checkGroupConsistency;
+              return _regenerator().w(function (_context2) {
+                while (1) switch (_context2.n) {
                   case 0:
                     _checkGroupConsistency = function _checkGroupConsistenc2() {
                       _checkGroupConsistency = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(group, label) {
-                        var _group$;
-                        var base, _i2, range, bk;
-                        return _regenerator().w(function (_context2) {
-                          while (1) switch (_context2.n) {
+                        var base, _i2, idx, _section2, obj, _firstPara, _range6, _bk3;
+                        return _regenerator().w(function (_context) {
+                          while (1) switch (_context.n) {
                             case 0:
-                              base = (_group$ = group[0]) === null || _group$ === void 0 ? void 0 : _group$.text;
-                              _i2 = 1;
+                              if (group.length) {
+                                _context.n = 1;
+                                break;
+                              }
+                              return _context.a(2);
                             case 1:
+                              base = group[0].text;
+                              _i2 = 1;
+                            case 2:
                               if (!(_i2 < group.length)) {
-                                _context2.n = 4;
+                                _context.n = 5;
                                 break;
                               }
                               if (!(group[_i2].text !== base)) {
-                                _context2.n = 3;
+                                _context.n = 4;
                                 break;
                               }
-                              range = group[_i2].para.getRange();
-                              bk = "inconsistent_".concat(label, "_").concat(group[_i2].index + 1);
-                              range.insertBookmark(bk);
-                              _context2.n = 2;
+                              idx = group[_i2].sectionIndex;
+                              _section2 = sections.items[idx];
+                              obj = label === "header" ? _section2.getHeader("Primary") : _section2.getFooter("Primary");
+                              _firstPara = obj.paragraphs.getFirst();
+                              _range6 = _firstPara.getRange();
+                              _bk3 = "inconsistent_".concat(label, "_").concat(idx + 1);
+                              _range6.insertBookmark(_bk3);
+                              _context.n = 3;
                               return context.sync();
-                            case 2:
+                            case 3:
                               results.push({
-                                id: "inconsistent-".concat(label, "-").concat(group[_i2].index + 1),
+                                id: "inconsistent-".concat(label, "-").concat(idx + 1),
                                 type: label.charAt(0).toUpperCase() + label.slice(1),
-                                message: "Section ".concat(group[_i2].index + 1, " ").concat(label, " is inconsistent with other ").concat(label, "s of same orientation."),
-                                location: bk,
+                                message: "Section ".concat(idx + 1, " ").concat(label, " is inconsistent with other ").concat(label, "s of same orientation."),
+                                location: _bk3,
                                 canLocate: true
                               });
-                            case 3:
-                              _i2++;
-                              _context2.n = 1;
-                              break;
                             case 4:
-                              return _context2.a(2);
+                              _i2++;
+                              _context.n = 2;
+                              break;
+                            case 5:
+                              return _context.a(2);
                           }
                         }, _callee);
                       }));
@@ -7631,428 +7647,373 @@ function _checkHeaderFooterFormatting() {
                     formatting = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.formatting, header = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.header, footer = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.footer;
                     sections = context.document.sections;
                     sections.load("items");
-                    _context3.n = 1;
+                    _context2.n = 1;
                     return context.sync();
                   case 1:
-                    headerTexts = [];
-                    footerTexts = [];
-                    _loop = /*#__PURE__*/_regenerator().m(function _loop(i) {
-                      var section, expectedDistance, range, bk, _range, _bk, headerObj, footerObj, headerParas, footerParas, headerCount, j, p, _range2, bkmark, hasDraft, _j, para, _range3, _bk2, _j2, _para, _range4, _para$font, name, size, color, underline, _bkmark, _bkmark2, _bkmark3, _bkmark4, allowedColors, _bkmark5, text, numIndex, before, _bkmark6, k, _para2, _range5, pics, _text, isCentered, _bkmark7, headerText, footerText, hasFooterText, isLandscape;
-                      return _regenerator().w(function (_context) {
-                        while (1) switch (_context.n) {
-                          case 0:
-                            section = sections.items[i]; // Check for Landscape orientation
-                            section.pageSetup.load("orientation");
-                            section.pageSetup.load(["headerDistance", "footerDistance"]);
-                            _context.n = 1;
-                            return context.sync();
-                          case 1:
-                            expectedDistance = 36; // 0.5 inches in points
-                            if (!(Math.abs(section.pageSetup.headerDistance - expectedDistance) > 0.1)) {
-                              _context.n = 3;
-                              break;
-                            }
-                            range = section.body.getRange();
-                            bk = "header_margin_".concat(i + 1);
-                            range.insertBookmark(bk);
-                            _context.n = 2;
-                            return context.sync();
-                          case 2:
-                            results.push({
-                              id: "header-margin-".concat(i + 1),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header margin is not set to 0.5 inches."),
-                              location: bk,
-                              canLocate: true
-                            });
-                          case 3:
-                            if (!(Math.abs(section.pageSetup.footerDistance - expectedDistance) > 0.1)) {
-                              _context.n = 5;
-                              break;
-                            }
-                            _range = section.body.getRange();
-                            _bk = "footer_margin_".concat(i + 1);
-                            _range.insertBookmark(_bk);
-                            _context.n = 4;
-                            return context.sync();
-                          case 4:
-                            results.push({
-                              id: "footer-margin-".concat(i + 1),
-                              type: "Footer",
-                              message: "Section ".concat(i + 1, " footer margin is not set to 0.5 inches."),
-                              location: _bk,
-                              canLocate: true
-                            });
-                          case 5:
-                            _context.n = 6;
-                            return context.sync();
-                          case 6:
-                            headerObj = section.getHeader("Primary");
-                            footerObj = section.getFooter("Primary");
-                            headerParas = headerObj.paragraphs;
-                            footerParas = footerObj.paragraphs;
-                            headerParas.load("items");
-                            footerParas.load("items");
-                            _context.n = 7;
-                            return context.sync();
-                          case 7:
-                            headerCount = headerParas.items.length;
-                            if (!(headerCount !== header.requiredLineCount)) {
-                              _context.n = 11;
-                              break;
-                            }
-                            j = 0;
-                          case 8:
-                            if (!(j < headerParas.items.length)) {
-                              _context.n = 11;
-                              break;
-                            }
-                            p = headerParas.items[j];
-                            _range2 = p.getRange();
-                            bkmark = "headerlinecount_".concat(i + 1, "_").concat(j + 1);
-                            _range2.insertBookmark(bkmark);
-                            _context.n = 9;
-                            return context.sync();
-                          case 9:
-                            results.push({
-                              id: "header-lines-".concat(i, "-").concat(j),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header: Expected ").concat(header.requiredLineCount, " lines, found ").concat(headerCount),
-                              location: bkmark,
-                              canLocate: true
-                            });
-                          case 10:
-                            j++;
-                            _context.n = 8;
-                            break;
-                          case 11:
-                            // Check if "DRAFT" exists in line 1 or 2
-                            hasDraft = false;
-                            _j = 0;
-                          case 12:
-                            if (!(_j < Math.min(headerCount, 2))) {
-                              _context.n = 15;
-                              break;
-                            }
-                            para = headerParas.items[_j];
-                            para.load("text");
-                            _context.n = 13;
-                            return context.sync();
-                          case 13:
-                            if (!(para.text || "").toLowerCase().includes("draft")) {
-                              _context.n = 14;
-                              break;
-                            }
-                            hasDraft = true;
-                            return _context.a(3, 15);
-                          case 14:
-                            _j++;
-                            _context.n = 12;
-                            break;
-                          case 15:
-                            if (!(!hasDraft && headerCount >= 1)) {
-                              _context.n = 17;
-                              break;
-                            }
-                            _range3 = headerParas.items[0].getRange();
-                            _bk2 = "header_draft_".concat(i + 1);
-                            _range3.insertBookmark(_bk2);
-                            _context.n = 16;
-                            return context.sync();
-                          case 16:
-                            results.push({
-                              id: "header-draft-".concat(i + 1),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header is missing \"DRAFT\" in line 1 or 2."),
-                              location: _bk2,
-                              canLocate: true
-                            });
-                          case 17:
-                            _j2 = 0;
-                          case 18:
-                            if (!(_j2 < Math.min(headerCount, header.requiredLineCount))) {
-                              _context.n = 32;
-                              break;
-                            }
-                            _para = headerParas.items[_j2];
-                            _range4 = _para.getRange();
-                            _para.load(["alignment", "font/underline", "font/name", "font/size", "font/color", "text"]);
-                            _context.n = 19;
-                            return context.sync();
-                          case 19:
-                            _para$font = _para.font, name = _para$font.name, size = _para$font.size, color = _para$font.color, underline = _para$font.underline;
-                            if (!(_para.alignment !== header.alignment)) {
-                              _context.n = 21;
-                              break;
-                            }
-                            _bkmark = "headeralignment_".concat(i + 1, "_").concat(_j2 + 1);
-                            _range4.insertBookmark(_bkmark);
-                            _context.n = 20;
-                            return context.sync();
-                          case 20:
-                            results.push({
-                              id: "header-align-".concat(i, "-").concat(_j2),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header line ").concat(_j2 + 1, ": Not ").concat(header.alignment, "-aligned"),
-                              location: _bkmark,
-                              canLocate: true
-                            });
-                          case 21:
-                            if (!(_j2 === 1 && header.secondLineUnderline && underline === "None")) {
-                              _context.n = 23;
-                              break;
-                            }
-                            _bkmark2 = "headerunderline_".concat(i + 1, "_").concat(_j2 + 1);
-                            _range4.insertBookmark(_bkmark2);
-                            _context.n = 22;
-                            return context.sync();
-                          case 22:
-                            results.push({
-                              id: "header-underline-".concat(i),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header line 2: Not underlined"),
-                              location: _bkmark2,
-                              canLocate: true
-                            });
-                          case 23:
-                            if (!(name !== formatting.allowedFont)) {
-                              _context.n = 25;
-                              break;
-                            }
-                            _bkmark3 = "headerfont_".concat(i + 1, "_").concat(_j2 + 1);
-                            _range4.insertBookmark(_bkmark3);
-                            _context.n = 24;
-                            return context.sync();
-                          case 24:
-                            results.push({
-                              id: "header-font-".concat(i, "-").concat(_j2),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header line ").concat(_j2 + 1, ": Font not ").concat(formatting.allowedFont),
-                              location: _bkmark3,
-                              canLocate: true
-                            });
-                          case 25:
-                            if (!(size < formatting.allowedFontSizeRange[0] || size > formatting.allowedFontSizeRange[1])) {
-                              _context.n = 27;
-                              break;
-                            }
-                            _bkmark4 = "headerfontsize_".concat(i + 1, "_").concat(_j2 + 1);
-                            _range4.insertBookmark(_bkmark4);
-                            _context.n = 26;
-                            return context.sync();
-                          case 26:
-                            results.push({
-                              id: "header-size-".concat(i, "-").concat(_j2),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header line ").concat(_j2 + 1, ": Font size ").concat(size, " not in allowed range"),
-                              location: _bkmark4,
-                              canLocate: true
-                            });
-                          case 27:
-                            allowedColors = formatting.allowedFontColors.map(function (c) {
-                              return c.toLowerCase();
-                            });
-                            if (allowedColors.includes((color || "").toLowerCase())) {
-                              _context.n = 29;
-                              break;
-                            }
-                            _bkmark5 = "headerfontcolor_".concat(i + 1, "_").concat(_j2 + 1);
-                            _range4.insertBookmark(_bkmark5);
-                            _context.n = 28;
-                            return context.sync();
-                          case 28:
-                            results.push({
-                              id: "header-color-".concat(i, "-").concat(_j2),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header line ").concat(_j2 + 1, ": Font color \"").concat(color, "\" not allowed"),
-                              location: _bkmark5,
-                              canLocate: true
-                            });
-                          case 29:
-                            text = _para.text || "";
-                            if (!(header.pageNumberPreTab && /\d+$/.test(text))) {
-                              _context.n = 31;
-                              break;
-                            }
-                            numIndex = text.search(/\d+$/);
-                            before = text.slice(0, numIndex);
-                            if (!(!before.includes("\t") && /  +$/.test(before))) {
-                              _context.n = 31;
-                              break;
-                            }
-                            _bkmark6 = "headertabs_".concat(i + 1, "_").concat(_j2 + 1);
-                            _range4.insertBookmark(_bkmark6);
-                            _context.n = 30;
-                            return context.sync();
-                          case 30:
-                            results.push({
-                              id: "header-tab-".concat(i, "-").concat(_j2),
-                              type: "Header",
-                              message: "Section ".concat(i + 1, " header line ").concat(_j2 + 1, ": Page number not preceded by TAB"),
-                              location: _bkmark6,
-                              canLocate: true
-                            });
-                          case 31:
-                            _j2++;
-                            _context.n = 18;
-                            break;
-                          case 32:
-                            k = 0;
-                          case 33:
-                            if (!(k < footerParas.items.length)) {
-                              _context.n = 38;
-                              break;
-                            }
-                            _para2 = footerParas.items[k];
-                            _range5 = _para2.getRange();
-                            _para2.load(["inlinePictures", "text", "alignment"]);
-                            _context.n = 34;
-                            return context.sync();
-                          case 34:
-                            pics = _para2.inlinePictures;
-                            pics.load("items");
-                            _context.n = 35;
-                            return context.sync();
-                          case 35:
-                            if (!(pics.items.length > 0)) {
-                              _context.n = 37;
-                              break;
-                            }
-                            _text = _para2.text || "";
-                            isCentered = _para2.alignment === "Centered" || _text.includes("\t");
-                            if (!(footer.imageMustBeCentered && !isCentered)) {
-                              _context.n = 37;
-                              break;
-                            }
-                            _bkmark7 = "footeralignment_".concat(i + 1, "_").concat(k + 1);
-                            _range5.insertBookmark(_bkmark7);
-                            _context.n = 36;
-                            return context.sync();
-                          case 36:
-                            results.push({
-                              id: "footer-image-".concat(i, "-").concat(k),
-                              type: "Footer",
-                              message: "Section ".concat(i + 1, " footer line ").concat(k + 1, ": Inline image not centered"),
-                              location: _bkmark7,
-                              canLocate: true
-                            });
-                          case 37:
-                            k++;
-                            _context.n = 33;
-                            break;
-                          case 38:
-                            // Gather cleaned content for consistency check
-                            headerText = headerParas.items.map(function (p) {
-                              return (p.text || "").replace(/\\d+/g, "").trim().toLowerCase();
-                            }).join("||");
-                            footerText = footerParas.items.map(function (p) {
-                              return (p.text || "").replace(/\\d+/g, "").trim().toLowerCase();
-                            }).join("||");
-                            headerTexts.push({
-                              text: headerText,
-                              para: headerParas.items[0],
-                              index: i
-                            });
-                            hasFooterText = footerParas.items.some(function (p) {
-                              return (p.text || "").trim().length > 0;
-                            });
-                            if (hasFooterText) {
-                              footerTexts.push({
-                                text: footerText,
-                                para: footerParas.items[0],
-                                index: i
-                              });
-                              // --- Append (Landscape) note if section is landscape and has errors ---
-                              isLandscape = section.pageSetup.orientation === "Landscape";
-                              if (isLandscape) {
-                                results.forEach(function (entry) {
-                                  if (entry.message.includes("Section ".concat(i + 1))) {
-                                    entry.message += " (Landscape)";
-                                  }
-                                });
-                              }
-                            }
-                          case 39:
-                            return _context.a(2);
-                        }
-                      }, _loop);
-                    });
                     i = 0;
                   case 2:
                     if (!(i < sections.items.length)) {
-                      _context3.n = 4;
+                      _context2.n = 37;
                       break;
                     }
-                    return _context3.d(_regeneratorValues(_loop(i)), 3);
+                    section = sections.items[i]; // Load page setup (orientation + header/footer distances)
+                    section.pageSetup.load(["orientation", "headerDistance", "footerDistance"]);
+                    _context2.n = 3;
+                    return context.sync();
                   case 3:
-                    i++;
-                    _context3.n = 2;
-                    break;
-                  case 4:
-                    // --- Split header/footer groups by orientation ---
-                    portraitHeaders = [], landscapeHeaders = [];
-                    portraitFooters = [], landscapeFooters = [];
-                    _i = 0;
-                  case 5:
-                    if (!(_i < sections.items.length)) {
-                      _context3.n = 8;
+                    expectedDistance = 36; // 0.5 inches in points
+                    // Header margin distance
+                    if (!(Math.abs(section.pageSetup.headerDistance - expectedDistance) > 0.1)) {
+                      _context2.n = 5;
                       break;
                     }
-                    section = sections.items[_i];
+                    range = section.body.getRange();
+                    bk = "header_margin_".concat(i + 1);
+                    range.insertBookmark(bk);
+                    _context2.n = 4;
+                    return context.sync();
+                  case 4:
+                    results.push({
+                      id: "header-margin-".concat(i + 1),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header margin is not set to 0.5 inches."),
+                      location: bk,
+                      canLocate: true
+                    });
+                  case 5:
+                    if (!(Math.abs(section.pageSetup.footerDistance - expectedDistance) > 0.1)) {
+                      _context2.n = 7;
+                      break;
+                    }
+                    _range = section.body.getRange();
+                    _bk = "footer_margin_".concat(i + 1);
+                    _range.insertBookmark(_bk);
+                    _context2.n = 6;
+                    return context.sync();
+                  case 6:
+                    results.push({
+                      id: "footer-margin-".concat(i + 1),
+                      type: "Footer",
+                      message: "Section ".concat(i + 1, " footer margin is not set to 0.5 inches."),
+                      location: _bk,
+                      canLocate: true
+                    });
+                  case 7:
                     headerObj = section.getHeader("Primary");
                     footerObj = section.getFooter("Primary");
                     headerParas = headerObj.paragraphs;
-                    footerParas = footerObj.paragraphs;
+                    footerParas = footerObj.paragraphs; // We need header text loaded so we can ignore empty paragraphs
                     headerParas.load("items/text");
-                    footerParas.load("items/text");
-                    _context3.n = 6;
+                    footerParas.load("items");
+                    _context2.n = 8;
                     return context.sync();
-                  case 6:
-                    headerText = headerParas.items.map(function (p) {
-                      return (p.text || "").replace(/\\d+/g, "").trim().toLowerCase();
-                    }).join("||");
-                    footerText = footerParas.items.map(function (p) {
-                      return (p.text || "").replace(/\\d+/g, "").trim().toLowerCase();
-                    }).join("||");
-                    hasFooterText = footerParas.items.some(function (p) {
+                  case 8:
+                    // Only count HEADER lines that actually have text
+                    nonEmptyHeaderParas = headerParas.items.filter(function (p) {
                       return (p.text || "").trim().length > 0;
                     });
-                    group = section.pageSetup.orientation === "Landscape" ? "landscape" : "portrait";
+                    headerCount = nonEmptyHeaderParas.length; // If line count is wrong, create ONE issue anchored to the first non-empty line
+                    if (!(typeof header.requiredLineCount === "number" && headerCount !== header.requiredLineCount && nonEmptyHeaderParas.length > 0)) {
+                      _context2.n = 10;
+                      break;
+                    }
+                    firstPara = nonEmptyHeaderParas[0];
+                    _range2 = firstPara.getRange();
+                    bkmark = "headerlinecount_".concat(i + 1, "_1");
+                    _range2.insertBookmark(bkmark);
+                    _context2.n = 9;
+                    return context.sync();
+                  case 9:
+                    results.push({
+                      id: "header-lines-".concat(i),
+                      // one issue per section now
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header: Expected ").concat(header.requiredLineCount, " lines, found ").concat(headerCount),
+                      location: bkmark,
+                      canLocate: true
+                    });
+                  case 10:
+                    // Check if "DRAFT" exists in any line of the header
+                    hasDraft = false;
+                    j = 0;
+                  case 11:
+                    if (!(j < nonEmptyHeaderParas.length)) {
+                      _context2.n = 13;
+                      break;
+                    }
+                    para = nonEmptyHeaderParas[j];
+                    text = para.text || "";
+                    if (!text.toLowerCase().includes("draft")) {
+                      _context2.n = 12;
+                      break;
+                    }
+                    hasDraft = true;
+                    return _context2.a(3, 13);
+                  case 12:
+                    j++;
+                    _context2.n = 11;
+                    break;
+                  case 13:
+                    if (!(!hasDraft && headerCount >= 1)) {
+                      _context2.n = 15;
+                      break;
+                    }
+                    _range3 = nonEmptyHeaderParas[0].getRange();
+                    _bk2 = "header_draft_".concat(i + 1);
+                    _range3.insertBookmark(_bk2);
+                    _context2.n = 14;
+                    return context.sync();
+                  case 14:
+                    results.push({
+                      id: "header-draft-".concat(i + 1),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, ": \"DRAFT\" is missing from header."),
+                      location: _bk2,
+                      canLocate: true
+                    });
+                  case 15:
+                    _j = 0;
+                  case 16:
+                    if (!(_j < Math.min(headerCount, header.requiredLineCount))) {
+                      _context2.n = 30;
+                      break;
+                    }
+                    _para = nonEmptyHeaderParas[_j];
+                    _range4 = _para.getRange();
+                    _para.load(["alignment", "font/underline", "font/name", "font/size", "font/color", "text"]);
+                    _context2.n = 17;
+                    return context.sync();
+                  case 17:
+                    _text = _para.text || "";
+                    _para$font = _para.font, name = _para$font.name, size = _para$font.size, color = _para$font.color, underline = _para$font.underline; // Alignment
+                    if (!(_para.alignment !== header.alignment)) {
+                      _context2.n = 19;
+                      break;
+                    }
+                    _bkmark = "headeralignment_".concat(i + 1, "_").concat(_j + 1);
+                    _range4.insertBookmark(_bkmark);
+                    _context2.n = 18;
+                    return context.sync();
+                  case 18:
+                    results.push({
+                      id: "header-align-".concat(i, "-").concat(_j),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header line ").concat(_j + 1, ": Not ").concat(header.alignment, "-aligned"),
+                      location: _bkmark,
+                      canLocate: true
+                    });
+                  case 19:
+                    if (!(_j === 1 && header.secondLineUnderline && underline === "None")) {
+                      _context2.n = 21;
+                      break;
+                    }
+                    _bkmark2 = "headerunderline_".concat(i + 1, "_").concat(_j + 1);
+                    _range4.insertBookmark(_bkmark2);
+                    _context2.n = 20;
+                    return context.sync();
+                  case 20:
+                    results.push({
+                      id: "header-underline-".concat(i),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header line 2: Not underlined"),
+                      location: _bkmark2,
+                      canLocate: true
+                    });
+                  case 21:
+                    if (!(name !== formatting.allowedFont)) {
+                      _context2.n = 23;
+                      break;
+                    }
+                    _bkmark3 = "headerfont_".concat(i + 1, "_").concat(_j + 1);
+                    _range4.insertBookmark(_bkmark3);
+                    _context2.n = 22;
+                    return context.sync();
+                  case 22:
+                    results.push({
+                      id: "header-font-".concat(i, "-").concat(_j),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header line ").concat(_j + 1, ": Font not ").concat(formatting.allowedFont),
+                      location: _bkmark3,
+                      canLocate: true
+                    });
+                  case 23:
+                    if (!(size < formatting.allowedFontSizeRange[0] || size > formatting.allowedFontSizeRange[1])) {
+                      _context2.n = 25;
+                      break;
+                    }
+                    _bkmark4 = "headerfontsize_".concat(i + 1, "_").concat(_j + 1);
+                    _range4.insertBookmark(_bkmark4);
+                    _context2.n = 24;
+                    return context.sync();
+                  case 24:
+                    results.push({
+                      id: "header-size-".concat(i, "-").concat(_j),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header line ").concat(_j + 1, ": Font size ").concat(size, " not in allowed range"),
+                      location: _bkmark4,
+                      canLocate: true
+                    });
+                  case 25:
+                    // Font color
+                    allowedColors = formatting.allowedFontColors.map(function (c) {
+                      return c.toLowerCase();
+                    });
+                    if (allowedColors.includes((color || "").toLowerCase())) {
+                      _context2.n = 27;
+                      break;
+                    }
+                    _bkmark5 = "headerfontcolor_".concat(i + 1, "_").concat(_j + 1);
+                    _range4.insertBookmark(_bkmark5);
+                    _context2.n = 26;
+                    return context.sync();
+                  case 26:
+                    results.push({
+                      id: "header-color-".concat(i, "-").concat(_j),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header line ").concat(_j + 1, ": Font color \"").concat(color, "\" not allowed"),
+                      location: _bkmark5,
+                      canLocate: true
+                    });
+                  case 27:
+                    if (!(header.pageNumberPreTab && /\d+$/.test(_text))) {
+                      _context2.n = 29;
+                      break;
+                    }
+                    numIndex = _text.search(/\d+$/);
+                    before = _text.slice(0, numIndex);
+                    if (!(!before.includes("\t") && /  +$/.test(before))) {
+                      _context2.n = 29;
+                      break;
+                    }
+                    _bkmark6 = "headertabs_".concat(i + 1, "_").concat(_j + 1);
+                    _range4.insertBookmark(_bkmark6);
+                    _context2.n = 28;
+                    return context.sync();
+                  case 28:
+                    results.push({
+                      id: "header-tab-".concat(i, "-").concat(_j),
+                      type: "Header",
+                      message: "Section ".concat(i + 1, " header line ").concat(_j + 1, ": Page number not preceded by TAB"),
+                      location: _bkmark6,
+                      canLocate: true
+                    });
+                  case 29:
+                    _j++;
+                    _context2.n = 16;
+                    break;
+                  case 30:
+                    k = 0;
+                  case 31:
+                    if (!(k < footerParas.items.length)) {
+                      _context2.n = 36;
+                      break;
+                    }
+                    _para2 = footerParas.items[k];
+                    _range5 = _para2.getRange();
+                    _para2.load(["inlinePictures", "text", "alignment"]);
+                    _context2.n = 32;
+                    return context.sync();
+                  case 32:
+                    pics = _para2.inlinePictures;
+                    pics.load("items");
+                    _context2.n = 33;
+                    return context.sync();
+                  case 33:
+                    if (!(pics.items.length > 0)) {
+                      _context2.n = 35;
+                      break;
+                    }
+                    _text2 = _para2.text || "";
+                    isCentered = _para2.alignment === "Centered" || _text2.includes("\t");
+                    if (!(footer.imageMustBeCentered && !isCentered)) {
+                      _context2.n = 35;
+                      break;
+                    }
+                    _bkmark7 = "footeralignment_".concat(i + 1, "_").concat(k + 1);
+                    _range5.insertBookmark(_bkmark7);
+                    _context2.n = 34;
+                    return context.sync();
+                  case 34:
+                    results.push({
+                      id: "footer-image-".concat(i, "-").concat(k),
+                      type: "Footer",
+                      message: "Section ".concat(i + 1, " footer line ").concat(k + 1, ": Inline image not centered"),
+                      location: _bkmark7,
+                      canLocate: true
+                    });
+                  case 35:
+                    k++;
+                    _context2.n = 31;
+                    break;
+                  case 36:
+                    i++;
+                    _context2.n = 2;
+                    break;
+                  case 37:
+                    // --- Second pass: consistency by orientation ---
+                    portraitHeaders = [];
+                    landscapeHeaders = [];
+                    portraitFooters = [];
+                    landscapeFooters = [];
+                    _i = 0;
+                  case 38:
+                    if (!(_i < sections.items.length)) {
+                      _context2.n = 41;
+                      break;
+                    }
+                    _section = sections.items[_i];
+                    _headerObj = _section.getHeader("Primary");
+                    _footerObj = _section.getFooter("Primary");
+                    _headerParas = _headerObj.paragraphs;
+                    _footerParas = _footerObj.paragraphs;
+                    _headerParas.load("items/text");
+                    _footerParas.load("items/text");
+                    _context2.n = 39;
+                    return context.sync();
+                  case 39:
+                    headerText = _headerParas.items.map(function (p) {
+                      return (p.text || "").replace(/\d+/g, "").trim().toLowerCase();
+                    }).join("||");
+                    footerText = _footerParas.items.map(function (p) {
+                      return (p.text || "").replace(/\d+/g, "").trim().toLowerCase();
+                    }).join("||");
+                    hasFooterText = _footerParas.items.some(function (p) {
+                      return (p.text || "").trim().length > 0;
+                    });
+                    isLandscape = _section.pageSetup.orientation === "Landscape";
                     headerEntry = {
                       text: headerText,
-                      para: headerParas.items[0],
-                      index: _i
+                      sectionIndex: _i
                     };
                     footerEntry = {
                       text: footerText,
-                      para: footerParas.items[0],
-                      index: _i
+                      sectionIndex: _i
                     };
-                    if (group === "landscape") {
+                    if (isLandscape) {
                       landscapeHeaders.push(headerEntry);
                       if (hasFooterText) landscapeFooters.push(footerEntry);
                     } else {
                       portraitHeaders.push(headerEntry);
                       if (hasFooterText) portraitFooters.push(footerEntry);
                     }
-                  case 7:
+                  case 40:
                     _i++;
-                    _context3.n = 5;
+                    _context2.n = 38;
                     break;
-                  case 8:
-                    _context3.n = 9;
+                  case 41:
+                    _context2.n = 42;
                     return checkGroupConsistency(portraitHeaders, "header");
-                  case 9:
-                    _context3.n = 10;
+                  case 42:
+                    _context2.n = 43;
                     return checkGroupConsistency(landscapeHeaders, "header");
-                  case 10:
-                    _context3.n = 11;
+                  case 43:
+                    _context2.n = 44;
                     return checkGroupConsistency(portraitFooters, "footer");
-                  case 11:
-                    _context3.n = 12;
+                  case 44:
+                    _context2.n = 45;
                     return checkGroupConsistency(landscapeFooters, "footer");
-                  case 12:
-                    return _context3.a(2, results);
+                  case 45:
+                    return _context2.a(2, results);
                 }
               }, _callee2);
             }));
@@ -8065,26 +8026,262 @@ function _checkHeaderFooterFormatting() {
   }));
   return _checkHeaderFooterFormatting.apply(this, arguments);
 }
+function syncHeaderFooterByOrientation() {
+  return _syncHeaderFooterByOrientation.apply(this, arguments);
+}
+
+// Fix individual header/footer issue
+function _syncHeaderFooterByOrientation() {
+  _syncHeaderFooterByOrientation = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
+    return _regenerator().w(function (_context6) {
+      while (1) switch (_context6.n) {
+        case 0:
+          return _context6.a(2, Word.run(/*#__PURE__*/function () {
+            var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(context) {
+              var doc, sections, portrait, landscape, i, s, entry, normalizeText, syncGroup, _syncGroup;
+              return _regenerator().w(function (_context5) {
+                while (1) switch (_context5.n) {
+                  case 0:
+                    _syncGroup = function _syncGroup3() {
+                      _syncGroup = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(group, label) {
+                        var headerRanges, footerRanges, headerOOXML, footerOOXML, headerFreq, footerFreq, _i3, hNorm, fNorm, prev, _prev, canonicalHeaderNorm, canonicalFooterNorm, canonicalHeaderXml, canonicalFooterXml, canonicalHeaderSection, canonicalFooterSection, maxHeaderCount, _iterator, _step, _step$value, norm, info, maxFooterCount, _iterator2, _step2, _step2$value, _norm, _info, _i4, _group$_i, section, headerBody, footerBody, currentHeaderNorm, currentFooterNorm, hr, fr;
+                        return _regenerator().w(function (_context4) {
+                          while (1) switch (_context4.n) {
+                            case 0:
+                              if (group.length) {
+                                _context4.n = 1;
+                                break;
+                              }
+                              return _context4.a(2);
+                            case 1:
+                              // Load text + OOXML for each header/footer in the group
+                              headerRanges = group.map(function (g) {
+                                return g.headerBody.getRange();
+                              });
+                              footerRanges = group.map(function (g) {
+                                return g.footerBody.getRange();
+                              }); // Load plain text for comparison
+                              headerRanges.forEach(function (r) {
+                                return r.load("text");
+                              });
+                              footerRanges.forEach(function (r) {
+                                return r.load("text");
+                              });
+
+                              // Request OOXML (this carries fields, images, formatting, etc.)
+                              headerOOXML = headerRanges.map(function (r) {
+                                return r.getOoxml();
+                              });
+                              footerOOXML = footerRanges.map(function (r) {
+                                return r.getOoxml();
+                              });
+                              _context4.n = 2;
+                              return context.sync();
+                            case 2:
+                              // Build frequency maps of normalized header/footer text
+                              headerFreq = new Map(); // key -> { count, index }
+                              footerFreq = new Map();
+                              for (_i3 = 0; _i3 < group.length; _i3++) {
+                                hNorm = normalizeText(headerRanges[_i3].text);
+                                fNorm = normalizeText(footerRanges[_i3].text);
+                                if (hNorm) {
+                                  prev = headerFreq.get(hNorm);
+                                  if (prev) {
+                                    prev.count++;
+                                  } else {
+                                    headerFreq.set(hNorm, {
+                                      count: 1,
+                                      index: _i3
+                                    });
+                                  }
+                                }
+                                if (fNorm) {
+                                  _prev = footerFreq.get(fNorm);
+                                  if (_prev) {
+                                    _prev.count++;
+                                  } else {
+                                    footerFreq.set(fNorm, {
+                                      count: 1,
+                                      index: _i3
+                                    });
+                                  }
+                                }
+                              }
+
+                              // Pick canonical header/footer = most frequent pattern (majority wins)
+                              canonicalHeaderNorm = "";
+                              canonicalFooterNorm = "";
+                              canonicalHeaderXml = "";
+                              canonicalFooterXml = "";
+                              canonicalHeaderSection = -1;
+                              canonicalFooterSection = -1; // Header
+                              maxHeaderCount = 0;
+                              _iterator = _createForOfIteratorHelper(headerFreq.entries());
+                              try {
+                                for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                                  _step$value = _slicedToArray(_step.value, 2), norm = _step$value[0], info = _step$value[1];
+                                  if (info.count > maxHeaderCount) {
+                                    maxHeaderCount = info.count;
+                                    canonicalHeaderNorm = norm;
+                                    canonicalHeaderXml = headerOOXML[info.index].value || "";
+                                    canonicalHeaderSection = group[info.index].index;
+                                  }
+                                }
+
+                                // Footer
+                              } catch (err) {
+                                _iterator.e(err);
+                              } finally {
+                                _iterator.f();
+                              }
+                              maxFooterCount = 0;
+                              _iterator2 = _createForOfIteratorHelper(footerFreq.entries());
+                              try {
+                                for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+                                  _step2$value = _slicedToArray(_step2.value, 2), _norm = _step2$value[0], _info = _step2$value[1];
+                                  if (_info.count > maxFooterCount) {
+                                    maxFooterCount = _info.count;
+                                    canonicalFooterNorm = _norm;
+                                    canonicalFooterXml = footerOOXML[_info.index].value || "";
+                                    canonicalFooterSection = group[_info.index].index;
+                                  }
+                                }
+
+                                // Debug logs
+                              } catch (err) {
+                                _iterator2.e(err);
+                              } finally {
+                                _iterator2.f();
+                              }
+                              if (canonicalHeaderXml) {
+                                console.log("[Header/Footer Sync] ".concat(label, " canonical HEADER (majority pattern) from Section ").concat(canonicalHeaderSection + 1));
+                              } else {
+                                console.log("[Header/Footer Sync] ".concat(label, " canonical HEADER (majority pattern): none found"));
+                              }
+                              if (canonicalFooterXml) {
+                                console.log("[Header/Footer Sync] ".concat(label, " canonical FOOTER (majority pattern) from Section ").concat(canonicalFooterSection + 1));
+                              } else {
+                                console.log("[Header/Footer Sync] ".concat(label, " canonical FOOTER (majority pattern): none found"));
+                              }
+
+                              // If there's nothing to copy, bail out
+                              if (!(!canonicalHeaderXml && !canonicalFooterXml)) {
+                                _context4.n = 3;
+                                break;
+                              }
+                              return _context4.a(2);
+                            case 3:
+                              // Now copy canonicals only where the normalized pattern differs
+                              for (_i4 = 0; _i4 < group.length; _i4++) {
+                                _group$_i = group[_i4], section = _group$_i.section, headerBody = _group$_i.headerBody, footerBody = _group$_i.footerBody;
+                                currentHeaderNorm = normalizeText(headerRanges[_i4].text);
+                                currentFooterNorm = normalizeText(footerRanges[_i4].text);
+                                if (canonicalHeaderXml && currentHeaderNorm && currentHeaderNorm !== canonicalHeaderNorm) {
+                                  hr = headerBody.getRange();
+                                  hr.clear();
+                                  hr.insertOoxml(canonicalHeaderXml, "Start");
+                                }
+                                if (canonicalFooterXml && currentFooterNorm && currentFooterNorm !== canonicalFooterNorm) {
+                                  fr = footerBody.getRange();
+                                  fr.clear();
+                                  fr.insertOoxml(canonicalFooterXml, "Start");
+                                }
+
+                                // Always enforce 0.5" margins
+                                try {
+                                  section.pageSetup.headerDistance = 36;
+                                  section.pageSetup.footerDistance = 36;
+                                } catch (e) {
+                                  // ignore if not supported
+                                }
+                              }
+                              _context4.n = 4;
+                              return context.sync();
+                            case 4:
+                              return _context4.a(2);
+                          }
+                        }, _callee4);
+                      }));
+                      return _syncGroup.apply(this, arguments);
+                    };
+                    syncGroup = function _syncGroup2(_x7, _x8) {
+                      return _syncGroup.apply(this, arguments);
+                    };
+                    doc = context.document;
+                    sections = doc.sections;
+                    sections.load("items/pageSetup");
+                    _context5.n = 1;
+                    return context.sync();
+                  case 1:
+                    if (sections.items.length) {
+                      _context5.n = 2;
+                      break;
+                    }
+                    return _context5.a(2);
+                  case 2:
+                    // Separate sections by orientation
+                    portrait = []; // { section, headerBody, footerBody, index }
+                    landscape = [];
+                    for (i = 0; i < sections.items.length; i++) {
+                      s = sections.items[i];
+                      entry = {
+                        section: s,
+                        headerBody: s.getHeader("Primary"),
+                        footerBody: s.getFooter("Primary"),
+                        index: i // 0-based section index
+                      };
+                      if (s.pageSetup.orientation === "Landscape") {
+                        landscape.push(entry);
+                      } else {
+                        portrait.push(entry);
+                      }
+                    }
+
+                    // Helper: normalize text so we can compare headers/footers ignoring page numbers
+                    normalizeText = function normalizeText(t) {
+                      return (t || "").replace(/\d+/g, "") // strip digits (page numbers)
+                      .replace(/\s+/g, " ") // collapse whitespace
+                      .trim().toLowerCase();
+                    }; // Portrait and landscape are handled completely separately
+                    _context5.n = 3;
+                    return syncGroup(portrait, "Portrait");
+                  case 3:
+                    _context5.n = 4;
+                    return syncGroup(landscape, "Landscape");
+                  case 4:
+                    return _context5.a(2);
+                }
+              }, _callee5);
+            }));
+            return function (_x6) {
+              return _ref2.apply(this, arguments);
+            };
+          }()));
+      }
+    }, _callee6);
+  }));
+  return _syncHeaderFooterByOrientation.apply(this, arguments);
+}
 function fixHeaderFooterIssue(_x) {
   return _fixHeaderFooterIssue.apply(this, arguments);
 }
 
 // Fix all header/footer issues at once
 function _fixHeaderFooterIssue() {
-  _fixHeaderFooterIssue = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(issue) {
-    return _regenerator().w(function (_context6) {
-      while (1) switch (_context6.n) {
+  _fixHeaderFooterIssue = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8(issue) {
+    return _regenerator().w(function (_context8) {
+      while (1) switch (_context8.n) {
         case 0:
-          return _context6.a(2, Word.run(/*#__PURE__*/function () {
-            var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(context) {
-              var formatting, header, footer, sections, sectionIndex, match, _match, section, headerObj, headerParas, paraMatch, paraIndex, _headerObj, _headerParas, _headerObj2, _headerParas2, _paraMatch, _paraIndex, _headerObj3, _headerParas3, _paraMatch2, _paraIndex2, _headerObj4, _headerParas4, _paraMatch3, _paraIndex3, footerObj, footerParas, _paraMatch4, _paraIndex4, _t;
-              return _regenerator().w(function (_context5) {
-                while (1) switch (_context5.p = _context5.n) {
+          return _context8.a(2, Word.run(/*#__PURE__*/function () {
+            var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(context) {
+              var formatting, header, footer, sections, sectionIndex, match, _match, section, headerObj, headerParas, paraMatch, paraIndex, _headerObj2, _headerParas2, _headerObj3, _headerParas3, _paraMatch, _paraIndex, _headerObj4, _headerParas4, _paraMatch2, _paraIndex2, _headerObj5, _headerParas5, _paraMatch3, _paraIndex3, footerObj, footerParas, _paraMatch4, _paraIndex4, _t;
+              return _regenerator().w(function (_context7) {
+                while (1) switch (_context7.p = _context7.n) {
                   case 0:
                     formatting = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.formatting, header = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.header, footer = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.footer;
                     sections = context.document.sections;
                     sections.load("items");
-                    _context5.n = 1;
+                    _context7.n = 1;
                     return context.sync();
                   case 1:
                     // Extract section index from issue ID
@@ -8098,219 +8295,219 @@ function _fixHeaderFooterIssue() {
                       sectionIndex = _match ? parseInt(_match[1]) : 0;
                     }
                     if (!(sectionIndex < 0 || sectionIndex >= sections.items.length)) {
-                      _context5.n = 2;
+                      _context7.n = 2;
                       break;
                     }
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: false,
                       message: "Invalid section index: ".concat(sectionIndex)
                     });
                   case 2:
                     section = sections.items[sectionIndex];
-                    _context5.p = 3;
+                    _context7.p = 3;
                     if (!issue.id.includes("header-margin")) {
-                      _context5.n = 6;
+                      _context7.n = 6;
                       break;
                     }
                     section.pageSetup.load("headerDistance");
-                    _context5.n = 4;
+                    _context7.n = 4;
                     return context.sync();
                   case 4:
                     section.pageSetup.headerDistance = 36; // 0.5 inches
-                    _context5.n = 5;
+                    _context7.n = 5;
                     return context.sync();
                   case 5:
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: true,
                       message: "Header margin fixed to 0.5 inches"
                     });
                   case 6:
                     if (!issue.id.includes("footer-margin")) {
-                      _context5.n = 9;
+                      _context7.n = 9;
                       break;
                     }
                     section.pageSetup.load("footerDistance");
-                    _context5.n = 7;
+                    _context7.n = 7;
                     return context.sync();
                   case 7:
                     section.pageSetup.footerDistance = 36; // 0.5 inches
-                    _context5.n = 8;
+                    _context7.n = 8;
                     return context.sync();
                   case 8:
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: true,
                       message: "Footer margin fixed to 0.5 inches"
                     });
                   case 9:
                     if (!issue.id.includes("header-align")) {
-                      _context5.n = 12;
+                      _context7.n = 12;
                       break;
                     }
                     headerObj = section.getHeader("Primary");
                     headerParas = headerObj.paragraphs;
                     headerParas.load("items");
-                    _context5.n = 10;
+                    _context7.n = 10;
                     return context.sync();
                   case 10:
                     paraMatch = issue.id.match(/-(\d+)$/);
                     paraIndex = paraMatch ? parseInt(paraMatch[1]) : 0;
                     if (!headerParas.items[paraIndex]) {
-                      _context5.n = 12;
+                      _context7.n = 12;
                       break;
                     }
                     headerParas.items[paraIndex].alignment = header.alignment;
-                    _context5.n = 11;
+                    _context7.n = 11;
                     return context.sync();
                   case 11:
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: true,
                       message: "Header alignment fixed"
                     });
                   case 12:
                     if (!issue.id.includes("header-underline")) {
-                      _context5.n = 15;
-                      break;
-                    }
-                    _headerObj = section.getHeader("Primary");
-                    _headerParas = _headerObj.paragraphs;
-                    _headerParas.load("items");
-                    _context5.n = 13;
-                    return context.sync();
-                  case 13:
-                    if (!_headerParas.items[1]) {
-                      _context5.n = 15;
-                      break;
-                    }
-                    _headerParas.items[1].font.underline = "Single";
-                    _context5.n = 14;
-                    return context.sync();
-                  case 14:
-                    return _context5.a(2, {
-                      success: true,
-                      message: "Header underline applied"
-                    });
-                  case 15:
-                    if (!(issue.id.includes("header-font") && !issue.id.includes("size") && !issue.id.includes("color"))) {
-                      _context5.n = 18;
+                      _context7.n = 15;
                       break;
                     }
                     _headerObj2 = section.getHeader("Primary");
                     _headerParas2 = _headerObj2.paragraphs;
                     _headerParas2.load("items");
-                    _context5.n = 16;
+                    _context7.n = 13;
                     return context.sync();
-                  case 16:
-                    _paraMatch = issue.id.match(/-(\d+)$/);
-                    _paraIndex = _paraMatch ? parseInt(_paraMatch[1]) : 0;
-                    if (!_headerParas2.items[_paraIndex]) {
-                      _context5.n = 18;
+                  case 13:
+                    if (!_headerParas2.items[1]) {
+                      _context7.n = 15;
                       break;
                     }
-                    _headerParas2.items[_paraIndex].font.name = formatting.allowedFont;
-                    _context5.n = 17;
+                    _headerParas2.items[1].font.underline = "Single";
+                    _context7.n = 14;
                     return context.sync();
-                  case 17:
-                    return _context5.a(2, {
+                  case 14:
+                    return _context7.a(2, {
                       success: true,
-                      message: "Header font fixed"
+                      message: "Header underline applied"
                     });
-                  case 18:
-                    if (!(issue.id.includes("header-size") || issue.id.includes("headerfontsize"))) {
-                      _context5.n = 21;
+                  case 15:
+                    if (!(issue.id.includes("header-font") && !issue.id.includes("size") && !issue.id.includes("color"))) {
+                      _context7.n = 18;
                       break;
                     }
                     _headerObj3 = section.getHeader("Primary");
                     _headerParas3 = _headerObj3.paragraphs;
                     _headerParas3.load("items");
-                    _context5.n = 19;
+                    _context7.n = 16;
                     return context.sync();
-                  case 19:
-                    _paraMatch2 = issue.id.match(/-(\d+)$/);
-                    _paraIndex2 = _paraMatch2 ? parseInt(_paraMatch2[1]) : 0;
-                    if (!_headerParas3.items[_paraIndex2]) {
-                      _context5.n = 21;
+                  case 16:
+                    _paraMatch = issue.id.match(/-(\d+)$/);
+                    _paraIndex = _paraMatch ? parseInt(_paraMatch[1]) : 0;
+                    if (!_headerParas3.items[_paraIndex]) {
+                      _context7.n = 18;
                       break;
                     }
-                    _headerParas3.items[_paraIndex2].font.size = formatting.allowedFontSizeRange[0];
-                    _context5.n = 20;
+                    _headerParas3.items[_paraIndex].font.name = formatting.allowedFont;
+                    _context7.n = 17;
                     return context.sync();
-                  case 20:
-                    return _context5.a(2, {
+                  case 17:
+                    return _context7.a(2, {
                       success: true,
-                      message: "Header font size fixed"
+                      message: "Header font fixed"
                     });
-                  case 21:
-                    if (!(issue.id.includes("header-color") || issue.id.includes("headerfontcolor"))) {
-                      _context5.n = 24;
+                  case 18:
+                    if (!(issue.id.includes("header-size") || issue.id.includes("headerfontsize"))) {
+                      _context7.n = 21;
                       break;
                     }
                     _headerObj4 = section.getHeader("Primary");
                     _headerParas4 = _headerObj4.paragraphs;
                     _headerParas4.load("items");
-                    _context5.n = 22;
+                    _context7.n = 19;
+                    return context.sync();
+                  case 19:
+                    _paraMatch2 = issue.id.match(/-(\d+)$/);
+                    _paraIndex2 = _paraMatch2 ? parseInt(_paraMatch2[1]) : 0;
+                    if (!_headerParas4.items[_paraIndex2]) {
+                      _context7.n = 21;
+                      break;
+                    }
+                    _headerParas4.items[_paraIndex2].font.size = formatting.allowedFontSizeRange[0];
+                    _context7.n = 20;
+                    return context.sync();
+                  case 20:
+                    return _context7.a(2, {
+                      success: true,
+                      message: "Header font size fixed"
+                    });
+                  case 21:
+                    if (!(issue.id.includes("header-color") || issue.id.includes("headerfontcolor"))) {
+                      _context7.n = 24;
+                      break;
+                    }
+                    _headerObj5 = section.getHeader("Primary");
+                    _headerParas5 = _headerObj5.paragraphs;
+                    _headerParas5.load("items");
+                    _context7.n = 22;
                     return context.sync();
                   case 22:
                     _paraMatch3 = issue.id.match(/-(\d+)$/);
                     _paraIndex3 = _paraMatch3 ? parseInt(_paraMatch3[1]) : 0;
-                    if (!_headerParas4.items[_paraIndex3]) {
-                      _context5.n = 24;
+                    if (!_headerParas5.items[_paraIndex3]) {
+                      _context7.n = 24;
                       break;
                     }
-                    _headerParas4.items[_paraIndex3].font.color = "#000000";
-                    _context5.n = 23;
+                    _headerParas5.items[_paraIndex3].font.color = "#000000";
+                    _context7.n = 23;
                     return context.sync();
                   case 23:
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: true,
                       message: "Header font color fixed"
                     });
                   case 24:
                     if (!(issue.id.includes("footer-image") || issue.id.includes("footeralignment"))) {
-                      _context5.n = 27;
+                      _context7.n = 27;
                       break;
                     }
                     footerObj = section.getFooter("Primary");
                     footerParas = footerObj.paragraphs;
                     footerParas.load("items");
-                    _context5.n = 25;
+                    _context7.n = 25;
                     return context.sync();
                   case 25:
                     _paraMatch4 = issue.id.match(/-(\d+)$/);
                     _paraIndex4 = _paraMatch4 ? parseInt(_paraMatch4[1]) : 0;
                     if (!footerParas.items[_paraIndex4]) {
-                      _context5.n = 27;
+                      _context7.n = 27;
                       break;
                     }
                     footerParas.items[_paraIndex4].alignment = "Centered";
-                    _context5.n = 26;
+                    _context7.n = 26;
                     return context.sync();
                   case 26:
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: true,
                       message: "Footer image centered"
                     });
                   case 27:
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: false,
                       message: "Fix not implemented for issue type: ".concat(issue.id)
                     });
                   case 28:
-                    _context5.p = 28;
-                    _t = _context5.v;
+                    _context7.p = 28;
+                    _t = _context7.v;
                     console.error("Error in fixHeaderFooterIssue:", _t);
-                    return _context5.a(2, {
+                    return _context7.a(2, {
                       success: false,
                       message: "Error: ".concat(_t.message)
                     });
                 }
-              }, _callee4, null, [[3, 28]]);
+              }, _callee7, null, [[3, 28]]);
             }));
-            return function (_x6) {
-              return _ref2.apply(this, arguments);
+            return function (_x9) {
+              return _ref3.apply(this, arguments);
             };
           }()));
       }
-    }, _callee5);
+    }, _callee8);
   }));
   return _fixHeaderFooterIssue.apply(this, arguments);
 }
@@ -8318,23 +8515,23 @@ function fixAllHeaderFooterIssues(_x2) {
   return _fixAllHeaderFooterIssues.apply(this, arguments);
 }
 function _fixAllHeaderFooterIssues() {
-  _fixAllHeaderFooterIssues = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(issues) {
-    var results, _iterator, _step, issue, result, _t2, _t3;
-    return _regenerator().w(function (_context7) {
-      while (1) switch (_context7.p = _context7.n) {
+  _fixAllHeaderFooterIssues = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9(issues) {
+    var results, _iterator3, _step3, issue, result, _t2, _t3;
+    return _regenerator().w(function (_context9) {
+      while (1) switch (_context9.p = _context9.n) {
         case 0:
           results = [];
-          _iterator = _createForOfIteratorHelper(issues);
-          _context7.p = 1;
-          _iterator.s();
+          _iterator3 = _createForOfIteratorHelper(issues);
+          _context9.p = 1;
+          _iterator3.s();
         case 2:
-          if ((_step = _iterator.n()).done) {
-            _context7.n = 7;
+          if ((_step3 = _iterator3.n()).done) {
+            _context9.n = 7;
             break;
           }
-          issue = _step.value;
+          issue = _step3.value;
           if (!(issue.type === "Info" || issue.id.includes("draft") || issue.id.includes("inconsistent"))) {
-            _context7.n = 3;
+            _context9.n = 3;
             break;
           }
           results.push({
@@ -8342,44 +8539,44 @@ function _fixAllHeaderFooterIssues() {
             success: false,
             message: "Not auto-fixable"
           });
-          return _context7.a(3, 6);
+          return _context9.a(3, 6);
         case 3:
-          _context7.p = 3;
-          _context7.n = 4;
+          _context9.p = 3;
+          _context9.n = 4;
           return fixHeaderFooterIssue(issue);
         case 4:
-          result = _context7.v;
+          result = _context9.v;
           results.push(_objectSpread({
             issue: issue.id
           }, result));
-          _context7.n = 6;
+          _context9.n = 6;
           break;
         case 5:
-          _context7.p = 5;
-          _t2 = _context7.v;
+          _context9.p = 5;
+          _t2 = _context9.v;
           results.push({
             issue: issue.id,
             success: false,
             message: _t2.message
           });
         case 6:
-          _context7.n = 2;
+          _context9.n = 2;
           break;
         case 7:
-          _context7.n = 9;
+          _context9.n = 9;
           break;
         case 8:
-          _context7.p = 8;
-          _t3 = _context7.v;
-          _iterator.e(_t3);
+          _context9.p = 8;
+          _t3 = _context9.v;
+          _iterator3.e(_t3);
         case 9:
-          _context7.p = 9;
-          _iterator.f();
-          return _context7.f(9);
+          _context9.p = 9;
+          _iterator3.f();
+          return _context9.f(9);
         case 10:
-          return _context7.a(2, results);
+          return _context9.a(2, results);
       }
-    }, _callee6, null, [[3, 5], [1, 8, 9, 10]]);
+    }, _callee9, null, [[3, 5], [1, 8, 9, 10]]);
   }));
   return _fixAllHeaderFooterIssues.apply(this, arguments);
 }
@@ -8655,6 +8852,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _checkStyles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../checkStyles */ "./src/taskpane/checkStyles.js");
 /* harmony import */ var _symbolChecks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../symbolChecks */ "./src/taskpane/symbolChecks.js");
 /* harmony import */ var _checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../checkHeaderFooterFormatting */ "./src/taskpane/checkHeaderFooterFormatting.js");
+/* harmony import */ var _fixGeneralDocIssues__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../fixGeneralDocIssues */ "./src/taskpane/fixGeneralDocIssues.js");
+/* harmony import */ var _marginChecks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../marginChecks */ "./src/taskpane/marginChecks.js");
 /* provided dependency */ var Promise = __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js")["Promise"];
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -8666,6 +8865,7 @@ function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArra
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -8676,6 +8876,8 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
 
 
 
@@ -8707,66 +8909,86 @@ function App() {
     _useState10 = _slicedToArray(_useState1, 2),
     symbolResults = _useState10[0],
     setSymbolResults = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState12 = _slicedToArray(_useState11, 2),
-    isChecking = _useState12[0],
-    setIsChecking = _useState12[1];
+    marginResults = _useState12[0],
+    setMarginResults = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState14 = _slicedToArray(_useState13, 2),
-    isCheckingDocument = _useState14[0],
-    setIsCheckingDocument = _useState14[1];
+    isChecking = _useState14[0],
+    setIsChecking = _useState14[1];
   var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState16 = _slicedToArray(_useState15, 2),
-    isCheckingStyles = _useState16[0],
-    setIsCheckingStyles = _useState16[1];
+    isCheckingDocument = _useState16[0],
+    setIsCheckingDocument = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState18 = _slicedToArray(_useState17, 2),
-    isCheckingComp = _useState18[0],
-    setIsCheckingComp = _useState18[1];
+    isCheckingStyles = _useState18[0],
+    setIsCheckingStyles = _useState18[1];
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState20 = _slicedToArray(_useState19, 2),
-    isCheckingHeaderFooter = _useState20[0],
-    setIsCheckingHeaderFooter = _useState20[1];
+    isCheckingComp = _useState20[0],
+    setIsCheckingComp = _useState20[1];
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState22 = _slicedToArray(_useState21, 2),
-    isFixingHeaderFooter = _useState22[0],
-    setIsFixingHeaderFooter = _useState22[1];
+    isCheckingHeaderFooter = _useState22[0],
+    setIsCheckingHeaderFooter = _useState22[1];
   var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState24 = _slicedToArray(_useState23, 2),
-    isCheckingSymbols = _useState24[0],
-    setIsCheckingSymbols = _useState24[1];
+    isFixingHeaderFooter = _useState24[0],
+    setIsFixingHeaderFooter = _useState24[1];
   var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState26 = _slicedToArray(_useState25, 2),
-    isFixingSymbols = _useState26[0],
-    setIsFixingSymbols = _useState26[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    isCheckingSymbols = _useState26[0],
+    setIsCheckingSymbols = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState28 = _slicedToArray(_useState27, 2),
-    fixingItemId = _useState28[0],
-    setFixingItemId = _useState28[1];
+    isFixingSymbols = _useState28[0],
+    setIsFixingSymbols = _useState28[1];
   var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState30 = _slicedToArray(_useState29, 2),
-    hasRunFormatting = _useState30[0],
-    setHasRunFormatting = _useState30[1];
-  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    isCheckingMargins = _useState30[0],
+    setIsCheckingMargins = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState32 = _slicedToArray(_useState31, 2),
-    hasRunDocument = _useState32[0],
-    setHasRunDocument = _useState32[1];
+    fixingItemId = _useState32[0],
+    setFixingItemId = _useState32[1];
   var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState34 = _slicedToArray(_useState33, 2),
-    hasRunStyles = _useState34[0],
-    setHasRunStyles = _useState34[1];
+    hasRunFormatting = _useState34[0],
+    setHasRunFormatting = _useState34[1];
   var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState36 = _slicedToArray(_useState35, 2),
-    hasRunComp = _useState36[0],
-    setHasRunComp = _useState36[1];
+    hasRunDocument = _useState36[0],
+    setHasRunDocument = _useState36[1];
   var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState38 = _slicedToArray(_useState37, 2),
-    hasRunHeaderFooter = _useState38[0],
-    setHasRunHeaderFooter = _useState38[1];
+    hasRunStyles = _useState38[0],
+    setHasRunStyles = _useState38[1];
   var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState40 = _slicedToArray(_useState39, 2),
-    hasRunSymbols = _useState40[0],
-    setHasRunSymbols = _useState40[1];
+    hasRunComp = _useState40[0],
+    setHasRunComp = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState42 = _slicedToArray(_useState41, 2),
+    hasRunHeaderFooter = _useState42[0],
+    setHasRunHeaderFooter = _useState42[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState44 = _slicedToArray(_useState43, 2),
+    hasRunSymbols = _useState44[0],
+    setHasRunSymbols = _useState44[1];
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState46 = _slicedToArray(_useState45, 2),
+    hasRunMargins = _useState46[0],
+    setHasRunMargins = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState48 = _slicedToArray(_useState47, 2),
+    isFixingGeneralIssue = _useState48[0],
+    setIsFixingGeneralIssue = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState50 = _slicedToArray(_useState49, 2),
+    isFixingAllGeneral = _useState50[0],
+    setIsFixingAllGeneral = _useState50[1];
 
   //Run formatting analysis
   var handleRunCheck = /*#__PURE__*/function () {
@@ -8835,222 +9057,406 @@ function App() {
       return _ref2.apply(this, arguments);
     };
   }();
-  var handleRunStylesCheck = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var issues, _t3;
+  var handleFixGeneralIssue = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(issue) {
+      var refreshed, _t3;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
             _context3.p = 0;
-            setIsCheckingStyles(true);
+            setIsFixingGeneralIssue(true);
             _context3.n = 1;
-            return (0,_checkStyles__WEBPACK_IMPORTED_MODULE_3__.checkStyles)();
+            return (0,_fixGeneralDocIssues__WEBPACK_IMPORTED_MODULE_6__.fixGeneralDocumentIssue)(issue);
           case 1:
-            issues = _context3.v;
-            setStyleResults(issues);
-            setHasRunStyles(true);
-            _context3.n = 3;
-            break;
+            _context3.n = 2;
+            return (0,_docChecks__WEBPACK_IMPORTED_MODULE_2__.checkDocument)();
           case 2:
-            _context3.p = 2;
-            _t3 = _context3.v;
-            console.error("Error running style checks:", _t3);
+            refreshed = _context3.v;
+            // re-check
+            setDocResults(refreshed);
+            _context3.n = 4;
+            break;
           case 3:
             _context3.p = 3;
-            setIsCheckingStyles(false);
-            return _context3.f(3);
+            _t3 = _context3.v;
+            console.error("Error fixing single general document issue:", _t3);
           case 4:
+            _context3.p = 4;
+            setIsFixingGeneralIssue(false);
+            return _context3.f(4);
+          case 5:
             return _context3.a(2);
         }
-      }, _callee3, null, [[0, 2, 3, 4]]);
+      }, _callee3, null, [[0, 3, 4, 5]]);
     }));
-    return function handleRunStylesCheck() {
+    return function handleFixGeneralIssue(_x) {
       return _ref3.apply(this, arguments);
     };
   }();
-  var handleRunSymbolsCheck = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-      var issues, _t4;
-      return _regenerator().w(function (_context4) {
-        while (1) switch (_context4.p = _context4.n) {
+  var handleFixAllGeneralIssues = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
+      var initialIssues, _iterator, _step, issue, finalIssues, _t4, _t5, _t6;
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.p = _context6.n) {
           case 0:
-            _context4.p = 0;
-            setIsCheckingSymbols(true);
-            _context4.n = 1;
-            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
+            _context6.p = 0;
+            setIsFixingAllGeneral(true);
+
+            // 1. Get the current list of header/footer issues
+            _context6.n = 1;
+            return Word.run(/*#__PURE__*/function () {
+              var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(context) {
+                return _regenerator().w(function (_context4) {
+                  while (1) switch (_context4.n) {
+                    case 0:
+                      _context4.n = 1;
+                      return (0,_docChecks__WEBPACK_IMPORTED_MODULE_2__.checkDocument)(context);
+                    case 1:
+                      return _context4.a(2, _context4.v);
+                  }
+                }, _callee4);
+              }));
+              return function (_x2) {
+                return _ref5.apply(this, arguments);
+              };
+            }());
           case 1:
-            issues = _context4.v;
-            setSymbolResults(issues);
-            setHasRunSymbols(true);
-            _context4.n = 3;
-            break;
-          case 2:
-            _context4.p = 2;
-            _t4 = _context4.v;
-            console.error("Error running symbols check:", _t4);
+            initialIssues = _context6.v;
+            // 2. Fix each issue individually (same as clicking each row's GoFix)
+            _iterator = _createForOfIteratorHelper(initialIssues);
+            _context6.p = 2;
+            _iterator.s();
           case 3:
-            _context4.p = 3;
-            setIsCheckingSymbols(false);
-            return _context4.f(3);
-          case 4:
-            return _context4.a(2);
+            if ((_step = _iterator.n()).done) {
+              _context6.n = 8;
+              break;
+            }
+            issue = _step.value;
+            _context6.p = 4;
+            _context6.n = 5;
+            return (0,_fixGeneralDocIssues__WEBPACK_IMPORTED_MODULE_6__.fixGeneralDocumentIssue)(issue);
+          case 5:
+            _context6.n = 7;
+            break;
+          case 6:
+            _context6.p = 6;
+            _t4 = _context6.v;
+            console.error("Error fixing general document issue", issue, _t4);
+          case 7:
+            _context6.n = 3;
+            break;
+          case 8:
+            _context6.n = 10;
+            break;
+          case 9:
+            _context6.p = 9;
+            _t5 = _context6.v;
+            _iterator.e(_t5);
+          case 10:
+            _context6.p = 10;
+            _iterator.f();
+            return _context6.f(10);
+          case 11:
+            _context6.n = 12;
+            return Word.run(/*#__PURE__*/function () {
+              var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(context) {
+                return _regenerator().w(function (_context5) {
+                  while (1) switch (_context5.n) {
+                    case 0:
+                      _context5.n = 1;
+                      return (0,_docChecks__WEBPACK_IMPORTED_MODULE_2__.checkDocument)(context);
+                    case 1:
+                      return _context5.a(2, _context5.v);
+                  }
+                }, _callee5);
+              }));
+              return function (_x3) {
+                return _ref6.apply(this, arguments);
+              };
+            }());
+          case 12:
+            finalIssues = _context6.v;
+            setDocResults(finalIssues);
+            _context6.n = 14;
+            break;
+          case 13:
+            _context6.p = 13;
+            _t6 = _context6.v;
+            console.error("Error fixing all header/footer issues:", _t6);
+          case 14:
+            _context6.p = 14;
+            setIsFixingAllGeneral(false);
+            return _context6.f(14);
+          case 15:
+            return _context6.a(2);
         }
-      }, _callee4, null, [[0, 2, 3, 4]]);
+      }, _callee6, null, [[4, 6], [2, 9, 10, 11], [0, 13, 14, 15]]);
     }));
-    return function handleRunSymbolsCheck() {
+    return function handleFixAllGeneralIssues() {
       return _ref4.apply(this, arguments);
     };
   }();
-  var handleRunComprehensiveCheck = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-      var formatting_issues, general_doc_issues, style_issues, all_issues, _t5;
-      return _regenerator().w(function (_context5) {
-        while (1) switch (_context5.p = _context5.n) {
+  var handleRunStylesCheck = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7() {
+      var issues, _t7;
+      return _regenerator().w(function (_context7) {
+        while (1) switch (_context7.p = _context7.n) {
           case 0:
-            _context5.p = 0;
+            _context7.p = 0;
+            setIsCheckingStyles(true);
+            _context7.n = 1;
+            return (0,_checkStyles__WEBPACK_IMPORTED_MODULE_3__.checkStyles)();
+          case 1:
+            issues = _context7.v;
+            setStyleResults(issues);
+            setHasRunStyles(true);
+            _context7.n = 3;
+            break;
+          case 2:
+            _context7.p = 2;
+            _t7 = _context7.v;
+            console.error("Error running style checks:", _t7);
+          case 3:
+            _context7.p = 3;
+            setIsCheckingStyles(false);
+            return _context7.f(3);
+          case 4:
+            return _context7.a(2);
+        }
+      }, _callee7, null, [[0, 2, 3, 4]]);
+    }));
+    return function handleRunStylesCheck() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+  var handleRunSymbolsCheck = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8() {
+      var issues, _t8;
+      return _regenerator().w(function (_context8) {
+        while (1) switch (_context8.p = _context8.n) {
+          case 0:
+            _context8.p = 0;
+            setIsCheckingSymbols(true);
+            _context8.n = 1;
+            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
+          case 1:
+            issues = _context8.v;
+            setSymbolResults(issues);
+            setHasRunSymbols(true);
+            _context8.n = 3;
+            break;
+          case 2:
+            _context8.p = 2;
+            _t8 = _context8.v;
+            console.error("Error running symbols check:", _t8);
+          case 3:
+            _context8.p = 3;
+            setIsCheckingSymbols(false);
+            return _context8.f(3);
+          case 4:
+            return _context8.a(2);
+        }
+      }, _callee8, null, [[0, 2, 3, 4]]);
+    }));
+    return function handleRunSymbolsCheck() {
+      return _ref8.apply(this, arguments);
+    };
+  }();
+  var handleRunMarginsCheck = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9() {
+      var issues, _t9;
+      return _regenerator().w(function (_context9) {
+        while (1) switch (_context9.p = _context9.n) {
+          case 0:
+            _context9.p = 0;
+            setIsCheckingMargins(true);
+            _context9.n = 1;
+            return (0,_marginChecks__WEBPACK_IMPORTED_MODULE_7__.checkMargins)();
+          case 1:
+            issues = _context9.v;
+            setMarginResults(issues);
+            setHasRunMargins(true);
+            _context9.n = 3;
+            break;
+          case 2:
+            _context9.p = 2;
+            _t9 = _context9.v;
+            console.error("Error running margins check:", _t9);
+          case 3:
+            _context9.p = 3;
+            setIsCheckingMargins(false);
+            return _context9.f(3);
+          case 4:
+            return _context9.a(2);
+        }
+      }, _callee9, null, [[0, 2, 3, 4]]);
+    }));
+    return function handleRunMarginsCheck() {
+      return _ref9.apply(this, arguments);
+    };
+  }();
+  var handleRunComprehensiveCheck = /*#__PURE__*/function () {
+    var _ref0 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0() {
+      var formatting_issues, header_footer_issues, general_doc_issues, style_issues, symbol_issues, margin_issues, all_issues, _t0;
+      return _regenerator().w(function (_context0) {
+        while (1) switch (_context0.p = _context0.n) {
+          case 0:
+            _context0.p = 0;
             setIsCheckingComp(true);
-            _context5.n = 1;
+            _context0.n = 1;
             return (0,_wordChecks__WEBPACK_IMPORTED_MODULE_1__.analyzeFormatting)();
           case 1:
-            formatting_issues = _context5.v;
-            _context5.n = 2;
-            return (0,_docChecks__WEBPACK_IMPORTED_MODULE_2__.checkDocument)();
+            formatting_issues = _context0.v;
+            _context0.n = 2;
+            return handleRunHeaderFooterCheck();
           case 2:
-            general_doc_issues = _context5.v;
-            _context5.n = 3;
-            return (0,_checkStyles__WEBPACK_IMPORTED_MODULE_3__.checkStyles)();
+            header_footer_issues = _context0.v;
+            _context0.n = 3;
+            return (0,_docChecks__WEBPACK_IMPORTED_MODULE_2__.checkDocument)();
           case 3:
-            style_issues = _context5.v;
-            all_issues = [].concat(_toConsumableArray(formatting_issues), _toConsumableArray(general_doc_issues), _toConsumableArray(style_issues));
+            general_doc_issues = _context0.v;
+            _context0.n = 4;
+            return (0,_checkStyles__WEBPACK_IMPORTED_MODULE_3__.checkStyles)();
+          case 4:
+            style_issues = _context0.v;
+            _context0.n = 5;
+            return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
+          case 5:
+            symbol_issues = _context0.v;
+            _context0.n = 6;
+            return (0,_marginChecks__WEBPACK_IMPORTED_MODULE_7__.checkMargins)();
+          case 6:
+            margin_issues = _context0.v;
+            all_issues = [].concat(_toConsumableArray(formatting_issues), _toConsumableArray(header_footer_issues), _toConsumableArray(general_doc_issues), _toConsumableArray(style_issues), _toConsumableArray(symbol_issues), _toConsumableArray(margin_issues));
             setCompResults(all_issues);
             setHasRunComp(true);
-            _context5.n = 5;
+            _context0.n = 8;
             break;
-          case 4:
-            _context5.p = 4;
-            _t5 = _context5.v;
-            console.error("Error running comprehensive checks:", _t5);
-          case 5:
-            _context5.p = 5;
+          case 7:
+            _context0.p = 7;
+            _t0 = _context0.v;
+            console.error("Error running comprehensive checks:", _t0);
+          case 8:
+            _context0.p = 8;
             setIsCheckingComp(false);
-            return _context5.f(5);
-          case 6:
-            return _context5.a(2);
+            return _context0.f(8);
+          case 9:
+            return _context0.a(2);
         }
-      }, _callee5, null, [[0, 4, 5, 6]]);
+      }, _callee0, null, [[0, 7, 8, 9]]);
     }));
     return function handleRunComprehensiveCheck() {
-      return _ref5.apply(this, arguments);
+      return _ref0.apply(this, arguments);
     };
   }();
 
   // Run header/footer checker independently
   var handleRunHeaderFooterCheck = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
-      var issues, _t6;
-      return _regenerator().w(function (_context6) {
-        while (1) switch (_context6.p = _context6.n) {
+    var _ref1 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1() {
+      var issues, _t1;
+      return _regenerator().w(function (_context1) {
+        while (1) switch (_context1.p = _context1.n) {
           case 0:
-            _context6.p = 0;
+            _context1.p = 0;
             setIsCheckingHeaderFooter(true);
-            _context6.n = 1;
+            _context1.n = 1;
             return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.checkHeaderFooterFormatting)();
           case 1:
-            issues = _context6.v;
+            issues = _context1.v;
             setHeaderFooterResults(issues);
             setHasRunHeaderFooter(true);
-            _context6.n = 3;
+            _context1.n = 3;
             break;
           case 2:
-            _context6.p = 2;
-            _t6 = _context6.v;
-            console.error("Error running header/footer checks:", _t6);
+            _context1.p = 2;
+            _t1 = _context1.v;
+            console.error("Error running header/footer checks:", _t1);
           case 3:
-            _context6.p = 3;
+            _context1.p = 3;
             setIsCheckingHeaderFooter(false);
-            return _context6.f(3);
+            return _context1.f(3);
           case 4:
-            return _context6.a(2);
+            return _context1.a(2);
         }
-      }, _callee6, null, [[0, 2, 3, 4]]);
+      }, _callee1, null, [[0, 2, 3, 4]]);
     }));
     return function handleRunHeaderFooterCheck() {
-      return _ref6.apply(this, arguments);
+      return _ref1.apply(this, arguments);
     };
   }();
 
   // Fix individual header/footer issue
   var handleFixSingleIssue = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(issue) {
-      var result, updatedIssues, _t7;
-      return _regenerator().w(function (_context7) {
-        while (1) switch (_context7.p = _context7.n) {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee10(issue) {
+      var result, updatedIssues, _t10;
+      return _regenerator().w(function (_context10) {
+        while (1) switch (_context10.p = _context10.n) {
           case 0:
-            _context7.p = 0;
+            _context10.p = 0;
             console.log("Fixing issue:", issue);
-            _context7.n = 1;
+            _context10.n = 1;
             return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.fixHeaderFooterIssue)(issue);
           case 1:
-            result = _context7.v;
+            result = _context10.v;
             console.log("Fix result:", result);
             if (!result.success) {
-              _context7.n = 3;
+              _context10.n = 3;
               break;
             }
-            _context7.n = 2;
+            _context10.n = 2;
             return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.checkHeaderFooterFormatting)();
           case 2:
-            updatedIssues = _context7.v;
+            updatedIssues = _context10.v;
             setHeaderFooterResults(updatedIssues);
             alert("\u2705 ".concat(result.message));
-            _context7.n = 4;
+            _context10.n = 4;
             break;
           case 3:
             alert("\u274C Could not fix: ".concat(result.message, "\n\nIssue ID: ").concat(issue.id));
           case 4:
-            _context7.n = 6;
+            _context10.n = 6;
             break;
           case 5:
-            _context7.p = 5;
-            _t7 = _context7.v;
-            console.error("Error fixing issue:", _t7);
-            alert("\u274C Error: ".concat(_t7.message, "\n\nIssue ID: ").concat(issue.id));
+            _context10.p = 5;
+            _t10 = _context10.v;
+            console.error("Error fixing issue:", _t10);
+            alert("\u274C Error: ".concat(_t10.message, "\n\nIssue ID: ").concat(issue.id));
           case 6:
-            return _context7.a(2);
+            return _context10.a(2);
         }
-      }, _callee7, null, [[0, 5]]);
+      }, _callee10, null, [[0, 5]]);
     }));
-    return function handleFixSingleIssue(_x) {
-      return _ref7.apply(this, arguments);
+    return function handleFixSingleIssue(_x4) {
+      return _ref10.apply(this, arguments);
     };
   }();
 
   // Fix all header/footer issues at once
   var handleFixAllHeaderFooter = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8() {
-      var fixableIssues, _results, successCount, failedIssues, updatedIssues, message, _t8;
-      return _regenerator().w(function (_context8) {
-        while (1) switch (_context8.p = _context8.n) {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee11() {
+      var fixableIssues, _results, successCount, failedIssues, updatedIssues, message, _t11;
+      return _regenerator().w(function (_context11) {
+        while (1) switch (_context11.p = _context11.n) {
           case 0:
-            _context8.p = 0;
+            _context11.p = 0;
             setIsFixingHeaderFooter(true);
             fixableIssues = headerFooterResults.filter(function (r) {
               return r.type !== "Info" && !r.id.includes("draft") && !r.id.includes("inconsistent");
             });
             if (!(fixableIssues.length === 0)) {
-              _context8.n = 1;
+              _context11.n = 1;
               break;
             }
             alert("No fixable issues found.");
-            return _context8.a(2);
+            return _context11.a(2);
           case 1:
             console.log("Fixing issues:", fixableIssues.map(function (i) {
               return i.id;
             }));
-            _context8.n = 2;
+            _context11.n = 2;
             return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.fixAllHeaderFooterIssues)(fixableIssues);
           case 2:
-            _results = _context8.v;
+            _results = _context11.v;
             console.log("Fix results:", _results);
             successCount = _results.filter(function (r) {
               return r.success;
@@ -9058,10 +9464,10 @@ function App() {
             failedIssues = _results.filter(function (r) {
               return !r.success;
             }); // Re-run check to update results
-            _context8.n = 3;
+            _context11.n = 3;
             return (0,_checkHeaderFooterFormatting__WEBPACK_IMPORTED_MODULE_5__.checkHeaderFooterFormatting)();
           case 3:
-            updatedIssues = _context8.v;
+            updatedIssues = _context11.v;
             setHeaderFooterResults(updatedIssues);
             message = "\u2705 Fixed ".concat(successCount, " out of ").concat(fixableIssues.length, " issues.");
             if (failedIssues.length > 0) {
@@ -9074,106 +9480,106 @@ function App() {
               }
             }
             alert(message);
-            _context8.n = 5;
+            _context11.n = 5;
             break;
           case 4:
-            _context8.p = 4;
-            _t8 = _context8.v;
-            console.error("Error fixing all issues:", _t8);
-            alert("\u274C Error: ".concat(_t8.message));
+            _context11.p = 4;
+            _t11 = _context11.v;
+            console.error("Error fixing all issues:", _t11);
+            alert("\u274C Error: ".concat(_t11.message));
           case 5:
-            _context8.p = 5;
+            _context11.p = 5;
             setIsFixingHeaderFooter(false);
-            return _context8.f(5);
+            return _context11.f(5);
           case 6:
-            return _context8.a(2);
+            return _context11.a(2);
         }
-      }, _callee8, null, [[0, 4, 5, 6]]);
+      }, _callee11, null, [[0, 4, 5, 6]]);
     }));
     return function handleFixAllHeaderFooter() {
-      return _ref8.apply(this, arguments);
+      return _ref11.apply(this, arguments);
     };
   }();
 
   // Fix individual symbol issue
   var handleFixSingleSymbol = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9(issue) {
-      var result, updatedIssues, _t9;
-      return _regenerator().w(function (_context9) {
-        while (1) switch (_context9.p = _context9.n) {
+    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee12(issue) {
+      var result, updatedIssues, _t12;
+      return _regenerator().w(function (_context12) {
+        while (1) switch (_context12.p = _context12.n) {
           case 0:
             setFixingItemId(issue.id);
-            _context9.n = 1;
+            _context12.n = 1;
             return new Promise(function (resolve) {
               return setTimeout(resolve, 10);
             });
           case 1:
-            _context9.p = 1;
+            _context12.p = 1;
             console.log("Fixing symbol issue:", issue);
-            _context9.n = 2;
+            _context12.n = 2;
             return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.fixSymbolIssue)(issue);
           case 2:
-            result = _context9.v;
+            result = _context12.v;
             console.log("Fix result:", result);
             if (!result.success) {
-              _context9.n = 4;
+              _context12.n = 4;
               break;
             }
-            _context9.n = 3;
+            _context12.n = 3;
             return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
           case 3:
-            updatedIssues = _context9.v;
+            updatedIssues = _context12.v;
             setSymbolResults(updatedIssues);
             alert("\u2705 Symbol font applied successfully!");
-            _context9.n = 5;
+            _context12.n = 5;
             break;
           case 4:
             alert("\u274C Could not fix: ".concat(result.error, "\n\nIssue ID: ").concat(issue.id));
           case 5:
-            _context9.n = 7;
+            _context12.n = 7;
             break;
           case 6:
-            _context9.p = 6;
-            _t9 = _context9.v;
-            console.error("Error fixing symbol issue:", _t9);
-            alert("\u274C Error: ".concat(_t9.message, "\n\nIssue ID: ").concat(issue.id));
+            _context12.p = 6;
+            _t12 = _context12.v;
+            console.error("Error fixing symbol issue:", _t12);
+            alert("\u274C Error: ".concat(_t12.message, "\n\nIssue ID: ").concat(issue.id));
           case 7:
-            _context9.p = 7;
+            _context12.p = 7;
             setFixingItemId(null);
-            return _context9.f(7);
+            return _context12.f(7);
           case 8:
-            return _context9.a(2);
+            return _context12.a(2);
         }
-      }, _callee9, null, [[1, 6, 7, 8]]);
+      }, _callee12, null, [[1, 6, 7, 8]]);
     }));
-    return function handleFixSingleSymbol(_x2) {
-      return _ref9.apply(this, arguments);
+    return function handleFixSingleSymbol(_x5) {
+      return _ref12.apply(this, arguments);
     };
   }();
 
   // Fix all symbol issues at once
   var handleFixAllSymbols = /*#__PURE__*/function () {
-    var _ref0 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0() {
-      var _results2, successCount, failedIssues, updatedIssues, message, _t0;
-      return _regenerator().w(function (_context0) {
-        while (1) switch (_context0.p = _context0.n) {
+    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee13() {
+      var _results2, successCount, failedIssues, updatedIssues, message, _t13;
+      return _regenerator().w(function (_context13) {
+        while (1) switch (_context13.p = _context13.n) {
           case 0:
-            _context0.p = 0;
+            _context13.p = 0;
             setIsFixingSymbols(true);
             if (!(symbolResults.length === 0)) {
-              _context0.n = 1;
+              _context13.n = 1;
               break;
             }
             alert("No fixable issues found.");
-            return _context0.a(2);
+            return _context13.a(2);
           case 1:
             console.log("Fixing symbol issues:", symbolResults.map(function (i) {
               return i.id;
             }));
-            _context0.n = 2;
+            _context13.n = 2;
             return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.fixAllSymbolIssues)(symbolResults);
           case 2:
-            _results2 = _context0.v;
+            _results2 = _context13.v;
             console.log("Fix results:", _results2);
             successCount = _results2.filter(function (r) {
               return r.success;
@@ -9181,10 +9587,10 @@ function App() {
             failedIssues = _results2.filter(function (r) {
               return !r.success;
             });
-            _context0.n = 3;
+            _context13.n = 3;
             return (0,_symbolChecks__WEBPACK_IMPORTED_MODULE_4__.checkSymbols)();
           case 3:
-            updatedIssues = _context0.v;
+            updatedIssues = _context13.v;
             setSymbolResults(updatedIssues);
             message = "\u2705 Fixed ".concat(successCount, " out of ").concat(symbolResults.length, " issues.");
             if (failedIssues.length > 0) {
@@ -9197,48 +9603,82 @@ function App() {
               }
             }
             alert(message);
-            _context0.n = 5;
+            _context13.n = 5;
             break;
           case 4:
-            _context0.p = 4;
-            _t0 = _context0.v;
-            console.error("Error fixing all symbol issues:", _t0);
-            alert("\u274C Error: ".concat(_t0.message));
+            _context13.p = 4;
+            _t13 = _context13.v;
+            console.error("Error fixing all symbol issues:", _t13);
+            alert("\u274C Error: ".concat(_t13.message));
           case 5:
-            _context0.p = 5;
+            _context13.p = 5;
             setIsFixingSymbols(false);
-            return _context0.f(5);
+            return _context13.f(5);
           case 6:
-            return _context0.a(2);
+            return _context13.a(2);
         }
-      }, _callee0, null, [[0, 4, 5, 6]]);
+      }, _callee13, null, [[0, 4, 5, 6]]);
     }));
     return function handleFixAllSymbols() {
-      return _ref0.apply(this, arguments);
+      return _ref13.apply(this, arguments);
     };
   }();
 
   //Jump to a specific error in Word
   var handleGoTo = /*#__PURE__*/function () {
-    var _ref1 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1(issue) {
-      return _regenerator().w(function (_context1) {
-        while (1) switch (_context1.n) {
+    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee14(issue) {
+      return _regenerator().w(function (_context14) {
+        while (1) switch (_context14.n) {
           case 0:
             if (!(issue.canLocate && issue.location)) {
-              _context1.n = 1;
+              _context14.n = 1;
               break;
             }
-            _context1.n = 1;
+            _context14.n = 1;
             return (0,_wordChecks__WEBPACK_IMPORTED_MODULE_1__.goToError)(issue.location);
           case 1:
-            return _context1.a(2);
+            return _context14.a(2);
         }
-      }, _callee1);
+      }, _callee14);
     }));
-    return function handleGoTo(_x3) {
-      return _ref1.apply(this, arguments);
+    return function handleGoTo(_x6) {
+      return _ref14.apply(this, arguments);
     };
   }();
+
+  // Get color based on issue type to match individual checker sections
+  var getTypeColor = function getTypeColor(type) {
+    switch (type) {
+      case "Formatting":
+        return "#9c8fb9";
+      // Formatting Checker purple
+      case "Header":
+      case "Footer":
+        return "#e89a3c";
+      // Headers & Footers Checker orange
+      case "General":
+      case "Comment":
+      case "Revision":
+      case "TextBox":
+      case "Watermark":
+      case "Reference":
+      case "PageSize":
+        return "#61854f";
+      // General Document Checker green
+      case "Style":
+        return "#c75450";
+      // Styles Checker red
+      case "Symbol":
+        return "#365d9f";
+      // Symbols Checker blue
+      case "Margins":
+        return "#6c757d";
+      // Margins Checker gray
+      default:
+        return "#f9f9f9";
+      // Default gray
+    }
+  };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
@@ -9265,7 +9705,8 @@ function App() {
       },
       style: _objectSpread(_objectSpread({}, styles.resultBox), {}, {
         cursor: r.canLocate ? "pointer" : "default",
-        backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9"
+        backgroundColor: r.canLocate ? getTypeColor(r.type) : "#f9f9f9",
+        opacity: r.canLocate ? 0.3 : 1
       })
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, r.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
       style: styles.message
@@ -9289,37 +9730,6 @@ function App() {
   }, "No results yet. Click \"Run Formatting Check\"."), results.length === 0 && !isChecking && hasRunFormatting && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.successMessage
   }, "\uD83C\uDF89 Congrats! No errors found."), !isChecking && results.map(function (r) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      key: r.id,
-      onClick: function onClick() {
-        return handleGoTo(r);
-      },
-      style: _objectSpread(_objectSpread({}, styles.resultBox), {}, {
-        cursor: r.canLocate ? "pointer" : "default",
-        backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9"
-      })
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, r.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-      style: styles.message
-    }, r.message));
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.container
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
-    style: styles.title
-  }, "General Document Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    onClick: handleRunDocumentCheck,
-    style: _objectSpread(_objectSpread({}, styles.button), {}, {
-      backgroundColor: "#7c152d"
-    }),
-    disabled: isCheckingDocument
-  }, isCheckingDocument ? "Checking..." : "Run Document Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    style: styles.resultsContainer
-  }, isCheckingDocument && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-    style: styles.loadingMessage
-  }, "Loading..."), docResults.length === 0 && !isCheckingDocument && !hasRunDocument && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-    style: styles.placeholder
-  }, "No results yet. Click \"Run Document Check\"."), docResults.length === 0 && !isCheckingDocument && hasRunDocument && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-    style: styles.successMessage
-  }, "\uD83C\uDF89 Congrats! No errors found."), !isCheckingDocument && docResults.map(function (r) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       key: r.id,
       onClick: function onClick() {
@@ -9396,9 +9806,55 @@ function App() {
     style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
     style: styles.title
-  }, "Margins Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+  }, "Margins Checker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: handleRunMarginsCheck,
+    style: _objectSpread(_objectSpread({}, styles.button), {}, {
+      backgroundColor: "#6c757d"
+    }),
+    disabled: isCheckingMargins
+  }, isCheckingMargins ? "Checking..." : "Run Margins Check"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: {
+      backgroundColor: "#fff3cd",
+      border: "1px solid #ffc107",
+      borderRadius: "4px",
+      padding: "10px",
+      margin: "10px 0",
+      fontFamily: "'Times New Roman', Times, serif"
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: "14px"
+    }
+  }, "\u26A0\uFE0F ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "Note:"), " Due to Microsoft Word API restrictions, margins cannot be automatically corrected. To fix margin issues manually:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ol", {
+    style: {
+      marginTop: "8px",
+      marginBottom: 0,
+      paddingLeft: "20px",
+      fontSize: "13px"
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null, "Go to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "Layout"), " tab \u2192 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "Margins"), " \u2192 ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "Custom Margins")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null, "Set the margins as shown in the error message"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null, "Click ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "OK"), " to apply"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    style: styles.resultsContainer
+  }, isCheckingMargins && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.loadingMessage
+  }, "Loading..."), marginResults.length === 0 && !isCheckingMargins && !hasRunMargins && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
-  }, "Coming soon - Margin validation will be added here.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, "No results yet. Click \"Run Margins Check\"."), marginResults.length === 0 && !isCheckingMargins && hasRunMargins && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    style: styles.successMessage
+  }, "\uD83C\uDF89 Congrats! All margins are correct."), !isCheckingMargins && marginResults.map(function (r) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      key: r.id,
+      onClick: function onClick() {
+        return handleGoTo(r);
+      },
+      style: _objectSpread(_objectSpread({}, styles.resultBox), {}, {
+        cursor: r.canLocate ? "pointer" : "default",
+        backgroundColor: r.canLocate ? "#eef5ff" : "#f9f9f9"
+      })
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, r.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+      style: styles.message
+    }, r.message));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
     style: styles.title
@@ -9412,7 +9868,7 @@ function App() {
     style: styles.resultsContainer
   }, isCheckingStyles && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.loadingMessage
-  }, "Loading..."), styleResults.length === 0 && !isCheckingStyles && !hasRunStyles && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+  }, "Loading..."), styleResults.length === 0 && !isCheckingStyles && !hasRunStyles && !isFixingGeneralIssue && !isFixingAllGeneral && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.placeholder
   }, "No results yet. Click \"Run Styles Check\"."), styleResults.length === 0 && !isCheckingStyles && hasRunStyles && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
     style: styles.successMessage
@@ -9428,7 +9884,20 @@ function App() {
       })
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, r.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
       style: styles.message
-    }, r.message));
+    }, r.message), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      style: styles.resultActions
+    }, r.canLocate && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      style: styles.smallButton,
+      onClick: function onClick() {
+        return handleGoTo(r);
+      }
+    }, "Go"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      style: styles.smallButton,
+      disabled: isCheckingDocument || isFixingGeneralIssue || isFixingAllGeneral,
+      onClick: function onClick() {
+        return handleFixGeneralIssue(r);
+      }
+    }, isFixingGeneralIssue ? "Fixing..." : "Fix")));
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     style: styles.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
@@ -9595,7 +10064,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 /**
- * Runs document-level checks (comments, text boxes, watermarks, references, margins, etc.)
+ * Runs document-level checks (comments, text boxes, watermarks, references, page size, etc.)
  * Returns an array of issue objects, compatible with the UI mapping.
  */
 function checkDocument() {
@@ -9603,11 +10072,11 @@ function checkDocument() {
 }
 function _checkDocument() {
   _checkDocument = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-    var document_checking, margins, page_size, symbols;
+    var document_checking, page_size, symbols;
     return _regenerator().w(function (_context2) {
       while (1) switch (_context2.n) {
         case 0:
-          document_checking = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.document_checking, margins = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.margins, page_size = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.page_size, symbols = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.symbols;
+          document_checking = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.document_checking, page_size = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.page_size, symbols = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.symbols;
           return _context2.a(2, Word.run(/*#__PURE__*/function () {
             var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(context) {
               var results, name, comments, revisions, shapes, sections, refFields, paragraphs, textBoxes, headerTypes, section, _i, _headerTypes, type, header, ooxml, xml, match, watermarkText, symbolParagraphIndexes, i, p, rangesToLoad, _i2, _symbolParagraphIndex, idx, para, range, j, _range, _t;
@@ -9629,7 +10098,7 @@ function _checkDocument() {
                     if (!document_checking.allowTextBoxes) {
                       shapes.load("items/type");
                     }
-                    if (!document_checking.allowWaterMarks || margins.enforceMargins || page_size.enforcePageSize) {
+                    if (!document_checking.allowWaterMarks || page_size.enforcePageSize) {
                       sections.load("items, items/pageSetup");
                     }
                     if (document_checking.enforceValidReferenceSources) {
@@ -9733,7 +10202,7 @@ function _checkDocument() {
                     results.push({
                       id: "watermark-".concat(type),
                       type: "Watermark",
-                      message: "Watermark detected in document, header type: ".concat(type, ". Watermark data: ").concat(watermarkText),
+                      message: "Watermark detected in document, header type: ".concat(type, ". Watermark data: ").concat(watermarkText, ".\n              Remove it manually: Design -> Watermark -> Remove Watermark"),
                       text: watermarkText,
                       canLocate: false
                     });
@@ -9766,32 +10235,6 @@ function _checkDocument() {
                       });
 
                       // await context.sync();
-                    }
-
-                    // --- MARGINS ---
-                    if (margins.enforceMargins) {
-                      // const sections = context.document.sections;
-                      // sections.load("items/pageSetup");
-                      // await context.sync();
-
-                      sections.items.forEach(function (section, index) {
-                        var s = section.pageSetup;
-                        var orientation = s.orientation;
-                        var isValid = true;
-                        if (orientation === Word.PageOrientation.portrait) {
-                          isValid = s.topMargin === margins.topMarginPortrait && s.bottomMargin === margins.bottomMarginPortrait && s.leftMargin === margins.leftMarginPortrait && s.rightMargin === margins.rightMarginPortrait;
-                        } else if (orientation === Word.PageOrientation.landscape) {
-                          isValid = s.topMargin === margins.topMarginLandscape && s.bottomMargin === margins.bottomMarginLandscape && s.leftMargin === margins.leftMarginLandscape && s.rightMargin === margins.rightMarginLandscape;
-                        }
-                        if (!isValid) {
-                          results.push({
-                            id: "margins-".concat(index + 1),
-                            type: "Margins",
-                            message: "Section ".concat(index + 1, " (").concat(orientation, ") has incorrect margins. Correct ").concat(orientation, " margins: top=").concat(orientation === Word.PageOrientation.portrait ? margins.topMarginPortrait / 72 : margins.topMarginLandscape / 72, ", bottom=").concat(orientation === Word.PageOrientation.portrait ? margins.bottomMarginPortrait / 72 : margins.bottomMarginLandscape / 72, ", left=").concat(orientation === Word.PageOrientation.portrait ? margins.leftMarginPortrait / 72 : margins.leftMarginLandscape / 72, ", right=").concat(orientation === Word.PageOrientation.portrait ? margins.rightMarginPortrait / 72 : margins.rightMarginLandscape / 72, " in inches"),
-                            canLocate: false
-                          });
-                        }
-                      });
                     }
 
                     // --- PAGE SIZE ---
@@ -9858,16 +10301,6 @@ function _checkDocument() {
                       });
                     }
                   case 7:
-                    // --- SUMMARY ---
-                    if (results.length === 0) {
-                      results.push({
-                        id: "info-clean",
-                        type: "Info",
-                        message: "✅ No document-level issues found.",
-                        text: "",
-                        canLocate: false
-                      });
-                    }
                     _context.n = 8;
                     return context.sync();
                   case 8:
@@ -9893,6 +10326,240 @@ function _checkDocument() {
     }, _callee2);
   }));
   return _checkDocument.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ "./src/taskpane/fixGeneralDocIssues.js":
+/*!*********************************************!*\
+  !*** ./src/taskpane/fixGeneralDocIssues.js ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fixGeneralDocumentIssue: function() { return /* binding */ fixGeneralDocumentIssue; }
+/* harmony export */ });
+/* harmony import */ var _config_rules_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/rules.json */ "./src/taskpane/config/rules.json");
+/* provided dependency */ var Promise = __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js")["Promise"];
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+
+// export async function fixGeneralDocumentIssue(issue) {
+//     return Word.run(async context => {
+//         if (!issue || !issue.location || !issue.id) return;
+
+//     });
+// }
+
+function fixGeneralDocumentIssue(_x) {
+  return _fixGeneralDocumentIssue.apply(this, arguments);
+}
+function _fixGeneralDocumentIssue() {
+  _fixGeneralDocumentIssue = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(issue) {
+    return _regenerator().w(function (_context2) {
+      while (1) switch (_context2.n) {
+        case 0:
+          return _context2.a(2, Word.run(/*#__PURE__*/function () {
+            var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(context) {
+              var document_checking, margins, page_size, symbols, comments, revisions, shapes, bookmarkRange, sections, _sections, _bookmarkRange, originalFont, _t, _t2;
+              return _regenerator().w(function (_context) {
+                while (1) switch (_context.p = _context.n) {
+                  case 0:
+                    if (!(!issue || !issue.id || !issue.type)) {
+                      _context.n = 1;
+                      break;
+                    }
+                    return _context.a(2);
+                  case 1:
+                    document_checking = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.document_checking, margins = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.margins, page_size = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.page_size, symbols = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.symbols;
+                    _context.p = 2;
+                    if (!(issue.type === "Comment")) {
+                      _context.n = 5;
+                      break;
+                    }
+                    // Comments cannot be located by bookmark, so remove all comments.
+                    comments = context.document.comments;
+                    comments.load("items");
+                    _context.n = 3;
+                    return context.sync();
+                  case 3:
+                    comments.items.forEach(function (c) {
+                      return c.delete();
+                    });
+                    _context.n = 4;
+                    return context.sync();
+                  case 4:
+                    return _context.a(2);
+                  case 5:
+                    if (!(issue.type === "Revision")) {
+                      _context.n = 7;
+                      break;
+                    }
+                    revisions = context.document.revisions;
+                    revisions.acceptAll();
+                    _context.n = 6;
+                    return context.sync();
+                  case 6:
+                    return _context.a(2);
+                  case 7:
+                    if (!(issue.type === "Text Box")) {
+                      _context.n = 10;
+                      break;
+                    }
+                    // Word API: Shapes cannot be located individually through bookmark. SO, we will remove all textboxes
+                    shapes = context.document.body.shapes;
+                    shapes.load("items/type");
+                    _context.n = 8;
+                    return context.sync();
+                  case 8:
+                    shapes.items.filter(function (s) {
+                      return s.type === "TextBox";
+                    }).forEach(function (s) {
+                      return s.delete();
+                    });
+                    _context.n = 9;
+                    return context.sync();
+                  case 9:
+                    return _context.a(2);
+                  case 10:
+                    if (!(issue.type === "Invalid Reference" && issue.location)) {
+                      _context.n = 13;
+                      break;
+                    }
+                    bookmarkRange = context.document.getBookmarkRange(issue.location);
+                    bookmarkRange.load("text");
+                    _context.n = 11;
+                    return context.sync();
+                  case 11:
+                    bookmarkRange.insertText("[Reference removed - source not found]", Word.InsertLocation.replace);
+                    _context.n = 12;
+                    return context.sync();
+                  case 12:
+                    return _context.a(2);
+                  case 13:
+                    if (!(issue.type === "Margins")) {
+                      _context.n = 16;
+                      break;
+                    }
+                    sections = context.document.sections;
+                    sections.load("items/pageSetup");
+                    _context.n = 14;
+                    return context.sync();
+                  case 14:
+                    sections.items.forEach(function (sec) {
+                      var ps = sec.pageSetup;
+                      var orientation = ps.orientation;
+                      if (orientation === Word.PageOrientation.portrait) {
+                        ps.topMargin = margins.topMarginPortrait;
+                        ps.bottomMargin = margins.bottomMarginPortrait;
+                        ps.leftMargin = margins.leftMarginPortrait;
+                        ps.rightMargin = margins.rightMarginPortrait;
+                      } else {
+                        ps.topMargin = margins.topMarginLandscape;
+                        ps.bottomMargin = margins.bottomMarginLandscape;
+                        ps.leftMargin = margins.leftMarginLandscape;
+                        ps.rightMargin = margins.rightMarginLandscape;
+                      }
+                    });
+                    _context.n = 15;
+                    return context.sync();
+                  case 15:
+                    return _context.a(2);
+                  case 16:
+                    if (!(issue.type === "Page Size")) {
+                      _context.n = 19;
+                      break;
+                    }
+                    _sections = context.document.sections;
+                    _sections.load("items/pageSetup");
+                    _context.n = 17;
+                    return context.sync();
+                  case 17:
+                    if (page_size.type === "letter") {
+                      _sections.items.forEach(function (sec) {
+                        sec.pageSetup.paperSize = Word.PaperSize.letter;
+                      });
+                    }
+                    _context.n = 18;
+                    return context.sync();
+                  case 18:
+                    return _context.a(2);
+                  case 19:
+                    if (!(issue.type === "Symbols")) {
+                      _context.n = 27;
+                      break;
+                    }
+                    _context.p = 20;
+                    // Locate the bookmark created earlier
+                    _bookmarkRange = context.document.getBookmarkRange(issue.location);
+                    if (_bookmarkRange) {
+                      _context.n = 21;
+                      break;
+                    }
+                    return _context.a(2, {
+                      success: false,
+                      message: "Unable to locate symbol font text."
+                    });
+                  case 21:
+                    // Load text + font for this range
+                    _bookmarkRange.load("text,font/name");
+                    _context.n = 22;
+                    return context.sync();
+                  case 22:
+                    originalFont = _bookmarkRange.font.name; // If it is indeed Symbol font, fix it
+                    if (!(originalFont && originalFont.toLowerCase() === "symbol")) {
+                      _context.n = 23;
+                      break;
+                    }
+                    _bookmarkRange.font.name = "Times New Roman";
+                    _context.n = 24;
+                    break;
+                  case 23:
+                    return _context.a(2, {
+                      success: false,
+                      message: "Bookmark located but font is no longer Symbol — already fixed?"
+                    });
+                  case 24:
+                    _context.n = 25;
+                    return context.sync();
+                  case 25:
+                    return _context.a(2, {
+                      success: true,
+                      message: "Symbol font converted to Times New Roman."
+                    });
+                  case 26:
+                    _context.p = 26;
+                    _t = _context.v;
+                    console.error("Symbol font fix failed:", _t);
+                    return _context.a(2, {
+                      success: false,
+                      message: "Error fixing symbol font: ".concat(_t.message)
+                    });
+                  case 27:
+                    console.warn("No fix implemented for issue:", issue.type);
+                    return _context.a(2);
+                  case 28:
+                    _context.p = 28;
+                    _t2 = _context.v;
+                    console.error("Error in fixGeneralDocumentIssue:", _t2);
+                    throw _t2;
+                  case 29:
+                    return _context.a(2);
+                }
+              }, _callee, null, [[20, 26], [2, 28]]);
+            }));
+            return function (_x2) {
+              return _ref.apply(this, arguments);
+            };
+          }()));
+      }
+    }, _callee2);
+  }));
+  return _fixGeneralDocumentIssue.apply(this, arguments);
 }
 
 /***/ }),
@@ -9931,6 +10598,121 @@ Office.onReady(function () {
 });
 if (false) // removed by dead control flow
 {}
+
+/***/ }),
+
+/***/ "./src/taskpane/marginChecks.js":
+/*!**************************************!*\
+  !*** ./src/taskpane/marginChecks.js ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   checkMargins: function() { return /* binding */ checkMargins; }
+/* harmony export */ });
+/* harmony import */ var _config_rules_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/rules.json */ "./src/taskpane/config/rules.json");
+/* provided dependency */ var Promise = __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js")["Promise"];
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+
+/**
+ * Check margins across all sections
+ * Note: Microsoft Word API does not support programmatically setting margins,
+ * so this checker only identifies issues and provides manual instructions.
+ */
+function checkMargins() {
+  return _checkMargins.apply(this, arguments);
+}
+function _checkMargins() {
+  _checkMargins = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+    return _regenerator().w(function (_context2) {
+      while (1) switch (_context2.n) {
+        case 0:
+          return _context2.a(2, Word.run(/*#__PURE__*/function () {
+            var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(context) {
+              var results, margins, sections, i, section, s, orientation, isValid, range, bk, expectedMargins;
+              return _regenerator().w(function (_context) {
+                while (1) switch (_context.n) {
+                  case 0:
+                    results = [];
+                    margins = _config_rules_json__WEBPACK_IMPORTED_MODULE_0__.margins;
+                    if (margins.enforceMargins) {
+                      _context.n = 1;
+                      break;
+                    }
+                    return _context.a(2, results);
+                  case 1:
+                    sections = context.document.sections;
+                    sections.load("items/pageSetup");
+                    _context.n = 2;
+                    return context.sync();
+                  case 2:
+                    i = 0;
+                  case 3:
+                    if (!(i < sections.items.length)) {
+                      _context.n = 6;
+                      break;
+                    }
+                    section = sections.items[i];
+                    s = section.pageSetup;
+                    orientation = s.orientation;
+                    isValid = true;
+                    if (orientation === Word.PageOrientation.portrait) {
+                      isValid = s.topMargin === margins.topMarginPortrait && s.bottomMargin === margins.bottomMarginPortrait && s.leftMargin === margins.leftMarginPortrait && s.rightMargin === margins.rightMarginPortrait;
+                    } else if (orientation === Word.PageOrientation.landscape) {
+                      isValid = s.topMargin === margins.topMarginLandscape && s.bottomMargin === margins.bottomMarginLandscape && s.leftMargin === margins.leftMarginLandscape && s.rightMargin === margins.rightMarginLandscape;
+                    }
+                    if (isValid) {
+                      _context.n = 5;
+                      break;
+                    }
+                    // Create bookmark for navigation
+                    range = section.body.getRange();
+                    bk = "margin_issue_".concat(i + 1);
+                    range.insertBookmark(bk);
+                    _context.n = 4;
+                    return context.sync();
+                  case 4:
+                    expectedMargins = orientation === Word.PageOrientation.portrait ? {
+                      top: margins.topMarginPortrait / 72,
+                      bottom: margins.bottomMarginPortrait / 72,
+                      left: margins.leftMarginPortrait / 72,
+                      right: margins.rightMarginPortrait / 72
+                    } : {
+                      top: margins.topMarginLandscape / 72,
+                      bottom: margins.bottomMarginLandscape / 72,
+                      left: margins.leftMarginLandscape / 72,
+                      right: margins.rightMarginLandscape / 72
+                    };
+                    results.push({
+                      id: "margins-".concat(i + 1),
+                      type: "Margins",
+                      message: "Section ".concat(i + 1, " (").concat(orientation, "): Incorrect margins. Expected - Top: ").concat(expectedMargins.top, "\", Bottom: ").concat(expectedMargins.bottom, "\", Left: ").concat(expectedMargins.left, "\", Right: ").concat(expectedMargins.right, "\""),
+                      location: bk,
+                      canLocate: true
+                    });
+                  case 5:
+                    i++;
+                    _context.n = 3;
+                    break;
+                  case 6:
+                    return _context.a(2, results);
+                }
+              }, _callee);
+            }));
+            return function (_x) {
+              return _ref.apply(this, arguments);
+            };
+          }()));
+      }
+    }, _callee2);
+  }));
+  return _checkMargins.apply(this, arguments);
+}
 
 /***/ }),
 

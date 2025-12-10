@@ -1,11 +1,11 @@
 import rules from "./config/rules.json";
 
 /**
- * Runs document-level checks (comments, text boxes, watermarks, references, margins, etc.)
+ * Runs document-level checks (comments, text boxes, watermarks, references, page size, etc.)
  * Returns an array of issue objects, compatible with the UI mapping.
  */
 export async function checkDocument() {
-  const { document_checking, margins, page_size, symbols } = rules;
+  const { document_checking, page_size, symbols } = rules;
 
   return Word.run(async (context) => {
     const results = [];
@@ -28,7 +28,7 @@ export async function checkDocument() {
       shapes.load("items/type");
     }
 
-    if (!document_checking.allowWaterMarks || margins.enforceMargins || page_size.enforcePageSize) {
+    if (!document_checking.allowWaterMarks || page_size.enforcePageSize) {
         sections.load("items, items/pageSetup");
     }
 
@@ -124,7 +124,7 @@ export async function checkDocument() {
             results.push({
               id: `watermark-${type}`,
               type: "Watermark",
-              message: `Watermark detected in document, header type: ${type}. Watermark data: ${watermarkText}`,
+              message: `Watermark detected in document, header type: ${type}. Watermark data: ${watermarkText}.\nRemove it manually: Design -> Watermark -> Remove Watermark`,
               text: watermarkText,
               canLocate: false,
             });
@@ -158,42 +158,6 @@ export async function checkDocument() {
         });
 
         // await context.sync();
-      }
-
-      // --- MARGINS ---
-      if (margins.enforceMargins) {
-        // const sections = context.document.sections;
-        // sections.load("items/pageSetup");
-        // await context.sync();
-
-        sections.items.forEach((section, index) => {
-          const s = section.pageSetup;
-          const orientation = s.orientation;
-          let isValid = true;
-
-          if (orientation === Word.PageOrientation.portrait) {
-            isValid =
-              s.topMargin === margins.topMarginPortrait &&
-              s.bottomMargin === margins.bottomMarginPortrait &&
-              s.leftMargin === margins.leftMarginPortrait &&
-              s.rightMargin === margins.rightMarginPortrait;
-          } else if (orientation === Word.PageOrientation.landscape) {
-            isValid =
-              s.topMargin === margins.topMarginLandscape &&
-              s.bottomMargin === margins.bottomMarginLandscape &&
-              s.leftMargin === margins.leftMarginLandscape &&
-              s.rightMargin === margins.rightMarginLandscape;
-          }
-
-          if (!isValid) {
-            results.push({
-              id: `margins-${index + 1}`,
-              type: "Margins",
-              message: `Section ${index + 1} (${orientation}) has incorrect margins. Correct ${orientation} margins: top=${orientation === Word.PageOrientation.portrait ? margins.topMarginPortrait/72 : margins.topMarginLandscape/72}, bottom=${orientation === Word.PageOrientation.portrait ? margins.bottomMarginPortrait/72 : margins.bottomMarginLandscape/72}, left=${orientation === Word.PageOrientation.portrait ? margins.leftMarginPortrait/72 : margins.leftMarginLandscape/72}, right=${orientation === Word.PageOrientation.portrait ? margins.rightMarginPortrait/72 : margins.rightMarginLandscape/72} in inches`,
-              canLocate: false,
-            });
-          }
-        });
       }
 
       // --- PAGE SIZE ---
@@ -255,16 +219,16 @@ export async function checkDocument() {
         }
       }
 
-      // --- SUMMARY ---
-      if (results.length === 0) {
-        results.push({
-          id: "info-clean",
-          type: "Info",
-          message: "✅ No document-level issues found.",
-          text: "",
-          canLocate: false,
-        });
-      }
+      // // --- SUMMARY ---
+      // if (results.length === 0) {
+      //   results.push({
+      //     id: "info-clean",
+      //     type: "Info",
+      //     message: "✅ No document-level issues found.",
+      //     text: "",
+      //     canLocate: false,
+      //   });
+      // }
 
       await context.sync();
       return results;
